@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define SCREEN_WIDTH 1000
-#define SCREEN_HEIGHT 1000
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 800
 #define CELL_SIZE 10
 #define GRID_WIDTH 100
 #define GRID_HEIGHT 200
@@ -41,6 +41,7 @@ bool kalah = false;
 int level = 1;
 int numCars = NUM_CARS_START;
 int carSpeed = CAR_SPEED_START;
+bool movement[4] = {false,false,false,false};
 
 void checkposition(Player *player, vector *check) {
     if (player->y % 50 == 0 && player->y != ScorTerakhir) {
@@ -96,16 +97,22 @@ void UpdateGame() {
             frameCounter = 0;
         }
 
-        int newX = player.x, newY = player.y;
-        if (IsKeyPressed(KEY_UP)) newY -= PLAYER_SPEED;
-        if (IsKeyPressed(KEY_DOWN)) newY += PLAYER_SPEED;
-        if (IsKeyPressed(KEY_LEFT)) newX -= PLAYER_SPEED;
-        if (IsKeyPressed(KEY_RIGHT)) newX += PLAYER_SPEED;
+      
+        if (IsKeyPressed(KEY_UP)) movement[0] = true;
+        if (IsKeyPressed(KEY_DOWN)) movement[1] = true;
+        if (IsKeyPressed(KEY_LEFT)) movement[2] = true;
+        if (IsKeyPressed(KEY_RIGHT)) movement[3] = true;
 
-        if (newX >= 0 && newX < GRID_WIDTH && newY >= 0 && newY < GRID_HEIGHT) {
-            player.x = newX;
-            player.y = newY;
-        }
+        if (movement[0]) { player.y -= PLAYER_SPEED; movement[0] = false; }
+        if (movement[1]) { player.y += PLAYER_SPEED; movement[1] = false; }
+        if (movement[2]) { player.x -= PLAYER_SPEED; movement[2] = false; }
+        if (movement[3]) { player.x += PLAYER_SPEED; movement[3] = false; }
+
+        if (player.x < 0) player.x = 0;
+        if (player.x >= GRID_WIDTH) player.x = GRID_WIDTH - 1;
+        if (player.y < 0) player.y = 0;
+        if (player.y >= GRID_HEIGHT) player.y = GRID_HEIGHT - 1;
+
 
         checkposition(&player, &checkpoint);
 
