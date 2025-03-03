@@ -22,7 +22,7 @@
 #define CAMERA_SPEED 1
 #define CAMERA_DISTANCE 50
 #define INACTIVE_TIME_LIMIT 180
-#define CAMERA_DEATH_DISTANCE 50
+#define CAMERA_DEATH_DISTANCE 80
 
 typedef struct {
     int x, y;
@@ -48,10 +48,9 @@ bool kalah = false;
 int level = 1;
 int numCars = NUM_CARS_START;
 int carSpeed = CAR_SPEED_START;
-bool movement[4] = {false,false,false,false};
+bool movement[4] = {false, false, false, false};
 int map[GRID_HEIGHT][GRID_WIDTH];
 int inactiveTimer = 0;
-bool tidak = false;
 
 void GenerateMap() {
     for (int y = 0; y < GRID_HEIGHT; y++) {
@@ -85,11 +84,17 @@ void InitGame() {
     player.score = 0;
     player.lives = MAX_LIVES;
     GenerateMap();
+
+    // Inisialisasi mobil hanya di sel yang kosong (CELL_EMPTY)
     for (int i = 0; i < numCars; i++) {
-        int lane = rand() % (GRID_HEIGHT - 2);
-        int col = rand() % GRID_WIDTH;
+        int x, y;
+        do {
+            x = rand() % GRID_WIDTH;
+            y = rand() % GRID_HEIGHT;
+        } while (map[y][x] != CELL_EMPTY); // Pastikan mobil hanya ditempatkan di sel kosong
+
         int direction = (rand() % 2) ? 1 : -1;
-        cars[i] = (Car){col, lane, carSpeed, direction};
+        cars[i] = (Car){x, y, carSpeed, direction};
     }
 }
 
@@ -99,12 +104,12 @@ void NextLevel() {
     level++;
     numCars += 5;
     carSpeed++;
-    if (carSpeed > 5) carSpeed = 5; 
+    if (carSpeed > 5) carSpeed = 5;
     player.x = GRID_WIDTH / 2;
     player.y = GRID_HEIGHT - 2;
     checkpoint.x = player.x;
     checkpoint.y = player.y;
-    
+
     InitGame();
 }
 
@@ -114,9 +119,14 @@ void UpdateGame() {
         if (frameCounter >= CAR_MOVE_DELAY) {
             for (int i = 0; i < numCars; i++) {
                 int newX = cars[i].x + cars[i].direction * cars[i].speed;
-                if (newX < 0) newX = GRID_WIDTH - 1;
-                if (newX >= GRID_WIDTH) newX = 0;
-                cars[i].x = newX;
+
+                // Cek apakah sel baru adalah CELL_EMPTY
+                if (newX >= 0 && newX < GRID_WIDTH && map[cars[i].y][newX] == CELL_EMPTY) {
+                    cars[i].x = newX;
+                } else {
+                    // Jika tidak, balik arah mobil
+                    cars[i].direction *= -1;
+                }
             }
             frameCounter = 0;
         }
@@ -156,7 +166,7 @@ void UpdateGame() {
             }
         }
     }
-    
+
     if (player.y == 0) {
         NextLevel();
     }
@@ -186,8 +196,8 @@ void DrawGame(Camera2D camera) {
     }
 
     DrawRectangle(player.x * CELL_SIZE, player.y * CELL_SIZE, PLAYER_SIZE, PLAYER_SIZE, GRAY);
-    DrawText(TextFormat("Score: %d", player.score), player.x *CELL_SIZE - 400, player.y * CELL_SIZE - 400, 20, DARKGRAY);
-    DrawText(TextFormat("Lives: %d", player.lives),  player.x *CELL_SIZE - 400, player.y * CELL_SIZE - 350, 20, DARKGRAY);
+    DrawText(TextFormat("Score: %d", player.score), player.x * CELL_SIZE - 400, player.y * CELL_SIZE - 400, 20, DARKGRAY);
+    DrawText(TextFormat("Lives: %d", player.lives), player.x * CELL_SIZE - 400, player.y * CELL_SIZE - 350, 20, DARKGRAY);
     DrawText(TextFormat("Level: %d", level), player.x * CELL_SIZE - 400, player.y * CELL_SIZE - 300, 20, DARKGRAY);
     DrawText("Use Arrow Keys to Move", 10, 100, 20, DARKGRAY);
 
@@ -218,7 +228,7 @@ int main() {
     while (!WindowShouldClose()) {
         UpdateGame();
 
-          // Update camera position hanya jika pemain belum mati
+        // Update camera position hanya jika pemain belum mati
         if (!kalah && !PermainanBerakhir) {
             camera.target.y -= CAMERA_SPEED; // Kamera selalu bergerak ke depan
 
@@ -228,7 +238,7 @@ int main() {
             }
         }
 
-        DrawGame(camera);    
+        DrawGame(camera);
     }
 
     CloseWindow();
