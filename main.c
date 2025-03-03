@@ -22,7 +22,8 @@
 #define CAMERA_SPEED 1
 #define CAMERA_DISTANCE 50
 #define INACTIVE_TIME_LIMIT 180
-#define CAMERA_DEATH_DISTANCE 80
+#define CAMERA_DEATH_DISTANCE 70
+#define CELL_CAR 3
 
 typedef struct {
     int x, y;
@@ -98,13 +99,11 @@ void InitGame() {
 
         int direction = (rand() % 2) ? 1 : -1;
         cars[i] = (Car){x, y, carSpeed, direction};
+        map[y][x]= CELL_CAR;
     }
 }
 
 void NextLevel(Camera2D *camera) {
-
-
-
     PermainanBerakhir = false;
     if (level == 2) PermainanBerakhir = true;
     level++;
@@ -129,7 +128,12 @@ void UpdateGame() {
 
                 // Cek apakah sel baru adalah CELL_EMPTY
                 if (newX >= 0 && newX < GRID_WIDTH && map[cars[i].y][newX] == CELL_EMPTY) {
-                    cars[i].x = newX;
+                      // Hapus mobil dari posisi lama
+                      map[cars[i].y][cars[i].x] = CELL_EMPTY;
+                      // Pindahkan mobil ke posisi baru
+                      cars[i].x = newX;
+
+                      map[cars[i].y][cars[i].x] = CELL_CAR;
                 } else {
                     // Jika tidak, balik arah mobil
                     cars[i].direction *= -1;
@@ -239,7 +243,7 @@ int main() {
             camera.target.y -= CAMERA_SPEED; // Kamera selalu bergerak ke depan
 
             // Cek jika pemain tertinggal terlalu jauh
-            if (player.y * CELL_SIZE < camera.target.y - CAMERA_DEATH_DISTANCE) {
+            if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
                 kalah = true;
             }
         }
