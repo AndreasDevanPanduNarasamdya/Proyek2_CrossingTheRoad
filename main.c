@@ -16,6 +16,9 @@
 #define CAR_MOVE_DELAY 6
 #define LANE_COLOR DARKGRAY
 #define MAX_LIVES 3
+#define CELL_EMPTY 0
+#define CELL_ROAD 1
+#define CELL_CHECKPOINT 2
 
 typedef struct {
     int x, y;
@@ -42,6 +45,22 @@ int level = 1;
 int numCars = NUM_CARS_START;
 int carSpeed = CAR_SPEED_START;
 bool movement[4] = {false,false,false,false};
+int map[GRID_HEIGHT][GRID_WIDTH];
+
+
+void GenerateMap() {
+    for (int y = 0; y < GRID_HEIGHT; y++) {
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            if (y % 8 == 0) {
+                map[y][x] = CELL_ROAD;  // Jalur mobil
+            } else if (y % 50 == 0) {
+                map[y][x] = CELL_CHECKPOINT;  // Checkpoint pemain
+            } else {
+                map[y][x] = CELL_EMPTY;  // Area kosong
+            }
+        }
+    }
+}
 
 void checkposition(Player *player, vector *check) {
     if (player->y % 50 == 0 && player->y != ScorTerakhir) {
@@ -59,8 +78,8 @@ void InitGame() {
     checkpoint.x = player.x;
     checkpoint.y = player.y;
     player.score = 0;
-    player.lives = MAX_LIVES;
-    
+    player.lives = MAX_LIVES;\
+    GenerateMap();
     for (int i = 0; i < numCars; i++) {
         int lane = rand() % (GRID_HEIGHT - 2);
         int col = rand() % GRID_WIDTH;
@@ -139,14 +158,12 @@ void DrawGame(Camera2D camera) {
     ClearBackground(WHITE);
     BeginMode2D(camera);
 
-    for (int i = 0; i < GRID_HEIGHT; i++) {
-        if (i % 8 == 0) {
-            for (int j = 0; j < GRID_WIDTH; j++) {
-                DrawRectangle(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE, LANE_COLOR);
-            }
-        } else if (i % 50 == 0) {
-            for (int n = 0; n < GRID_WIDTH; n++) {
-                DrawRectangle(n * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE, BLUE);
+    for (int y = 0; y < GRID_HEIGHT; y++) {
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            if (map[y][x] == CELL_ROAD) {
+                DrawRectangle(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, LANE_COLOR);
+            } else if (map[y][x] == CELL_CHECKPOINT) {
+                DrawRectangle(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, BLUE);
             }
         }
     }
