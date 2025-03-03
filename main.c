@@ -19,6 +19,10 @@
 #define CELL_EMPTY 0
 #define CELL_ROAD 1
 #define CELL_CHECKPOINT 2
+#define CAMERA_SPEED 1
+#define CAMERA_DISTANCE 50
+#define INACTIVE_TIME_LIMIT 180
+#define CAMERA_DEATH_DISTANCE 50
 
 typedef struct {
     int x, y;
@@ -46,7 +50,7 @@ int numCars = NUM_CARS_START;
 int carSpeed = CAR_SPEED_START;
 bool movement[4] = {false,false,false,false};
 int map[GRID_HEIGHT][GRID_WIDTH];
-
+int inactiveTimer = 0;
 
 void GenerateMap() {
     for (int y = 0; y < GRID_HEIGHT; y++) {
@@ -78,7 +82,7 @@ void InitGame() {
     checkpoint.x = player.x;
     checkpoint.y = player.y;
     player.score = 0;
-    player.lives = MAX_LIVES;\
+    player.lives = MAX_LIVES;
     GenerateMap();
     for (int i = 0; i < numCars; i++) {
         int lane = rand() % (GRID_HEIGHT - 2);
@@ -116,22 +120,26 @@ void UpdateGame() {
             frameCounter = 0;
         }
 
-      
-        if (IsKeyPressed(KEY_UP)) movement[0] = true;
-        if (IsKeyPressed(KEY_DOWN)) movement[1] = true;
-        if (IsKeyPressed(KEY_LEFT)) movement[2] = true;
-        if (IsKeyPressed(KEY_RIGHT)) movement[3] = true;
-
-        if (movement[0]) { player.y -= PLAYER_SPEED; movement[0] = false; }
-        if (movement[1]) { player.y += PLAYER_SPEED; movement[1] = false; }
-        if (movement[2]) { player.x -= PLAYER_SPEED; movement[2] = false; }
-        if (movement[3]) { player.x += PLAYER_SPEED; movement[3] = false; }
+        bool playerMoved = false;
+        if (IsKeyPressed(KEY_UP)) { player.y -= PLAYER_SPEED; playerMoved = true; }
+        if (IsKeyPressed(KEY_DOWN)) { player.y += PLAYER_SPEED; playerMoved = true; }
+        if (IsKeyPressed(KEY_LEFT)) { player.x -= PLAYER_SPEED; playerMoved = true; }
+        if (IsKeyPressed(KEY_RIGHT)) { player.x += PLAYER_SPEED; playerMoved = true; }
 
         if (player.x < 0) player.x = 0;
         if (player.x >= GRID_WIDTH) player.x = GRID_WIDTH - 1;
         if (player.y < 0) player.y = 0;
         if (player.y >= GRID_HEIGHT) player.y = GRID_HEIGHT - 1;
 
+        if (playerMoved) {
+            inactiveTimer = 0;
+        } else {
+            inactiveTimer++;
+        }
+
+        if (inactiveTimer >= INACTIVE_TIME_LIMIT) {
+            kalah = true;
+        }
 
         checkposition(&player, &checkpoint);
 
@@ -191,13 +199,9 @@ void DrawGame(Camera2D camera) {
         PermainanBerakhir = true;
     }
 
-
     EndMode2D();
     EndDrawing();
 }
-
-
-
 
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
@@ -211,9 +215,15 @@ int main() {
     camera.zoom = 1.0f;
 
     while (!WindowShouldClose()) {
-            UpdateGame();
-            camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
-            DrawGame(camera);    
+        UpdateGame();
+        
+         camera.target.y -= CAMERA_SPEED; // Kamera selalu bergerak ke depan
+
+            if (player.y * CELL_SIZE < camera.target.y - CAMERA_DEATH_DISTANCE) {
+                kalah = true;
+            }
+
+        DrawGame(camera);    
     }
 
     CloseWindow();
