@@ -51,6 +51,7 @@ int carSpeed = CAR_SPEED_START;
 bool movement[4] = {false,false,false,false};
 int map[GRID_HEIGHT][GRID_WIDTH];
 int inactiveTimer = 0;
+bool tidak = false;
 
 void GenerateMap() {
     for (int y = 0; y < GRID_HEIGHT; y++) {
@@ -216,12 +217,16 @@ int main() {
 
     while (!WindowShouldClose()) {
         UpdateGame();
-        
-         camera.target.y -= CAMERA_SPEED; // Kamera selalu bergerak ke depan
 
+          // Update camera position hanya jika pemain belum mati
+        if (!kalah && !PermainanBerakhir) {
+            camera.target.y -= CAMERA_SPEED; // Kamera selalu bergerak ke depan
+
+            // Cek jika pemain tertinggal terlalu jauh
             if (player.y * CELL_SIZE < camera.target.y - CAMERA_DEATH_DISTANCE) {
                 kalah = true;
             }
+        }
 
         DrawGame(camera);    
     }
