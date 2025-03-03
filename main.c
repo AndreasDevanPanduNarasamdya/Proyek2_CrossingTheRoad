@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 800
+#define SCREEN_WIDTH 1000
+#define SCREEN_HEIGHT 1000
 #define CELL_SIZE 10
 #define GRID_WIDTH 100
 #define GRID_HEIGHT 200
