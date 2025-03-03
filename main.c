@@ -40,6 +40,7 @@ typedef struct vector {
 
 Player player;
 vector checkpoint;
+Camera2D camera = {0};
 Car cars[NUM_CARS_START * 2];
 int frameCounter = 0;
 int ScorTerakhir = -1;
@@ -51,6 +52,7 @@ int carSpeed = CAR_SPEED_START;
 bool movement[4] = {false, false, false, false};
 int map[GRID_HEIGHT][GRID_WIDTH];
 int inactiveTimer = 0;
+
 
 void GenerateMap() {
     for (int y = 0; y < GRID_HEIGHT; y++) {
@@ -83,6 +85,7 @@ void InitGame() {
     checkpoint.y = player.y;
     player.score = 0;
     player.lives = MAX_LIVES;
+
     GenerateMap();
 
     // Inisialisasi mobil hanya di sel yang kosong (CELL_EMPTY)
@@ -98,7 +101,10 @@ void InitGame() {
     }
 }
 
-void NextLevel() {
+void NextLevel(Camera2D *camera) {
+
+
+
     PermainanBerakhir = false;
     if (level == 2) PermainanBerakhir = true;
     level++;
@@ -109,6 +115,7 @@ void NextLevel() {
     player.y = GRID_HEIGHT - 2;
     checkpoint.x = player.x;
     checkpoint.y = player.y;
+    camera->target.y = player.y * CELL_SIZE;
 
     InitGame();
 }
@@ -168,7 +175,7 @@ void UpdateGame() {
     }
 
     if (player.y == 0) {
-        NextLevel();
+        NextLevel(&camera);
     }
 }
 
@@ -219,7 +226,6 @@ int main() {
     SetTargetFPS(60);
     InitGame();
 
-    Camera2D camera = {0};
     camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
     camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
     camera.rotation = 0.0f;
@@ -228,7 +234,7 @@ int main() {
     while (!WindowShouldClose()) {
         UpdateGame();
 
-        // Update camera position hanya jika pemain belum mati
+        
         if (!kalah && !PermainanBerakhir) {
             camera.target.y -= CAMERA_SPEED; // Kamera selalu bergerak ke depan
 
