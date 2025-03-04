@@ -25,10 +25,18 @@
 #define CAMERA_DEATH_DISTANCE 300
 #define CELL_CAR 3
 
+typedef enum {
+    VEHICLE_CAR,
+    VEHICLE_TRUCK,
+    VEHICLE_BUS,
+    VEHICLE_BIKE
+} VehicleType;
+
 typedef struct {
     int x, y;
     int speed;
     int direction;
+    VehicleType type;
 } Car;
 
 typedef struct {
@@ -54,6 +62,36 @@ bool movement[4] = {false, false, false, false};
 int map[GRID_HEIGHT][GRID_WIDTH];
 int inactiveTimer = 0;
 
+void DrawVehicle(Car car) {
+    int x = car.x * CELL_SIZE;
+    int y = car.y * CELL_SIZE;
+
+    switch (car.type) {
+        case VEHICLE_CAR:
+            DrawRectangle(x, y, CAR_WIDTH, CAR_HEIGHT, RED); // Mobil kecil
+            DrawRectangle(x + 2, y - 2, 5, 4, BLACK); // Lampu depan
+            DrawRectangle(x + 2, y + CAR_HEIGHT - 2, 5, 4, BLACK); // Lampu belakang
+            break;
+
+        case VEHICLE_TRUCK:
+            DrawRectangle(x, y, CAR_WIDTH * 2, CAR_HEIGHT, BLUE); // Truk
+            DrawRectangle(x + 4, y - 2, 5, 4, BLACK); // Lampu depan
+            DrawRectangle(x + 4, y + CAR_HEIGHT - 2, 5, 4, BLACK); // Lampu belakang
+            break;
+
+        case VEHICLE_BUS:
+            DrawRectangle(x, y, CAR_WIDTH * 3, CAR_HEIGHT, YELLOW); // Bus
+            DrawRectangle(x + 6, y - 2, 5, 4, BLACK); // Lampu depan
+            DrawRectangle(x + 6, y + CAR_HEIGHT - 2, 5, 4, BLACK); // Lampu belakang
+            break;
+
+        case VEHICLE_BIKE:
+            DrawRectangle(x, y, CAR_WIDTH / 2, CAR_HEIGHT, GREEN); // Sepeda motor
+            DrawRectangle(x + 1, y - 2, 3, 4, BLACK); // Lampu depan
+            DrawRectangle(x + 1, y + CAR_HEIGHT - 2, 3, 4, BLACK); // Lampu belakang
+            break;
+    }
+}
 
 void GenerateMap() {
     for (int y = 0; y < GRID_HEIGHT; y++) {
@@ -89,17 +127,28 @@ void InitGame() {
 
     GenerateMap();
 
-    // Inisialisasi mobil hanya di sel yang kosong (CELL_EMPTY)
+    // Inisialisasi kendaraan dengan jenis yang berbeda
     for (int i = 0; i < numCars; i++) {
         int x, y;
         do {
             x = rand() % GRID_WIDTH;
             y = rand() % GRID_HEIGHT;
-        } while (map[y][x] != CELL_EMPTY); // Pastikan mobil hanya ditempatkan di sel kosong
+        } while (map[y][x] != CELL_EMPTY || x == 0 || x == GRID_WIDTH - 1); // Pastikan kendaraan hanya ditempatkan di sel kosong dan tidak di tepi grid
 
+        VehicleType type = rand() % 4; // Pilih jenis kendaraan secara acak
         int direction = (rand() % 2) ? 1 : -1;
-        cars[i] = (Car){x, y, carSpeed, direction};
-        map[y][x]= CELL_CAR;
+        int speed = carSpeed;
+
+        // Sesuaikan kecepatan berdasarkan jenis kendaraan
+        switch (type) {
+            case VEHICLE_CAR: speed = carSpeed; break;
+            case VEHICLE_TRUCK: speed = (carSpeed - 1 > 0) ? carSpeed - 1 : 1; break; // Truk lebih lambat, minimal kecepatan 1
+            case VEHICLE_BUS: speed = carSpeed; break;
+            case VEHICLE_BIKE: speed = carSpeed + 1; break; // Sepeda motor lebih cepat
+        }
+
+        cars[i] = (Car){x, y, speed, direction, type};
+        map[y][x] = CELL_CAR;
     }
 }
 
@@ -126,17 +175,23 @@ void UpdateGame() {
             for (int i = 0; i < numCars; i++) {
                 int newX = cars[i].x + cars[i].direction * cars[i].speed;
 
-                // Cek apakah sel baru adalah CELL_EMPTY
+                // Cek apakah sel baru valid dan kosong
                 if (newX >= 0 && newX < GRID_WIDTH && map[cars[i].y][newX] == CELL_EMPTY) {
-                      // Hapus mobil dari posisi lama
-                      map[cars[i].y][cars[i].x] = CELL_EMPTY;
-                      // Pindahkan mobil ke posisi baru
-                      cars[i].x = newX;
-
-                      map[cars[i].y][cars[i].x] = CELL_CAR;
+                    // Hapus mobil dari posisi lama
+                    map[cars[i].y][cars[i].x] = CELL_EMPTY;
+                    // Pindahkan mobil ke posisi baru
+                    cars[i].x = newX;
+                    map[cars[i].y][cars[i].x] = CELL_CAR;
                 } else {
                     // Jika tidak, balik arah mobil
                     cars[i].direction *= -1;
+                    // Coba bergerak ke arah yang berlawanan
+                    newX = cars[i].x + cars[i].direction * cars[i].speed;
+                    if (newX >= 0 && newX < GRID_WIDTH && map[cars[i].y][newX] == CELL_EMPTY) {
+                        map[cars[i].y][cars[i].x] = CELL_EMPTY;
+                        cars[i].x = newX;
+                        map[cars[i].y][cars[i].x] = CELL_CAR;
+                    }
                 }
             }
             frameCounter = 0;
@@ -199,11 +254,7 @@ void DrawGame(Camera2D camera) {
     }
 
     for (int i = 0; i < numCars; i++) {
-        int x = cars[i].x * CELL_SIZE;
-        int y = cars[i].y * CELL_SIZE;
-        DrawRectangle(x, y, CAR_WIDTH, CAR_HEIGHT, RED);
-        DrawRectangle(x + 2, y - 2, 5, 4, BLACK);
-        DrawRectangle(x + 2, y + CAR_HEIGHT - 2, 5, 4, BLACK);
+        DrawVehicle(cars[i]);
     }
 
     DrawRectangle(player.x * CELL_SIZE, player.y * CELL_SIZE, PLAYER_SIZE, PLAYER_SIZE, GRAY);
@@ -238,7 +289,6 @@ int main() {
     while (!WindowShouldClose()) {
         UpdateGame();
 
-        
         if (!kalah && !PermainanBerakhir) {
             camera.target.y -= CAMERA_SPEED; // Kamera selalu bergerak ke depan
 
