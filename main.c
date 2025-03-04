@@ -22,7 +22,7 @@
 #define CAMERA_SPEED 1
 #define CAMERA_DISTANCE 50
 #define INACTIVE_TIME_LIMIT 180
-#define CAMERA_DEATH_DISTANCE 70
+#define CAMERA_DEATH_DISTANCE 300
 #define CELL_CAR 3
 
 typedef struct {
