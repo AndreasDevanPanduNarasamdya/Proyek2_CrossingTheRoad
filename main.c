@@ -15,14 +15,14 @@
 #define CAR_SPEED_START 1
 #define CAR_MOVE_DELAY 6
 #define LANE_COLOR DARKGRAY
-#define MAX_LIVES 3
+#define MAX_LIVES 5
 #define CELL_EMPTY 0
 #define CELL_ROAD 1
 #define CELL_CHECKPOINT 2
 #define CAMERA_SPEED 1
 #define CAMERA_DISTANCE 50
-#define INACTIVE_TIME_LIMIT 180
-#define CAMERA_DEATH_DISTANCE 300
+#define INACTIVE_TIME_LIMIT 600
+#define CAMERA_DEATH_DISTANCE 500
 #define CELL_CAR 3
 
 typedef enum {
@@ -68,27 +68,47 @@ void DrawVehicle(Car car) {
 
     switch (car.type) {
         case VEHICLE_CAR:
-            DrawRectangle(x, y, CAR_WIDTH, CAR_HEIGHT, RED); // Mobil kecil
-            DrawRectangle(x + 2, y - 2, 5, 4, BLACK); // Lampu depan
-            DrawRectangle(x + 2, y + CAR_HEIGHT - 2, 5, 4, BLACK); // Lampu belakang
+            // Badan mobil
+            DrawRectangle(x, y, CAR_WIDTH, CAR_HEIGHT, RED);
+            // Lampu depan dan belakang
+            DrawRectangle(x + 2, y - 2, 5, 4, BLACK);
+            DrawRectangle(x + 2, y + CAR_HEIGHT - 2, 5, 4, BLACK);
+            // Roda depan dan belakang
+            DrawCircle(x + 3, y + CAR_HEIGHT - 1, 3, BLACK); // Roda belakang
+            DrawCircle(x + CAR_WIDTH - 3, y + CAR_HEIGHT - 1, 3, BLACK); // Roda depan
             break;
 
         case VEHICLE_TRUCK:
-            DrawRectangle(x, y, CAR_WIDTH * 2, CAR_HEIGHT, BLUE); // Truk
-            DrawRectangle(x + 4, y - 2, 5, 4, BLACK); // Lampu depan
-            DrawRectangle(x + 4, y + CAR_HEIGHT - 2, 5, 4, BLACK); // Lampu belakang
+            // Badan truk
+            DrawRectangle(x, y, CAR_WIDTH * 2, CAR_HEIGHT, BLUE);
+            // Lampu depan dan belakang
+            DrawRectangle(x + 4, y - 2, 5, 4, BLACK);
+            DrawRectangle(x + 4, y + CAR_HEIGHT - 2, 5, 4, BLACK);
+            // Roda depan dan belakang
+            DrawCircle(x + 5, y + CAR_HEIGHT - 1, 3, BLACK); // Roda belakang
+            DrawCircle(x + (CAR_WIDTH * 2) - 5, y + CAR_HEIGHT - 1, 3, BLACK); // Roda depan
             break;
 
         case VEHICLE_BUS:
-            DrawRectangle(x, y, CAR_WIDTH * 3, CAR_HEIGHT, YELLOW); // Bus
-            DrawRectangle(x + 6, y - 2, 5, 4, BLACK); // Lampu depan
-            DrawRectangle(x + 6, y + CAR_HEIGHT - 2, 5, 4, BLACK); // Lampu belakang
+            // Badan bus
+            DrawRectangle(x, y, CAR_WIDTH * 3, CAR_HEIGHT, YELLOW);
+            // Lampu depan dan belakang
+            DrawRectangle(x + 6, y - 2, 5, 4, BLACK);
+            DrawRectangle(x + 6, y + CAR_HEIGHT - 2, 5, 4, BLACK);
+            // Roda depan dan belakang
+            DrawCircle(x + 7, y + CAR_HEIGHT - 1, 3, BLACK); // Roda belakang
+            DrawCircle(x + (CAR_WIDTH * 3) - 7, y + CAR_HEIGHT - 1, 3, BLACK); // Roda depan
             break;
 
         case VEHICLE_BIKE:
-            DrawRectangle(x, y, CAR_WIDTH / 2, CAR_HEIGHT, GREEN); // Sepeda motor
-            DrawRectangle(x + 1, y - 2, 3, 4, BLACK); // Lampu depan
-            DrawRectangle(x + 1, y + CAR_HEIGHT - 2, 3, 4, BLACK); // Lampu belakang
+            // Badan sepeda motor
+            DrawRectangle(x, y, CAR_WIDTH / 2, CAR_HEIGHT, GREEN);
+            // Lampu depan dan belakang
+            DrawRectangle(x + 1, y - 2, 3, 4, BLACK);
+            DrawRectangle(x + 1, y + CAR_HEIGHT - 2, 3, 4, BLACK);
+            // Roda depan dan belakang
+            DrawCircle(x + 2, y + CAR_HEIGHT - 1, 2, BLACK); // Roda belakang
+            DrawCircle(x + (CAR_WIDTH / 2) - 2, y + CAR_HEIGHT - 1, 2, BLACK); // Roda depan
             break;
     }
 }
@@ -153,6 +173,7 @@ void InitGame() {
 }
 
 void NextLevel(Camera2D *camera) {
+
     PermainanBerakhir = false;
     if (level == 2) PermainanBerakhir = true;
     level++;
@@ -175,17 +196,12 @@ void UpdateGame() {
             for (int i = 0; i < numCars; i++) {
                 int newX = cars[i].x + cars[i].direction * cars[i].speed;
 
-                // Cek apakah sel baru valid dan kosong
                 if (newX >= 0 && newX < GRID_WIDTH && map[cars[i].y][newX] == CELL_EMPTY) {
-                    // Hapus mobil dari posisi lama
                     map[cars[i].y][cars[i].x] = CELL_EMPTY;
-                    // Pindahkan mobil ke posisi baru
                     cars[i].x = newX;
                     map[cars[i].y][cars[i].x] = CELL_CAR;
                 } else {
-                    // Jika tidak, balik arah mobil
                     cars[i].direction *= -1;
-                    // Coba bergerak ke arah yang berlawanan
                     newX = cars[i].x + cars[i].direction * cars[i].speed;
                     if (newX >= 0 && newX < GRID_WIDTH && map[cars[i].y][newX] == CELL_EMPTY) {
                         map[cars[i].y][cars[i].x] = CELL_EMPTY;
@@ -220,13 +236,16 @@ void UpdateGame() {
 
         checkposition(&player, &checkpoint);
 
+        // Cek tabrakan dengan semua kendaraan
         for (int i = 0; i < numCars; i++) {
             if (player.x == cars[i].x && player.y == cars[i].y) {
-                player.x = checkpoint.x;
-                player.y = checkpoint.y;
-                player.lives--;
+                player.lives--; // Kurangi nyawa
                 if (player.lives <= 0) {
                     kalah = true;
+                } else {
+                    // Reset pemain ke checkpoint jika masih punya nyawa
+                    player.x = checkpoint.x;
+                    player.y = checkpoint.y;
                 }
                 break;
             }
@@ -237,6 +256,7 @@ void UpdateGame() {
         NextLevel(&camera);
     }
 }
+
 
 void DrawGame(Camera2D camera) {
     BeginDrawing();
@@ -290,7 +310,7 @@ int main() {
         UpdateGame();
 
         if (!kalah && !PermainanBerakhir) {
-            camera.target.y -= CAMERA_SPEED; // Kamera selalu bergerak ke depan
+            camera.target.y -= CAMERA_SPEED ; // Kamera selalu bergerak ke depan
 
             // Cek jika pemain tertinggal terlalu jauh
             if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
