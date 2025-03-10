@@ -21,6 +21,7 @@ void RenderCharacter(Texture2D *PlayerSprite, Player player)
     DrawTextureEx(*PlayerSprite, (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE}, 0.0f, 0.1f, WHITE);
 }
 
+
  void RenderCars(int *numCars, Car cars[])
 {
     for (int i = 0; i < *numCars; i++)  // Use *numCars instead of numCars
@@ -66,9 +67,13 @@ void LoadAllTextures()
 
 void RenderInstructions(Player player, char *coordText, int level)
 {
-    DrawText(TextFormat("Score: %d", player.score), player.x *CELL_SIZE - 400, player.y * CELL_SIZE - 400, 20, WHITE);
-    DrawText(TextFormat("Lives: %d", player.lives),  player.x *CELL_SIZE - 400, player.y * CELL_SIZE - 350, 20, WHITE);
-    DrawText(TextFormat("Level: %d", level), player.x * CELL_SIZE - 400, player.y * CELL_SIZE - 300, 20, WHITE);
-    DrawText(coordText, player.x * CELL_SIZE - 400, player.y * CELL_SIZE - 200, 20, WHITE);
-    DrawText("Use Arrow Keys to Move", player.x * CELL_SIZE - 400, player.y * CELL_SIZE - 250, 20, WHITE);
+    int margin = 20; // Margin dari tepi layar
+
+    // Menampilkan teks di sudut kiri atas layar
+    DrawText(TextFormat("Score: %d", player.score), margin, margin, 20, WHITE);
+    DrawText(TextFormat("Lives: %d", player.lives), margin, margin + 30, 20, WHITE);
+    DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, WHITE);
+    DrawText(coordText, margin, margin + 90, 20, WHITE);
+    DrawText("Use Arrow Keys to Move", margin, margin + 120, 20, WHITE);
 }
+
