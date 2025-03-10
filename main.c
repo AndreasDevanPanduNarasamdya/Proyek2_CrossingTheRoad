@@ -1,39 +1,15 @@
 #include "raylib.h"
+#include "GLOBALHEADER.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
-
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 800
-#define CELL_SIZE 10
-#define GRID_WIDTH 100
-#define GRID_HEIGHT 200
-#define PLAYER_SIZE 10
-#define CAR_WIDTH 20
-#define CAR_HEIGHT 10
-#define NUM_CARS_START 20
-#define PLAYER_SPEED 1
-#define CAR_SPEED_START 1
-#define CAR_MOVE_DELAY 6
-#define LANE_COLOR DARKGRAY
-#define MAX_LIVES 3
-
-typedef struct {
-    int x, y;
-    int speed;
-    int direction;
-} Car;
-
-typedef struct {
-    int x, y, score, lives;
-} Player;
-
-typedef struct vector {
-    int x, y;
-} vector;
+#include "LibraryAndrew.c"
+#include "HeaderAndrew.h"
 
 Player player;
 vector checkpoint;
 Car cars[NUM_CARS_START * 2];
+Camera2D camera = {0};
 int frameCounter = 0;
 int ScorTerakhir = -1;
 bool PermainanBerakhir = false;
@@ -41,6 +17,8 @@ bool kalah = false;
 int level = 1;
 int numCars = NUM_CARS_START;
 int carSpeed = CAR_SPEED_START;
+bool movement[4] = {false,false,false,false};
+char coordText[50];
 
 void checkposition(Player *player, vector *check) {
     if (player->y % 50 == 0 && player->y != ScorTerakhir) {
@@ -65,6 +43,7 @@ void InitGame() {
         int col = rand() % GRID_WIDTH;
         int direction = (rand() % 2) ? 1 : -1;
         cars[i] = (Car){col, lane, carSpeed, direction};
+        cars[i].type = rand() % 3;  // Assigns 0, 1, or 2 randomly
     }
 }
 
@@ -96,16 +75,21 @@ void UpdateGame() {
             frameCounter = 0;
         }
 
-        int newX = player.x, newY = player.y;
-        if (IsKeyPressed(KEY_UP)) newY -= PLAYER_SPEED;
-        if (IsKeyPressed(KEY_DOWN)) newY += PLAYER_SPEED;
-        if (IsKeyPressed(KEY_LEFT)) newX -= PLAYER_SPEED;
-        if (IsKeyPressed(KEY_RIGHT)) newX += PLAYER_SPEED;
+      
+        if (IsKeyPressed(KEY_UP)) movement[0] = true;
+        if (IsKeyPressed(KEY_DOWN)) movement[1] = true;
+        if (IsKeyPressed(KEY_LEFT)) movement[2] = true;
+        if (IsKeyPressed(KEY_RIGHT)) movement[3] = true;
 
-        if (newX >= 0 && newX < GRID_WIDTH && newY >= 0 && newY < GRID_HEIGHT) {
-            player.x = newX;
-            player.y = newY;
-        }
+        if (movement[0]) { player.y -= PLAYER_SPEED; movement[0] = false; }
+        if (movement[1]) { player.y += PLAYER_SPEED; movement[1] = false; }
+        if (movement[2]) { player.x -= PLAYER_SPEED; movement[2] = false; }
+        if (movement[3]) { player.x += PLAYER_SPEED; movement[3] = false; }
+
+        if (player.x < 0) player.x = 0;
+        if (player.x >= GRID_WIDTH) player.x = GRID_WIDTH - 1;
+        if (player.y < 0) player.y = 0;
+        if (player.y >= GRID_HEIGHT) player.y = GRID_HEIGHT - 1;
 
         checkposition(&player, &checkpoint);
 
@@ -132,6 +116,10 @@ void DrawGame(Camera2D camera) {
     ClearBackground(WHITE);
     BeginMode2D(camera);
 
+    sprintf(coordText, "X: %d, Y: %d", player.x, player.y);
+
+    RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
+
     for (int i = 0; i < GRID_HEIGHT; i++) {
         if (i % 8 == 0) {
             for (int j = 0; j < GRID_WIDTH; j++) {
@@ -144,19 +132,10 @@ void DrawGame(Camera2D camera) {
         }
     }
 
-    for (int i = 0; i < numCars; i++) {
-        int x = cars[i].x * CELL_SIZE;
-        int y = cars[i].y * CELL_SIZE;
-        DrawRectangle(x, y, CAR_WIDTH, CAR_HEIGHT, RED);
-        DrawRectangle(x + 2, y - 2, 5, 4, BLACK);
-        DrawRectangle(x + 2, y + CAR_HEIGHT - 2, 5, 4, BLACK);
-    }
+    RenderCars(&numCars, cars);
 
-    DrawRectangle(player.x * CELL_SIZE, player.y * CELL_SIZE, PLAYER_SIZE, PLAYER_SIZE, GRAY);
-    DrawText(TextFormat("Score: %d", player.score), player.x *CELL_SIZE - 400, player.y * CELL_SIZE - 400, 20, DARKGRAY);
-    DrawText(TextFormat("Lives: %d", player.lives),  player.x *CELL_SIZE - 400, player.y * CELL_SIZE - 350, 20, DARKGRAY);
-    DrawText(TextFormat("Level: %d", level), player.x * CELL_SIZE - 400, player.y * CELL_SIZE - 300, 20, DARKGRAY);
-    DrawText("Use Arrow Keys to Move", 10, 100, 20, DARKGRAY);
+    RenderCharacter(&PlayerSprite, player);
+    RenderInstructions(player, coordText, level);
 
     if (PermainanBerakhir) {
         DrawText("MENANG", player.x * CELL_SIZE, player.y * CELL_SIZE, 40, RED);
@@ -179,19 +158,29 @@ int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
     SetTargetFPS(60);
     InitGame();
+    LoadAllTextures();
 
-    Camera2D camera = {0};
     camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
     camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
     camera.rotation = 0.0f;
     camera.zoom = 1.0f;
 
     while (!WindowShouldClose()) {
-            UpdateGame();
-            camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
-            DrawGame(camera);    
+        UpdateGame();
+
+        if (!kalah && !PermainanBerakhir) {
+            camera.target.y -= CAMERA_SPEED ; // Kamera selalu bergerak ke depan
+
+            // Cek jika pemain tertinggal terlalu jauh
+            if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
+                kalah = true;
+            }
+        }
+
+        DrawGame(camera);
     }
 
+    UnloadAllTextures();
     CloseWindow();
     return 0;
 }
