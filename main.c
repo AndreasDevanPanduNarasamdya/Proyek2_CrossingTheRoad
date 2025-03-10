@@ -8,6 +8,25 @@
 #include "LibraryFaiz.h"
 #include "LibraryFaiz.c"
 
+void RenderGrid() {
+    for (int i = 0; i < GRID_HEIGHT; i++) {
+        for (int j = 0; j < GRID_WIDTH; j++) {
+            Color cellColor = DARKGRAY; // Default warna jalan biasa
+
+            if (grid[i][j] == LANE_MARK) {
+                cellColor = LANE_COLOR; // Warna garis jalur
+            } 
+            else if (grid[i][j] == CHECKPOINT_LINE) {
+                cellColor = BLUE; // Warna garis checkpoint
+            }
+
+            DrawRectangle(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE, cellColor);
+        }
+    }
+}
+
+
+
 
 void DrawGame(Camera2D camera) {
     
@@ -19,17 +38,7 @@ void DrawGame(Camera2D camera) {
 
     sprintf(coordText, "X: %d, Y: %d", player.x, player.y);
 
-    for (int i = 0; i < GRID_HEIGHT; i++) {
-        if (i % 8 == 0) {
-            for (int j = 0; j < GRID_WIDTH; j++) {
-                DrawRectangle(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE, LANE_COLOR);
-            }
-        } else if (i % 50 == 0) {
-            for (int n = 0; n < GRID_WIDTH; n++) {
-                DrawRectangle(n * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE, BLUE);
-            }
-        }
-    }
+    RenderGrid();
     // Menggambar elemen game dalam dunia (terpengaruh oleh kamera)
     
     RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);

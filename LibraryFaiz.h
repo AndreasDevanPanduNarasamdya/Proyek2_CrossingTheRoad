@@ -17,10 +17,14 @@ int carSpeed = CAR_SPEED_START;
 bool movement[4] = {false,false,false,false};
 char coordText[50];
 
+int grid[GRID_HEIGHT][GRID_WIDTH];
+
+
 void InitGame();
 void UpdateGame();
 void NextLevel();
-void checkposition(Player *player, vector *check);
+void checkposition(Player *player);
+void InitGrid();
 
 
 #endif

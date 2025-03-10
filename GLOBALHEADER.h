@@ -22,6 +22,12 @@
 #define CAMERA_DISTANCE 50
 #define CAMERA_DEATH_DISTANCE 500
 
+#define ROAD 0
+#define LANE_MARK 1
+#define CHECKPOINT_LINE 2
+#define PLAYER 2
+#define CAR 3
+
 Texture2D TaxiTexture, TruckTexture, VanTexture, PlayerSprite, background;
 
 typedef struct {

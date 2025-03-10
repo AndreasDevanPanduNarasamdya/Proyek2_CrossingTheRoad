@@ -21,6 +21,7 @@ void RenderCharacter(Texture2D *PlayerSprite, Player player)
     DrawTextureEx(*PlayerSprite, (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE}, 0.0f, 0.1f, WHITE);
 }
 
+
  void RenderCars(int *numCars, Car cars[])
 {
     for (int i = 0; i < *numCars; i++)  // Use *numCars instead of numCars

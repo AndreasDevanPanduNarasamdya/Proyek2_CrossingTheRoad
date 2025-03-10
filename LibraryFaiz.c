@@ -5,14 +5,33 @@
 #include "GLOBALHEADER.h"
 
 
-void checkposition(Player *player, vector *check) {
-    if (player->y % 50 == 0 && player->y != ScorTerakhir) {
-        check->x = player->x;
-        check->y = player->y;
-        player->score += 10;
-        ScorTerakhir = player->y;
+void InitGrid() {
+    for (int i = 0; i < GRID_HEIGHT; i++) {
+        for (int j = 0; j < GRID_WIDTH; j++) {
+            if (i % 50 == 0) {
+                grid[i][j] = CHECKPOINT_LINE; // Garis biru setiap 50 baris
+            } else if (i % 8 == 0) {
+                grid[i][j] = LANE_MARK; // Garis putih tiap 8 baris
+            } else {
+                grid[i][j] = ROAD; // Jalan normal
+            }
+        }
     }
 }
+
+
+void checkposition(Player *player) {
+    if (grid[player->y][player->x] == CHECKPOINT_LINE && player->y != ScorTerakhir) {
+        checkpoint.x = player->x; 
+        checkpoint.y = player->y;
+        player->score += 10;
+        ScorTerakhir = player->y;
+
+        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
+        grid[player->y][player->x] = ROAD;
+    }
+}
+
 
 void InitGame() {
     srand(time(NULL));
@@ -23,13 +42,23 @@ void InitGame() {
     player.score = 0;
     player.lives = MAX_LIVES;
     
+    InitGrid();  // Pastikan grid diinisialisasi sebelum menempatkan mobil
+
     for (int i = 0; i < numCars; i++) {
-        int lane = rand() % (GRID_HEIGHT - 2);
-        int col = rand() % GRID_WIDTH;
+        int lane, col;
+
+        do {
+            lane = rand() % (GRID_HEIGHT - 2);
+        } while (grid[lane][0] == LANE_MARK);  // Pastikan bukan garis batas
+
+        col = rand() % GRID_WIDTH;
         int direction = (rand() % 2) ? 1 : -1;
-        cars[i] = (Car){col, lane, carSpeed, direction, rand() % 3};
+
+        cars[i] = (Car){col, lane, carSpeed, direction};
+        cars[i].type = rand() % 3;  // Pilih jenis mobil secara acak
     }
 }
+
 
 void NextLevel() {
     PermainanBerakhir = (level == 2);
@@ -53,7 +82,9 @@ void UpdateGame() {
                 int newX = cars[i].x + cars[i].direction * cars[i].speed;
                 if (newX < 0) newX = GRID_WIDTH - 1;
                 if (newX >= GRID_WIDTH) newX = 0;
+                grid[cars[i].y][cars[i].x] = ROAD;
                 cars[i].x = newX;
+                grid[cars[i].y][cars[i].x] = CAR;
             }
             frameCounter = 0;
         }
@@ -73,7 +104,7 @@ void UpdateGame() {
         if (player.y < 0) player.y = 0;
         if (player.y >= GRID_HEIGHT) player.y = GRID_HEIGHT - 1;
 
-        checkposition(&player, &checkpoint);
+        checkposition(&player);
 
         for (int i = 0; i < numCars; i++) {
             if (player.x == cars[i].x && player.y == cars[i].y) {
