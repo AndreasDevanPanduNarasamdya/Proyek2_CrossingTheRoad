@@ -1,24 +1,30 @@
-#include <windows.h>
-#include <stdio.h>
+#include "raylib.h"
+#include "sfx.h"
 
-int main() {
-    // Open an audio file (change "example.wav" to "example.mp3" for MP3)
-    if (mciSendString("open \"car#1.wav\" type waveaudio alias sound1", NULL, 0, NULL) != 0) {
-        printf("Failed to open audio file.\n");
-        return 1;
-    }
+int main(void) {
+    // Initialize the audio device
+    InitAudioDevice();
 
-    // Play the audio file
-    if (mciSendString("play sound1", NULL, 0, NULL) != 0) {
-        printf("Failed to play audio.\n");
-        return 1;
-    }
+    // Create sound managers for different sound files
+    SoundManager sound1 = CreateSoundManager("backsound1.wav");
+    SoundManager sound2 = CreateSoundManager("backsound2.wav");
 
-    printf("Playing sound... Press Enter to stop.\n");
-    getchar(); // Wait for user input to stop playback
+    // Play the first sound
+    PlaySoundManager(&sound1);
 
-    // Close the audio file
-    mciSendString("close sound1", NULL, 0, NULL);
+    // Wait for the user to press ESC to stop
+    while (!IsKeyPressed(KEY_ESCAPE)) {}
+
+    // Play the second sound
+    PlaySoundManager(&sound2);
+
+    // Wait for the user to press ESC to stop
+    while (!IsKeyPressed(KEY_ESCAPE)) {}
+
+    // Unload sounds and close the audio device
+    UnloadSoundManager(&sound1);
+    UnloadSoundManager(&sound2);
+    CloseAudioDevice();
 
     return 0;
 }

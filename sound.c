@@ -1,12 +1,30 @@
 #include "raylib.h"
+#include "sfx.h"
 
-int main(void)
-{
+int main(void) {
+    // Initialize the audio device
     InitAudioDevice();
-    Sound sound = LoadSound("backsound2.wav");
-    PlaySound(sound);
-    while (!IsKeyPressed(KEY_ESCAPE)) {} // Keep the program running
-    UnloadSound(sound);
+
+    // Create sound managers for different sound files
+    SoundManager sound1 = CreateSoundManager("backsound1.wav");
+    SoundManager sound2 = CreateSoundManager("backsound2.wav");`
+
+    // Play the first sound
+    PlaySoundManager(&sound1);
+
+    // Wait for the user to press ESC to stop
+    while (!IsKeyPressed(KEY_ESCAPE)) {}
+
+    // Play the second sound
+    PlaySoundManager(&sound2);
+
+    // Wait for the user to press ESC to stop
+    while (!IsKeyPressed(KEY_ESCAPE)) {}
+
+    // Unload sounds and close the audio device
+    UnloadSoundManager(&sound1);
+    UnloadSoundManager(&sound2);
     CloseAudioDevice();
+
     return 0;
 }

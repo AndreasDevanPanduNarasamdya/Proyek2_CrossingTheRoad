@@ -1,10 +1,17 @@
-#ifndef SFX_H
-#define SFX_H
+#ifndef SOUND_H
+#define SOUND_H
 
-// Function declarations
-void enable_sound_effects();
-void disable_sound_effects();
-void set_volume(int level);
-void play_sound(const char *sound_name);
+#include "raylib.h"
+
+// Define a struct to represent a SoundManager
+typedef struct {
+    Sound sound;
+    const char *soundFilePath;
+} SoundManager;
+
+// Functions to operate on the SoundManager
+SoundManager CreateSoundManager(const char *soundFilePath);
+void PlaySoundManager(SoundManager *manager);
+void UnloadSoundManager(SoundManager *manager);
 
 #endif
