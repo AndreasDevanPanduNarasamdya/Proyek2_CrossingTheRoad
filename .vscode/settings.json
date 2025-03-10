@@ -10,6 +10,12 @@
   },
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+  "files.associations": {
+    "libraryfaiz.h": "c"
+  },
+>>>>>>> Stashed changes
 =======
   "files.associations": {
     "libraryfaiz.h": "c"
@@ -77,12 +83,15 @@
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
     "raylib.h": "c",
     "stdlib.h": "c",
     "globalheader.h": "c"
   }
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   "C_Cpp_Runner.msvcSecureNoWarnings": false
