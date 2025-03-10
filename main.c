@@ -1,6 +1,10 @@
 #include "raylib.h"
+#include "GLOBALHEADER.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
+#include "LibraryAndrew.c"
+#include "HeaderAndrew.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 800
@@ -51,6 +55,7 @@ Player player;
 vector checkpoint;
 Camera2D camera = {0};
 Car cars[NUM_CARS_START * 2];
+Camera2D camera = {0};
 int frameCounter = 0;
 int ScorTerakhir = -1;
 bool PermainanBerakhir = false;
@@ -58,74 +63,7 @@ bool kalah = false;
 int level = 1;
 int numCars = NUM_CARS_START;
 int carSpeed = CAR_SPEED_START;
-bool movement[4] = {false, false, false, false};
-int map[GRID_HEIGHT][GRID_WIDTH];
-int inactiveTimer = 0;
-
-void DrawVehicle(Car car) {
-    int x = car.x * CELL_SIZE;
-    int y = car.y * CELL_SIZE;
-
-    switch (car.type) {
-        case VEHICLE_CAR:
-            // Badan mobil
-            DrawRectangle(x, y, CAR_WIDTH, CAR_HEIGHT, RED);
-            // Lampu depan dan belakang
-            DrawRectangle(x + 2, y - 2, 5, 4, BLACK);
-            DrawRectangle(x + 2, y + CAR_HEIGHT - 2, 5, 4, BLACK);
-            // Roda depan dan belakang
-            DrawCircle(x + 3, y + CAR_HEIGHT - 1, 3, BLACK); // Roda belakang
-            DrawCircle(x + CAR_WIDTH - 3, y + CAR_HEIGHT - 1, 3, BLACK); // Roda depan
-            break;
-
-        case VEHICLE_TRUCK:
-            // Badan truk
-            DrawRectangle(x, y, CAR_WIDTH * 2, CAR_HEIGHT, BLUE);
-            // Lampu depan dan belakang
-            DrawRectangle(x + 4, y - 2, 5, 4, BLACK);
-            DrawRectangle(x + 4, y + CAR_HEIGHT - 2, 5, 4, BLACK);
-            // Roda depan dan belakang
-            DrawCircle(x + 5, y + CAR_HEIGHT - 1, 3, BLACK); // Roda belakang
-            DrawCircle(x + (CAR_WIDTH * 2) - 5, y + CAR_HEIGHT - 1, 3, BLACK); // Roda depan
-            break;
-
-        case VEHICLE_BUS:
-            // Badan bus
-            DrawRectangle(x, y, CAR_WIDTH * 3, CAR_HEIGHT, YELLOW);
-            // Lampu depan dan belakang
-            DrawRectangle(x + 6, y - 2, 5, 4, BLACK);
-            DrawRectangle(x + 6, y + CAR_HEIGHT - 2, 5, 4, BLACK);
-            // Roda depan dan belakang
-            DrawCircle(x + 7, y + CAR_HEIGHT - 1, 3, BLACK); // Roda belakang
-            DrawCircle(x + (CAR_WIDTH * 3) - 7, y + CAR_HEIGHT - 1, 3, BLACK); // Roda depan
-            break;
-
-        case VEHICLE_BIKE:
-            // Badan sepeda motor
-            DrawRectangle(x, y, CAR_WIDTH / 2, CAR_HEIGHT, GREEN);
-            // Lampu depan dan belakang
-            DrawRectangle(x + 1, y - 2, 3, 4, BLACK);
-            DrawRectangle(x + 1, y + CAR_HEIGHT - 2, 3, 4, BLACK);
-            // Roda depan dan belakang
-            DrawCircle(x + 2, y + CAR_HEIGHT - 1, 2, BLACK); // Roda belakang
-            DrawCircle(x + (CAR_WIDTH / 2) - 2, y + CAR_HEIGHT - 1, 2, BLACK); // Roda depan
-            break;
-    }
-}
-
-void GenerateMap() {
-    for (int y = 0; y < GRID_HEIGHT; y++) {
-        for (int x = 0; x < GRID_WIDTH; x++) {
-            if (y % 8 == 0) {
-                map[y][x] = CELL_ROAD;  // Jalur mobil
-            } else if (y % 50 == 0) {
-                map[y][x] = CELL_CHECKPOINT;  // Checkpoint pemain
-            } else {
-                map[y][x] = CELL_EMPTY;  // Area kosong
-            }
-        }
-    }
-}
+bool movement[4] = {false,false,false,false};
 
 void checkposition(Player *player, vector *check) {
     if (player->y % 50 == 0 && player->y != ScorTerakhir) {
@@ -157,18 +95,7 @@ void InitGame() {
 
         VehicleType type = rand() % 4; // Pilih jenis kendaraan secara acak
         int direction = (rand() % 2) ? 1 : -1;
-        int speed = carSpeed;
-
-        // Sesuaikan kecepatan berdasarkan jenis kendaraan
-        switch (type) {
-            case VEHICLE_CAR: speed = carSpeed; break;
-            case VEHICLE_TRUCK: speed = (carSpeed - 1 > 0) ? carSpeed - 1 : 1; break; // Truk lebih lambat, minimal kecepatan 1
-            case VEHICLE_BUS: speed = carSpeed; break;
-            case VEHICLE_BIKE: speed = carSpeed + 1; break; // Sepeda motor lebih cepat
-        }
-
-        cars[i] = (Car){x, y, speed, direction, type};
-        map[y][x] = CELL_CAR;
+        cars[i] = (Car){col, lane, carSpeed, direction};
     }
 }
 
@@ -224,15 +151,6 @@ void UpdateGame() {
         if (player.y < 0) player.y = 0;
         if (player.y >= GRID_HEIGHT) player.y = GRID_HEIGHT - 1;
 
-        if (playerMoved) {
-            inactiveTimer = 0;
-        } else {
-            inactiveTimer++;
-        }
-
-        if (inactiveTimer >= INACTIVE_TIME_LIMIT) {
-            kalah = true;
-        }
 
         checkposition(&player, &checkpoint);
 
@@ -263,6 +181,10 @@ void DrawGame(Camera2D camera) {
     ClearBackground(WHITE);
     BeginMode2D(camera);
 
+    sprintf(coordText, "X: %d, Y: %d", player.x, player.y);
+
+    RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
+
     for (int y = 0; y < GRID_HEIGHT; y++) {
         for (int x = 0; x < GRID_WIDTH; x++) {
             if (map[y][x] == CELL_ROAD) {
@@ -274,12 +196,16 @@ void DrawGame(Camera2D camera) {
     }
 
     for (int i = 0; i < numCars; i++) {
-        DrawVehicle(cars[i]);
+        int x = cars[i].x * CELL_SIZE;
+        int y = cars[i].y * CELL_SIZE;
+        DrawRectangle(x, y, CAR_WIDTH, CAR_HEIGHT, RED);
+        DrawRectangle(x + 2, y - 2, 5, 4, BLACK);
+        DrawRectangle(x + 2, y + CAR_HEIGHT - 2, 5, 4, BLACK);
     }
 
     DrawRectangle(player.x * CELL_SIZE, player.y * CELL_SIZE, PLAYER_SIZE, PLAYER_SIZE, GRAY);
-    DrawText(TextFormat("Score: %d", player.score), player.x * CELL_SIZE - 400, player.y * CELL_SIZE - 400, 20, DARKGRAY);
-    DrawText(TextFormat("Lives: %d", player.lives), player.x * CELL_SIZE - 400, player.y * CELL_SIZE - 350, 20, DARKGRAY);
+    DrawText(TextFormat("Score: %d", player.score), player.x *CELL_SIZE - 400, player.y * CELL_SIZE - 400, 20, DARKGRAY);
+    DrawText(TextFormat("Lives: %d", player.lives),  player.x *CELL_SIZE - 400, player.y * CELL_SIZE - 350, 20, DARKGRAY);
     DrawText(TextFormat("Level: %d", level), player.x * CELL_SIZE - 400, player.y * CELL_SIZE - 300, 20, DARKGRAY);
     DrawText("Use Arrow Keys to Move", 10, 100, 20, DARKGRAY);
 
@@ -300,6 +226,7 @@ int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
     SetTargetFPS(60);
     InitGame();
+    LoadAllTextures();
 
     camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
     camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
@@ -321,6 +248,7 @@ int main() {
         DrawGame(camera);
     }
 
+    UnloadAllTextures();
     CloseWindow();
     return 0;
 }
