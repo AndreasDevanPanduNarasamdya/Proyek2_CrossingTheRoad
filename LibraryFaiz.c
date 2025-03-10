@@ -25,6 +25,7 @@ void checkposition(Player *player) {
         checkpoint.x = player->x; 
         checkpoint.y = player->y;
         player->score += 10;
+        
         ScorTerakhir = player->y;
 
         // Tandai checkpoint sudah dilewati agar tidak terus menambah skor

@@ -63,6 +63,8 @@ void DrawGame(Camera2D camera) {
     }
 
 
+
+    
     EndMode2D();
     EndDrawing();
 }
