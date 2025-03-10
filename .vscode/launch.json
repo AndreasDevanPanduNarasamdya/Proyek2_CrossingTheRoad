@@ -61,8 +61,13 @@
       "stopAtEntry": false,
       "externalConsole": true,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       "cwd": "d:/Proyek2_CrossingTheRoad",
       "program": "d:/Proyek2_CrossingTheRoad/build/Debug/outDebug",
+=======
+      "cwd": "l:/Kampus/PROJEK 2 Struktur Data dan Array/Proyek2_CrossingTheRoad",
+      "program": "l:/Kampus/PROJEK 2 Struktur Data dan Array/Proyek2_CrossingTheRoad/build/Debug/outDebug",
+>>>>>>> Stashed changes
 =======
       "cwd": "l:/Kampus/PROJEK 2 Struktur Data dan Array/Proyek2_CrossingTheRoad",
       "program": "l:/Kampus/PROJEK 2 Struktur Data dan Array/Proyek2_CrossingTheRoad/build/Debug/outDebug",
