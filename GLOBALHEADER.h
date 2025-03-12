@@ -7,8 +7,8 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 800
 #define CELL_SIZE 10
-#define GRID_WIDTH 100
-#define GRID_HEIGHT 200
+#define GRID_WIDTH 200
+#define GRID_HEIGHT 400
 #define PLAYER_SIZE 10
 #define CAR_WIDTH 20
 #define CAR_HEIGHT 10

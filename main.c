@@ -19,13 +19,10 @@ void RenderGrid() {
             else if (grid[i][j] == CHECKPOINT_LINE) {
                 cellColor = BLUE; // Warna garis checkpoint
             }
-
             DrawRectangle(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE, cellColor);
         }
     }
 }
-
-
 
 
 void DrawGame(Camera2D camera) {
@@ -42,16 +39,15 @@ void DrawGame(Camera2D camera) {
     // Menggambar elemen game dalam dunia (terpengaruh oleh kamera)
     
     RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
+
     RenderCars(&numCars, cars);
+
     RenderCharacter(&PlayerSprite, player);
+
     EndMode2D(); // Selesai menggambar elemen dalam dunia
 
     // Menggambar elemen UI/HUD (agar tetap di layar)
     RenderInstructions(player, coordText, level);
-
-  
-
-    
 
     if (PermainanBerakhir) {
         DrawText("MENANG", player.x * CELL_SIZE, player.y * CELL_SIZE, 40, RED);
@@ -62,9 +58,6 @@ void DrawGame(Camera2D camera) {
         PermainanBerakhir = true;
     }
 
-
-
-    
     EndMode2D();
     EndDrawing();
 }
@@ -81,7 +74,7 @@ int main() {
     camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
     camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
     camera.rotation = 0.0f;
-    camera.zoom = 1.0f;
+    camera.zoom = 1.5f;
 
     while (!WindowShouldClose()) {
         UpdateGame();

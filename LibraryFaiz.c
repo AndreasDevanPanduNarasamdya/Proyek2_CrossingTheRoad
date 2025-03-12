@@ -8,7 +8,7 @@
 void InitGrid() {
     for (int i = 0; i < GRID_HEIGHT; i++) {
         for (int j = 0; j < GRID_WIDTH; j++) {
-            if (i % 50 == 0) {
+            if (i % 100 == 0) {
                 grid[i][j] = CHECKPOINT_LINE; // Garis biru setiap 50 baris
             } else if (i % 8 == 0) {
                 grid[i][j] = LANE_MARK; // Garis putih tiap 8 baris
@@ -25,7 +25,7 @@ void checkposition(Player *player) {
         checkpoint.x = player->x; 
         checkpoint.y = player->y;
         player->score += 10;
-        
+
         ScorTerakhir = player->y;
 
         // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
@@ -108,7 +108,7 @@ void UpdateGame() {
         checkposition(&player);
 
         for (int i = 0; i < numCars; i++) {
-            if (player.x == cars[i].x && player.y == cars[i].y) {
+            if (player.x + 4 == cars[i].x  && player.y == cars[i].y) {
                 player.x = checkpoint.x;
                 player.y = checkpoint.y;
                 player.lives--;
