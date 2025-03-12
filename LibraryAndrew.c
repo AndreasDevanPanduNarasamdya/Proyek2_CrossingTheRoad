@@ -4,17 +4,33 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include "LibraryFaiz.h"
 
 void RenderRoads()
 {
-    for (int x = 0; x < SCREEN_WIDTH; x += background.width) 
+    int padding = 50; // Padding default antara aset jalan
+    int scaledWidth = background.width * 0.20f;  // Sesuaikan dengan skala
+    int scaledHeight = background.height * 0.20f; 
+
+    for (int x = 0; x < SCREEN_WIDTH; x += scaledWidth + padding) 
     {
-        for (int y = 0; y < SCREEN_HEIGHT*2.5; y += 300) 
+        for (int y = 0; y < SCREEN_HEIGHT * 4.8; y += scaledHeight + padding) 
         {
-            DrawTextureEx(background, (Vector2){x, y}, 0.0f, 0.25, WHITE);
+            int gridX = x / CELL_SIZE;
+            int gridY = y / CELL_SIZE; 
+
+            // Gambar background jalan dengan celah ekstra jika perlu
+            DrawTextureEx(background, (Vector2){x, y}, 0.0f, 0.20f, WHITE);
+            
+            if (gridY < GRID_HEIGHT && grid[gridY][gridX] == CHECKPOINT_LINE) {
+                    DrawRectangle(x, y , CELL_SIZE, CELL_SIZE, BLUE);
+            }
+            
+            
         }
     }
 }
+
 
 void RenderCharacter(Texture2D *PlayerSprite, Player player)
 {
@@ -70,10 +86,10 @@ void RenderInstructions(Player player, char *coordText, int level)
     int margin = 20; // Margin dari tepi layar
 
     // Menampilkan teks di sudut kiri atas layar
-    DrawText(TextFormat("Score: %d", player.score), margin, margin, 20, WHITE);
-    DrawText(TextFormat("Lives: %d", player.lives), margin, margin + 30, 20, WHITE);
-    DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, WHITE);
-    DrawText(coordText, margin, margin + 90, 20, WHITE);
-    DrawText("Use Arrow Keys to Move", margin, margin + 120, 20, WHITE);
-}
+    DrawText(TextFormat("Score: %d", player.score), margin, margin, 20, BLACK);
+    DrawText(TextFormat("Lives: %d", player.lives), margin, margin + 30, 20, BLACK);
+    DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, BLACK);
+    DrawText(coordText, margin, margin + 90, 20, BLACK);
+    DrawText("Use Arrow Keys to Move", margin, margin + 120, 20, BLACK);
 
+}
