@@ -62,9 +62,6 @@ void DrawGame(Camera2D camera) {
     EndDrawing();
 }
 
-
-
-
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
     SetTargetFPS(60);
