@@ -5,8 +5,6 @@
 #include <time.h>
 #include "LibraryAndrew.c"
 #include "HeaderAndrew.h"
-#include "menu.h"
-#include "menu.c"
 
 Player player;
 vector checkpoint;
@@ -114,29 +112,27 @@ void UpdateGame() {
 }
 
 void DrawGame(Camera2D camera) {
+    
+
     BeginDrawing();
     ClearBackground(WHITE);
+
     BeginMode2D(camera);
 
     sprintf(coordText, "X: %d, Y: %d", player.x, player.y);
 
+    RenderGrid();
+    // Menggambar elemen game dalam dunia (terpengaruh oleh kamera)
+    
     RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-    for (int i = 0; i < GRID_HEIGHT; i++) {
-        if (i % 8 == 0) {
-            for (int j = 0; j < GRID_WIDTH; j++) {
-                DrawRectangle(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE, LANE_COLOR);
-            }
-        } else if (i % 50 == 0) {
-            for (int n = 0; n < GRID_WIDTH; n++) {
-                DrawRectangle(n * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE, BLUE);
-            }
-        }
-    }
 
     RenderCars(&numCars, cars);
 
     RenderCharacter(&PlayerSprite, player);
+
+    EndMode2D(); // Selesai menggambar elemen dalam dunia
+
+    // Menggambar elemen UI/HUD (agar tetap di layar)
     RenderInstructions(player, coordText, level);
 
     if (PermainanBerakhir) {
@@ -148,13 +144,9 @@ void DrawGame(Camera2D camera) {
         PermainanBerakhir = true;
     }
 
-
     EndMode2D();
     EndDrawing();
 }
-
-
-
 
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
@@ -173,7 +165,7 @@ int main() {
     camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
     camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
     camera.rotation = 0.0f;
-    camera.zoom = 1.0f;
+    camera.zoom = 1.5f;
 
     while (!WindowShouldClose()) {
         UpdateGame();

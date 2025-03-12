@@ -7,8 +7,8 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 800
 #define CELL_SIZE 10
-#define GRID_WIDTH 100
-#define GRID_HEIGHT 200
+#define GRID_WIDTH 200
+#define GRID_HEIGHT 400
 #define PLAYER_SIZE 10
 #define CAR_WIDTH 20
 #define CAR_HEIGHT 10
@@ -21,6 +21,12 @@
 #define CAMERA_SPEED 1
 #define CAMERA_DISTANCE 50
 #define CAMERA_DEATH_DISTANCE 500
+
+#define ROAD 0
+#define LANE_MARK 1
+#define CHECKPOINT_LINE 2
+#define PLAYER 2
+#define CAR 3
 
 Texture2D TaxiTexture, TruckTexture, VanTexture, PlayerSprite, background;
 
