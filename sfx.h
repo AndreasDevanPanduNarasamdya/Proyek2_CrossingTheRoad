@@ -1,17 +1,15 @@
-#ifndef SOUND_H
-#define SOUND_H
+#include "sfx.h"
 
-#include "raylib.h"
+SoundManager CreateSoundManager(const char* fileName) {
+    SoundManager manager;
+    manager.sound = LoadSound(fileName);
+    return manager;
+}
 
-// Define a struct to represent a SoundManager
-typedef struct {
-    Sound sound;
-    const char *soundFilePath;
-} SoundManager;
+void PlaySoundManager(SoundManager* manager) {
+    PlaySound(manager->sound);
+}
 
-// Functions to operate on the SoundManager
-SoundManager CreateSoundManager(const char *soundFilePath);
-void PlaySoundManager(SoundManager *manager);
-void UnloadSoundManager(SoundManager *manager);
-
-#endif
+void UnloadSoundManager(SoundManager* manager) {
+    UnloadSound(manager->sound);
+}
