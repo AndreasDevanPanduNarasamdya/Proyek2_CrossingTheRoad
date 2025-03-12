@@ -5,6 +5,8 @@
 #include <time.h>
 #include "LibraryAndrew.c"
 #include "HeaderAndrew.h"
+#include "menu.h"
+#include "menu.c"
 
 Player player;
 vector checkpoint;
@@ -164,7 +166,7 @@ int main() {
         CloseWindow();
         return 0;
     }
-    
+
     InitGame();
     LoadAllTextures();
 
