@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include "GLOBALHEADER.h"
+#include "../GLOBALHEADER.h"
 
 void RenderGrid() {
     for (int i = 0; i < GRID_HEIGHT; i++) {

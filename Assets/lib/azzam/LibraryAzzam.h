@@ -1,9 +1,9 @@
 #ifndef LIBRARYAZZAM_H
 #define LIBRARYAZZAM_H
 
-#include "GLOBALHEADER.h"
-#include "raylib.h"
-#include "LibraryFaiz.h"
+#include "../GLOBALHEADER.h"
+#include "../raylib.h"
+#include "../faiz/LibraryFaiz.h"
 
 void NextLevel(); // Deklarasi fungsi NextLevel()
 

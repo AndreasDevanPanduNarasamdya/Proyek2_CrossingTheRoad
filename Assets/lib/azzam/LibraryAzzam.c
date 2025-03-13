@@ -1,5 +1,5 @@
 #include "LibraryAzzam.h"
-#include "LibraryFaiz.h" 
+#include "../faiz/LibraryFaiz.h"
 
 void NextLevel() {
     PermainanBerakhir = (level == 2);

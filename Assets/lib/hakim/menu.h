@@ -1,7 +1,7 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include "raylib.h"
+#include "../raylib.h"
 
 typedef enum {
     MENU_START,

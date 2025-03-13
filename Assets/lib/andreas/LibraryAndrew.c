@@ -1,10 +1,12 @@
-#include "raylib.h"
-#include "GLOBALHEADER.h"
+#include "../raylib.h"
 #include "HeaderAndrew.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include "LibraryFaiz.h"
+#include "../GLOBALHEADER.h"
+#include "../azzam/LibraryAzzam.h"
+#include "../faiz/LibraryFaiz.h"
+
 
 
 void RenderRoads() {
