@@ -4,7 +4,10 @@
 #include <stdio.h>
 #include <time.h>
 #include "LibraryAndrew.c"
+#include "HeaderAndrew.h"
+#include "LibraryFaiz.h"
 #include "LibraryFaiz.c"
+#include "menu.h"
 #include "menu.c"
 
 
