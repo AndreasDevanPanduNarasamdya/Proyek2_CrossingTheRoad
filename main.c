@@ -7,6 +7,8 @@
 #include "HeaderAndrew.h"
 #include "LibraryFaiz.h"
 #include "LibraryFaiz.c"
+#include "LibraryAzzam.h"
+#include "LibraryAzzam.c"
 #include "menu.h"
 #include "menu.c"
 
