@@ -104,19 +104,19 @@ endif
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),LINUX)
         RAYLIB_PREFIX ?= ..
-        RAYLIB_PATH    = $(realpath $(RAYLIB_PREFIX))
+        RAYLIB_PATH = C:/raylib/raylib
         CC = gcc
-        CFLAGS = -Wall -std=c99 -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external
-        LFLAGS = -L. -L$(RAYLIB_PATH)/src
-        LIBS = -lraylib -lopengl32 -lgdi32 -lwinmm
-        OBJS = main.c sound.c
+        CFLAGS = -Wall -std=c99 -D_DEFAULT_SOURCE -Wno-missing-braces -s -O1 \
+         -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external
+        LFLAGS = -L$(RAYLIB_PATH)/src
+    LIBS = -lraylib -lopengl32 -lgdi32 -lwinmm
+    OBJS = main.c sound.c
 
-main: $(OBJS)
-    $(CC) -o main $(OBJS) $(CFLAGS) $(LFLAGS) $(LIBS)
+    game: $(OBJS)
+        $(CC) -o game $(OBJS) $(CFLAGS) $(LFLAGS) $(LIBS)
 
-clean:
-    rm -f main.exe *.o
-
+    clean:
+        rm -f game.exe *.o
     endif
 endif
 # Default path for raylib on Raspberry Pi, if installed in different path, update it!
