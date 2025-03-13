@@ -5,11 +5,11 @@
 
 typedef enum {
     MENU_START,
-    MENU_CONTINUE,
     MENU_OPTIONS,
     MENU_EXIT
 } MenuOption;
 
+// Fungsi untuk menampilkan menu utama
 MenuOption ShowMenu();
 
 #endif
