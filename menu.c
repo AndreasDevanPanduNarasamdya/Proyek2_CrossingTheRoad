@@ -3,7 +3,7 @@
 
 MenuOption ShowMenu() {
     int selectedOption = 0;
-    const char *menuOptions[] = {"Start Game", "Continue", "Options", "Exit"};
+    const char *menuOptions[] = {"Start Game", "Options", "Exit"};
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
     while (!WindowShouldClose()) {
@@ -11,9 +11,16 @@ MenuOption ShowMenu() {
         ClearBackground(RAYWHITE);
 
         DrawText("Main Menu", 320, 100, 40, DARKGRAY);
+
         for (int i = 0; i < totalOptions; i++) {
-            Color color = (i == selectedOption) ? RED : BLACK;
-            DrawText(menuOptions[i], 350, 200 + i * 50, 30, color);
+            Color textColor = (i == selectedOption) ? WHITE : BLACK;
+
+            // **Kotak highlight di belakang opsi yang dipilih**
+            if (i == selectedOption) {
+                DrawRectangle(340, 200 + i * 50, 160, 40, RED);
+            }
+
+            DrawText(menuOptions[i], 350, 210 + i * 50, 30, textColor);
         }
 
         EndDrawing();
@@ -25,8 +32,12 @@ MenuOption ShowMenu() {
             selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
         }
         if (IsKeyPressed(KEY_ENTER)) {
+            if (selectedOption == MENU_EXIT) {
+                CloseWindow();
+            }
             return (MenuOption)selectedOption;
         }
     }
+
     return MENU_EXIT;
 }
