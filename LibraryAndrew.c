@@ -6,27 +6,19 @@
 #include <time.h>
 #include "LibraryFaiz.h"
 
-void RenderRoads()
-{
-    int padding = 50; // Padding default antara aset jalan
-    int scaledWidth = background.width * 0.20f;  // Sesuaikan dengan skala
-    int scaledHeight = background.height * 0.20f; 
 
-    for (int x = 0; x < SCREEN_WIDTH; x += scaledWidth + padding) 
-    {
-        for (int y = 0; y < SCREEN_HEIGHT * 4.8; y += scaledHeight + padding) 
-        {
-            int gridX = x / CELL_SIZE;
-            int gridY = y / CELL_SIZE; 
-
-            // Gambar background jalan dengan celah ekstra jika perlu
-            DrawTextureEx(background, (Vector2){x, y}, 0.0f, 0.20f, WHITE);
-            
-            if (gridY < GRID_HEIGHT && grid[gridY][gridX] == CHECKPOINT_LINE) {
-                    DrawRectangle(x, y , CELL_SIZE, CELL_SIZE, BLUE);
+void RenderRoads() {
+    for (int y = 0; y < GRID_HEIGHT; y++) {
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            if (grid[y][x] == LANE_MARK) {
+                DrawRectangle(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, BLACK);
+            } else if (grid[y][x] == putihs) {
+                DrawRectangle(x * CELL_SIZE + CELL_SIZE / 4, y * CELL_SIZE + CELL_SIZE / 4, CELL_SIZE / 2, CELL_SIZE / 8, YELLOW);
+            } else if (grid[y][x]== ROAD) {
+                DrawRectangle(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, GRAY);
+            } else if (grid[y][x]== CHECKPOINT_LINE){
+                DrawRectangle(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, BLUE);
             }
-            
-            
         }
     }
 }
@@ -38,7 +30,8 @@ void RenderCharacter(Texture2D *PlayerSprite, Player player)
 }
 
 
- void RenderCars(int *numCars, Car cars[])
+
+void RenderCars(int *numCars, Car cars[])
 {
     for (int i = 0; i < *numCars; i++)  // Use *numCars instead of numCars
     {
