@@ -7,8 +7,8 @@
 #include "HeaderAndrew.h"
 #include "LibraryFaiz.h"
 #include "LibraryFaiz.c"
-#include "LibraryAzzam.h"
-#include "LibraryAzzam.c"
+#include "menu.h"
+#include "menu.c"
 
 
 void DrawGame(Camera2D camera) {
@@ -50,6 +50,13 @@ void DrawGame(Camera2D camera) {
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
     SetTargetFPS(60);
+
+    MenuOption selectedMenu = ShowMenu();
+    if (selectedMenu == MENU_EXIT) {
+        CloseWindow();
+        return 0;
+    }
+    
     InitGame();
     LoadAllTextures();
 
