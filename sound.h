@@ -3,9 +3,9 @@
 
 #include "raylib.h"
 
-// Function Prototypes
 void InitSounds();
 void PlayBackgroundMusic();
+void PlayMoveSound();  // Ensure this is added
 void UnloadSounds();
 
 #endif

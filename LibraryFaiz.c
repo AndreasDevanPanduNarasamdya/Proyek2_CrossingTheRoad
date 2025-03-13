@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <time.h>
 #include "GLOBALHEADER.h"
+#include "sound.h"
+#include "sound.c"
 
 
 void InitGrid() {
@@ -90,25 +92,46 @@ void UpdateGame() {
             frameCounter = 0;
         }
 
+        // Check for key presses to move the player
         if (IsKeyPressed(KEY_UP)) movement[0] = true;
         if (IsKeyPressed(KEY_DOWN)) movement[1] = true;
         if (IsKeyPressed(KEY_LEFT)) movement[2] = true;
         if (IsKeyPressed(KEY_RIGHT)) movement[3] = true;
 
-        if (movement[0]) { player.y -= PLAYER_SPEED; movement[0] = false; }
-        if (movement[1]) { player.y += PLAYER_SPEED; movement[1] = false; }
-        if (movement[2]) { player.x -= PLAYER_SPEED; movement[2] = false; }
-        if (movement[3]) { player.x += PLAYER_SPEED; movement[3] = false; }
+        // Perform movement and play move sound
+        if (movement[0]) { 
+            player.y -= PLAYER_SPEED; 
+            movement[0] = false; 
+            PlayMoveSound(); // Play sound effect
+        }
+        if (movement[1]) { 
+            player.y += PLAYER_SPEED; 
+            movement[1] = false; 
+            PlayMoveSound(); // Play sound effect
+        }
+        if (movement[2]) { 
+            player.x -= PLAYER_SPEED; 
+            movement[2] = false; 
+            PlayMoveSound(); // Play sound effect
+        }
+        if (movement[3]) { 
+            player.x += PLAYER_SPEED; 
+            movement[3] = false; 
+            PlayMoveSound(); // Play sound effect
+        }
 
+        // Ensure player stays within the grid boundaries
         if (player.x < 0) player.x = 0;
         if (player.x >= GRID_WIDTH) player.x = GRID_WIDTH - 1;
         if (player.y < 0) player.y = 0;
         if (player.y >= GRID_HEIGHT) player.y = GRID_HEIGHT - 1;
 
+        // Check for score update and checkpoint
         checkposition(&player);
 
+        // Collision detection with cars
         for (int i = 0; i < numCars; i++) {
-            if (player.x + 4 == cars[i].x  && player.y == cars[i].y) {
+            if (player.x + 4 == cars[i].x && player.y == cars[i].y) {
                 player.x = checkpoint.x;
                 player.y = checkpoint.y;
                 player.lives--;
@@ -120,6 +143,7 @@ void UpdateGame() {
         }
     }
 
+    // Proceed to the next level if the player reaches the top
     if (player.y == 0) {
         NextLevel();
     }
