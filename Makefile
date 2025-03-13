@@ -30,6 +30,7 @@ RAYLIB_PATH        ?= ..\..
 
 # Define compiler path on Windows
 COMPILER_PATH      ?= C:/raylib/w64devkit/bin
+
 # Define default options
 # One of PLATFORM_DESKTOP, PLATFORM_ANDROID, PLATFORM_WEB
 PLATFORM           ?= PLATFORM_DESKTOP
@@ -104,19 +105,7 @@ endif
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),LINUX)
         RAYLIB_PREFIX ?= ..
-        RAYLIB_PATH = C:/raylib/raylib
-        CC = gcc
-        CFLAGS = -Wall -std=c99 -D_DEFAULT_SOURCE -Wno-missing-braces -s -O1 \
-         -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external
-        LFLAGS = -L$(RAYLIB_PATH)/src
-    LIBS = -lraylib -lopengl32 -lgdi32 -lwinmm
-    OBJS = main.c sound.c
-
-    game: $(OBJS)
-        $(CC) -o game $(OBJS) $(CFLAGS) $(LFLAGS) $(LIBS)
-
-    clean:
-        rm -f game.exe *.o
+        RAYLIB_PATH    = $(realpath $(RAYLIB_PREFIX))
     endif
 endif
 # Default path for raylib on Raspberry Pi, if installed in different path, update it!
@@ -348,9 +337,7 @@ endif
 ifeq ($(PLATFORM),PLATFORM_RPI)
     # Libraries for Raspberry Pi compiling
     # NOTE: Required packages: libasound2-dev (ALSA)
-    LDLIBS = -lraylib -lbrcmGLESv2 -lbrcmEGL -lpthread -lrt -lm -lbcm_host -ldl -lopengl32 -lgdi32 -lwinmm
-
-    
+    LDLIBS = -lraylib -lbrcmGLESv2 -lbrcmEGL -lpthread -lrt -lm -lbcm_host -ldl
 endif
 ifeq ($(PLATFORM),PLATFORM_WEB)
     # Libraries for web (HTML5) compiling
