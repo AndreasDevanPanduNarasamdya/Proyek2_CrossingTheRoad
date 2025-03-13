@@ -35,7 +35,6 @@ void RenderGrid() {
 
 void DrawGame(Camera2D camera) {
     
-
     BeginDrawing();
     ClearBackground(WHITE);
 
@@ -47,16 +46,15 @@ void DrawGame(Camera2D camera) {
     // Menggambar elemen game dalam dunia (terpengaruh oleh kamera)
     
     RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
+
     RenderCars(&numCars, cars);
+
     RenderCharacter(&PlayerSprite, player);
+
     EndMode2D(); // Selesai menggambar elemen dalam dunia
 
     // Menggambar elemen UI/HUD (agar tetap di layar)
     RenderInstructions(player, coordText, level);
-
-  
-
-    
 
     if (PermainanBerakhir) {
         DrawText("MENANG", player.x * CELL_SIZE, player.y * CELL_SIZE, 40, RED);
@@ -67,15 +65,9 @@ void DrawGame(Camera2D camera) {
         PermainanBerakhir = true;
     }
 
-
-
-    
     EndMode2D();
     EndDrawing();
 }
-
-
-
 
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");

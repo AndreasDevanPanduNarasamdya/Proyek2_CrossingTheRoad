@@ -4,17 +4,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include "LibraryFaiz.h"
 
-void RenderRoads()
-{
-    for (int x = 0; x < SCREEN_WIDTH; x += background.width) 
-    {
-        for (int y = 0; y < SCREEN_HEIGHT*2.5; y += 300) 
-        {
-            DrawTextureEx(background, (Vector2){x, y}, 0.0f, 0.25, WHITE);
+
+void RenderRoads() {
+    for (int y = 0; y < GRID_HEIGHT; y++) {
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            if (grid[y][x] == LANE_MARK) {
+                DrawRectangle(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, BLACK);
+            } else if (grid[y][x] == putihs) {
+                DrawRectangle(x * CELL_SIZE + CELL_SIZE / 4, y * CELL_SIZE + CELL_SIZE / 4, CELL_SIZE / 2, CELL_SIZE / 8, YELLOW);
+            } else if (grid[y][x]== ROAD) {
+                DrawRectangle(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, GRAY);
+            } else if (grid[y][x]== CHECKPOINT_LINE){
+                DrawRectangle(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, BLUE);
+            }
         }
     }
 }
+
 
 void RenderCharacter(Texture2D *PlayerSprite, Player player)
 {
@@ -22,7 +30,8 @@ void RenderCharacter(Texture2D *PlayerSprite, Player player)
 }
 
 
- void RenderCars(int *numCars, Car cars[])
+
+void RenderCars(int *numCars, Car cars[])
 {
     for (int i = 0; i < *numCars; i++)  // Use *numCars instead of numCars
     {
@@ -70,10 +79,10 @@ void RenderInstructions(Player player, char *coordText, int level)
     int margin = 20; // Margin dari tepi layar
 
     // Menampilkan teks di sudut kiri atas layar
-    DrawText(TextFormat("Score: %d", player.score), margin, margin, 20, WHITE);
-    DrawText(TextFormat("Lives: %d", player.lives), margin, margin + 30, 20, WHITE);
-    DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, WHITE);
-    DrawText(coordText, margin, margin + 90, 20, WHITE);
-    DrawText("Use Arrow Keys to Move", margin, margin + 120, 20, WHITE);
-}
+    DrawText(TextFormat("Score: %d", player.score), margin, margin, 20, BLACK);
+    DrawText(TextFormat("Lives: %d", player.lives), margin, margin + 30, 20, BLACK);
+    DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, BLACK);
+    DrawText(coordText, margin, margin + 90, 20, BLACK);
+    DrawText("Use Arrow Keys to Move", margin, margin + 120, 20, BLACK);
 
+}

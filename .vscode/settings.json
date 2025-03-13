@@ -9,6 +9,8 @@
 		"**/*.exe": true,
 	},
 	"files.associations": {
-		"libraryfaiz.h": "c"
+		"libraryfaiz.h": "c",
+		"stdlib.h": "c",
+		"globalheader.h": "c"
 	}
 }
