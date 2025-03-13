@@ -7,8 +7,6 @@
 #include "HeaderAndrew.h"
 #include "LibraryFaiz.h"
 #include "LibraryFaiz.c"
-#include "sound.h"
-#include "sound.c"
 
 
     void RenderGrid() {
