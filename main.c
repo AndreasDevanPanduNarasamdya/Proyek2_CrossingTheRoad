@@ -9,6 +9,7 @@
 #include "LibraryFaiz.c"
 #include "LibraryAzzam.h"
 #include "LibraryAzzam.c"
+<<<<<<< Updated upstream
 
 void RenderGrid() {
     for (int i = 0; i < GRID_HEIGHT; i++) {
@@ -28,6 +29,8 @@ void RenderGrid() {
 }
 
 
+=======
+>>>>>>> Stashed changes
 
 
 void DrawGame(Camera2D camera) {
