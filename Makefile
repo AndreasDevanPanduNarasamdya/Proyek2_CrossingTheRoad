@@ -30,8 +30,6 @@ RAYLIB_PATH        ?= ..\..
 
 # Define compiler path on Windows
 COMPILER_PATH      ?= C:/raylib/w64devkit/bin
-OBJS = main.c sfx.c
-
 # Define default options
 # One of PLATFORM_DESKTOP, PLATFORM_ANDROID, PLATFORM_WEB
 PLATFORM           ?= PLATFORM_DESKTOP
@@ -107,6 +105,18 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),LINUX)
         RAYLIB_PREFIX ?= ..
         RAYLIB_PATH    = $(realpath $(RAYLIB_PREFIX))
+        CC = gcc
+        CFLAGS = -Wall -std=c99 -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external
+        LFLAGS = -L. -L$(RAYLIB_PATH)/src
+        LIBS = -lraylib -lopengl32 -lgdi32 -lwinmm
+        OBJS = main.c sound.c
+
+main: $(OBJS)
+    $(CC) -o main $(OBJS) $(CFLAGS) $(LFLAGS) $(LIBS)
+
+clean:
+    rm -f main.exe *.o
+
     endif
 endif
 # Default path for raylib on Raspberry Pi, if installed in different path, update it!
