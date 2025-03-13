@@ -7,6 +7,8 @@
 #include "HeaderAndrew.h"
 #include "LibraryFaiz.h"
 #include "LibraryFaiz.c"
+#include "LibraryAzzam.h"
+#include "LibraryAzzam.c"
 
 void RenderGrid() {
     for (int i = 0; i < GRID_HEIGHT; i++) {
