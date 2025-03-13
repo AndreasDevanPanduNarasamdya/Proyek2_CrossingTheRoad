@@ -19,9 +19,9 @@ void PlayBackgroundMusic() {
 }
 
 void PlayMoveSound() {
-    // Play the move sound effect
-    PlaySound(moveSound);
+    PlaySound(moveSound); // Play the movement sound effect
 }
+
 
 void UnloadSounds() {
     StopMusicStream(backgroundMusic);

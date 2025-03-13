@@ -5,7 +5,7 @@
 
 void InitSounds();
 void PlayBackgroundMusic();
-void PlayMoveSound();  // Ensure this is added
+void PlayMoveSound();
 void UnloadSounds();
 
 #endif
