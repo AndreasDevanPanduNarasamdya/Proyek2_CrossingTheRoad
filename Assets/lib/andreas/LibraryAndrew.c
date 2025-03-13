@@ -69,11 +69,11 @@ void UnloadAllTextures()
 
 void LoadAllTextures()
 {
-    TaxiTexture = LoadTexture("Assets/taxi.png");
-    TruckTexture = LoadTexture("Assets/gruppesechs_van.png");
-    VanTexture = LoadTexture("Assets/vanbankk.png");
-    PlayerSprite = LoadTexture("Assets/npcmoment.png");
-    background = LoadTexture("Assets/longroad2lanes.png");
+    TaxiTexture = LoadTexture("Assets/sprite/taxi.png");
+    TruckTexture = LoadTexture("Assets/sprite/gruppesechs_van.png");
+    VanTexture = LoadTexture("Assets/sprite/vanbankk.png");
+    PlayerSprite = LoadTexture("Assets/sprite/npcmoment.png");
+    background = LoadTexture("Assets/sprite/longroad2lanes.png");
 }
 
 void RenderInstructions(Player player, char *coordText, int level)
