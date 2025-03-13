@@ -30,6 +30,7 @@ RAYLIB_PATH        ?= ..\..
 
 # Define compiler path on Windows
 COMPILER_PATH      ?= C:/raylib/w64devkit/bin
+OBJS = main.c sfx.c
 
 # Define default options
 # One of PLATFORM_DESKTOP, PLATFORM_ANDROID, PLATFORM_WEB
