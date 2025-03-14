@@ -1,33 +1,37 @@
 #include "sound.h"
 
 // Declare global variables for sound effects
-static Music backgroundMusic;
+static Music backgroundMusic, menuBacksound;
 static Sound moveSound;
 
-void InitSounds() {
+void InitSounds()
+{
     InitAudioDevice(); // Initialize the audio device
 
     // Load background music and movement sound effect
-    backgroundMusic = LoadMusicStream("Assets/sound/backsound4.wav");
-    moveSound = LoadSound("Assets/sound/sfx_movement.wav");
+    menuBacksound = LoadMusicStream("../../sound/backsound4.wav");
+    backgroundMusic = LoadMusicStream("../../sound/backsound4.wav");
+    moveSound = LoadSound("../../sound/sfx_movement.wav");
 
     PlayMusicStream(backgroundMusic);
 }
 
-void PlayBackgroundMusic() {
+void PlayBackgroundMusic()
+{
     UpdateMusicStream(backgroundMusic);
 }
-
-void PlayMoveSound() {
+void PlayMoveSound()
+{
     PlaySound(moveSound); // Play the movement sound effect
 }
-
-
-void UnloadSounds() {
+void UnloadSounds()
+{
+    StopMusicStream(menuBacksound);
     StopMusicStream(backgroundMusic);
+
+    UnloadMusicStream(menuBacksound);
     UnloadMusicStream(backgroundMusic);
 
-    // Unload move sound and close audio device
     UnloadSound(moveSound);
-    CloseAudioDevice();
+    CloseAudioDevice(); // Close the audio device
 }

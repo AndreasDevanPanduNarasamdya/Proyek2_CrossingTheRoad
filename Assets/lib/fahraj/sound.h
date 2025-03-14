@@ -1,11 +1,11 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-#include "raylib.h"
+#include "../raylib.h"
 
-void InitSounds();
-void PlayBackgroundMusic();
-void PlayMoveSound();
-void UnloadSounds();
+extern void InitSounds();
+extern void PlayBackgroundMusic();
+extern void PlayMoveSound();
+extern void UnloadSounds();
 
 #endif
