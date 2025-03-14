@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <time.h>
 #include "../GLOBALHEADER.h"
-#include "../fahraj/sound.h"
-#include "../fahraj/sound.c"
+#include "../fahraj/sfx.c"
 
 void RenderGrid()
 {

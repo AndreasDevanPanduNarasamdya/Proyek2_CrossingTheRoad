@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "sound.h"
 
 static Music backgroundMusic, menuBacksound;
@@ -13,6 +14,11 @@ void InitSounds()
     PlayMusicStream(backgroundMusic);
 }
 
+void PlayBackgroundMusic()
+{
+    UpdateMusicStream(backgroundMusic);
+}
+
 void PlayMenuBacksound()
 {
     // Play or update the menu backsound
@@ -22,10 +28,7 @@ void PlayMenuBacksound()
     }
     UpdateMusicStream(menuBacksound); // Keep the music stream updated
 }
-void PlayBacgroundMusic()
-{
-    UpdateMusicStream(backgroundMusic);
-}
+
 void PlayMoveSound()
 {
     PlaySound(moveSound);
