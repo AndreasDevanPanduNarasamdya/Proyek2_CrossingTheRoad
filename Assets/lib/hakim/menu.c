@@ -1,16 +1,16 @@
 #include "menu.h"
 #include <stdio.h>
-#include "../fahraj/sfx.c"
+// #include "../fahraj/sfx.c"
 
 MenuOption ShowMenu() {
     int selectedOption = 0;
     const char *menuOptions[] = {"Start Game", "Options", "Exit"};
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
-    PlayMusicStream(menuBacksound); // Play menu music
+    // PlayMusicStream(menuBacksound); // Play menu music
 
     while (!WindowShouldClose()) {
-        UpdateMusicStream(menuBacksound); // Keep menu music streaming
+        // UpdateMusicStream(menuBacksound); // Keep menu music streaming
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -30,28 +30,28 @@ MenuOption ShowMenu() {
         EndDrawing();
 
         if (IsKeyPressed(KEY_DOWN)) {
-            PlayMoveSound(); // Play navigation sound
+            // PlayMoveSound(); // Play navigation sound
             selectedOption = (selectedOption + 1) % totalOptions;
         }
         if (IsKeyPressed(KEY_UP)) {
-            PlayMoveSound(); // Play navigation sound
+            // PlayMoveSound(); // Play navigation sound
             selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
         }
         if (IsKeyPressed(KEY_ENTER)) {
             if (selectedOption == MENU_EXIT) {
-                StopMusicStream(menuBacksound); // Stop menu music
-                UnloadSounds();                // Clean up sound resources
+                // StopMusicStream(menuBacksound); // Stop menu music
+                // UnloadSounds();                // Clean up sound resources
                 CloseWindow();
             } else {
-                StopMusicStream(menuBacksound); // Stop menu music
-                PlayMusicStream(backgroundMusic); // Start game music
+                // StopMusicStream(menuBacksound); // Stop menu music
+                // PlayMusicStream(backgroundMusic); // Start game music
             }
             return (MenuOption)selectedOption;
         }
     }
 
-    StopMusicStream(menuBacksound);
-    UnloadSounds();
+    // StopMusicStream(menuBacksound);
+    // UnloadSounds();
     return MENU_EXIT;
 }
 
