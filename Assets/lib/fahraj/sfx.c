@@ -1,4 +1,4 @@
-#include "sound.h"
+#include "sfx.h"
 
 static Music backgroundMusic, menuBacksound;
 static Sound moveSound;
@@ -11,7 +11,7 @@ void InitSounds()
     moveSound = LoadSound("../../sound/sfx_movement.wav");
 
     PlayMusicStream(backgroundMusic);
-}
+};
 
 void PlayMenuBacksound()
 {
