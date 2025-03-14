@@ -30,8 +30,6 @@
 #define PLAYER 2
 #define CAR 3
 
-
-
 Texture2D TaxiTexture, TruckTexture, VanTexture, PlayerSprite, background;
 
 typedef struct {
