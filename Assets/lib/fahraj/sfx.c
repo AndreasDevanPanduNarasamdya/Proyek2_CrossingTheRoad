@@ -1,46 +1,47 @@
-#include <stdio.h>
-#include "sound.h"
+#include "../raylib.h"
+#include "sfx.h"
 
-static Music backgroundMusic, menuBacksound;
-static Sound moveSound;
+static Music backgroundMusic1, menuSound;
+static Sound moveChar;
 
 void InitSounds()
 {
     InitAudioDevice(); // Initialize the audio device
-    menuBacksound = LoadMusicStream("../../sound/backsound4.wav");
-    backgroundMusic = LoadMusicStream("../../sound/backsound4.wav");
-    moveSound = LoadSound("../../sound/sfx_movement.wav");
+    menuSound = LoadMusicStream("../../sound/backsound4.wav");
+    backgroundMusic1 = LoadMusicStream("../../sound/backsound4.wav");
+    moveChar = LoadSound("../../sound/moveChar.wav");
 
-    PlayMusicStream(backgroundMusic);
+    PlayMusicStream(backgroundMusic1);
 }
 
-void PlayBackgroundMusic()
-{
-    UpdateMusicStream(backgroundMusic);
-}
-
-void PlayMenuBacksound()
+void PlaymenuSound()
 {
     // Play or update the menu backsound
-    if (!IsMusicStreamPlaying(menuBacksound))
+    if (!IsMusicStreamPlaying(menuSound))
     {
-        PlayMusicStream(menuBacksound); // Start playing the menu backsound if it's not already playing
+        PlayMusicStream(menuSound); // Start playing the menu backsound if it's not already playing
     }
-    UpdateMusicStream(menuBacksound); // Keep the music stream updated
+    UpdateMusicStream(menuSound); // Keep the music stream updated
 }
 
-void PlayMoveSound()
+void PlayBacgroundMusic1()
 {
-    PlaySound(moveSound);
+    UpdateMusicStream(backgroundMusic1);
 }
+
+void PlaymoveChar()
+{
+    PlaySound(moveChar);
+}
+
 void UnloadSounds()
 {
-    StopMusicStream(menuBacksound);
-    StopMusicStream(backgroundMusic);
+    StopMusicStream(menuSound);
+    StopMusicStream(backgroundMusic1);
 
-    UnloadMusicStream(menuBacksound);
-    UnloadMusicStream(backgroundMusic);
+    UnloadMusicStream(menuSound);
+    UnloadMusicStream(backgroundMusic1);
 
-    UnloadSound(moveSound);
+    UnloadSound(moveChar);
     CloseAudioDevice();
 }
