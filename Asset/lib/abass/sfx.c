@@ -22,14 +22,17 @@ void PlayMenuBacksound()
     }
     UpdateMusicStream(menuBacksound); // Keep the music stream updated
 };
+
 void PlayBacgroundMusic()
 {
     UpdateMusicStream(backgroundMusic);
 };
+
 void PlayMoveSound()
 {
     PlaySound(moveSound);
 };
+
 void UnloadSounds()
 {
     StopMusicStream(menuBacksound);

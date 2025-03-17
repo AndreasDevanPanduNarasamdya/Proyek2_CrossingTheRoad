@@ -1,5 +1,6 @@
 #ifndef SFX_H
 #define SFX_H
+
 #include "../raylib.h"
 
 void InitSounds();
