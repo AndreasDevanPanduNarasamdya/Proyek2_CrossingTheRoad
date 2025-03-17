@@ -12,7 +12,7 @@ void InitSounds()
     InitAudioDevice();
 
     // Load audio files and check for errors
-    menuSound = LoadMusicStream("../../sound/backsound4.mp3");
+    menuSound = LoadMusicStream("../../sound/backsound4.wav");
     if (menuSound.stream.buffer == NULL)
     {
         TraceLog(LOG_WARNING, "Failed to load menu background sound: ../../sound/backsound4.wav");
