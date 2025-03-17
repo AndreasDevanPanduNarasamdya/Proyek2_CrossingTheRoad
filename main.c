@@ -1,16 +1,16 @@
-#include "Assets/lib/raylib.h"
-#include "Assets/lib/GLOBALHEADER.h"
+#include "Asset/lib/raylib.h"
+#include "Asset/lib/GLOBALHEADER.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include "Assets/lib/andreas/HeaderAndrew.h"
-#include "Assets/lib/andreas/LibraryAndrew.c"
-#include "Assets/lib/faiz/LibraryFaiz.h"
-#include "Assets/lib/faiz/LibraryFaiz.c"
-#include "Assets/lib/azzam/LibraryAzzam.h"
-#include "Assets/lib/azzam/LibraryAzzam.c"
-#include "Assets/lib/hakim/menu.h"
-#include "Assets/lib/hakim/menu.c"
+#include "Asset/lib/andreas/HeaderAndrew.h"
+#include "Asset/lib/andreas/LibraryAndrew.c"
+#include "Asset/lib/faiz/LibraryFaiz.h"
+#include "Asset/lib/faiz/LibraryFaiz.c"
+#include "Asset/lib/azzam/LibraryAzzam.h"
+#include "Asset/lib/azzam/LibraryAzzam.c"
+#include "Asset/lib/hakim/menu.h"
+#include "Asset/lib/hakim/menu.c"
 
 
 void DrawGame(Camera2D camera) {
