@@ -2,33 +2,30 @@
 
 // Fungsi untuk menampilkan menu Options
 void ShowOptions(float *volume, bool *isFullscreen) {
+    int selectedOption = 0;
     while (!WindowShouldClose()) {
-        // Bersihkan layar sebelum menggambar
+        BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        // Hitung posisi teks agar rata tengah
-        int fontSize = 20;
-        int textWidth = MeasureText("Fullscreen", fontSize);
-        int buttonWidth = 200;
-        int buttonHeight = 40;
-        int buttonX = (GetScreenWidth() - buttonWidth) / 2;
-        int buttonY = 200;
+        DrawText("Options", SCREEN_WIDTH / 2 - MeasureText("Options", 30) / 2, 50, 30, DARKGRAY);
+        DrawText(TextFormat("Volume: %d%%", (int)(*volume * 100)), 100, 120, 20, selectedOption == 0 ? RED : BLACK);
+        DrawText(TextFormat("Fullscreen: %s", *isFullscreen ? "ON" : "OFF"), 100, 150, 20, selectedOption == 1 ? RED : BLACK);
+        DrawText("Back", 100, 180, 20, selectedOption == 2 ? RED : BLACK);
 
-        // Tampilkan teks judul "Options"
-        DrawText("Options", GetScreenWidth() / 2 - MeasureText("Options", 30) / 2, 50, 30, DARKGRAY);
-
-        // Tampilkan pengaturan Volume
-        DrawText(TextFormat("Volume: %d%%", (int)(*volume * 100)), GetScreenWidth() / 2 - MeasureText("Volume: 100%", fontSize) / 2, 120, fontSize, BLACK);
-
-        // Gambar tombol "Fullscreen"
-        DrawRectangle(buttonX, buttonY, buttonWidth, buttonHeight, RED);
-        DrawText("Fullscreen", buttonX + (buttonWidth - textWidth) / 2, buttonY + 10, fontSize, BLACK);
-        DrawText(*isFullscreen ? "ON" : "OFF", buttonX + buttonWidth + 20, buttonY + 10, fontSize, BLACK);
-
-        // Tombol kembali
-        DrawText("Back to Main Menu", GetScreenWidth() / 2 - MeasureText("Back to Main Menu", fontSize) / 2, 300, fontSize, BLACK);
-
-        // Perbarui tampilan
         EndDrawing();
+
+        if (IsKeyPressed(KEY_DOWN)) selectedOption = (selectedOption + 1) % 3;
+        if (IsKeyPressed(KEY_UP)) selectedOption = (selectedOption - 1 + 3) % 3;
+        if (IsKeyPressed(KEY_ENTER)) {
+            if (selectedOption == 0) {  // Volume (belum diimplementasikan)
+            }
+            else if (selectedOption == 1) {  // Fullscreen Toggle
+                *isFullscreen = !(*isFullscreen);
+                ToggleFullscreen();
+            }
+            else if (selectedOption == 2) {  // Back
+                return;
+            }
+        }
     }
 }
