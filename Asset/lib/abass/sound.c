@@ -37,8 +37,8 @@ Sound moveChar;
 void InitMoveChar()
 {
     // Load the sound file for move character
-    moveChar = LoadSound("../../sound/moveChar.wav"); // Replace with your actual file path
-    SetSoundVolume(moveChar, 1.0f);                   // Set volume to 50%
+    moveChar = LoadSound("../../sound/moveChar.wav"); 
+    SetSoundVolume(moveChar, 1.0f);                  
 }
 void PlayMoveChar()
 {

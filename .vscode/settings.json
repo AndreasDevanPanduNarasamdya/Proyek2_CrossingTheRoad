@@ -60,6 +60,7 @@
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
     "*.embeddedhtml": "html",
-    "raylib.h": "c"
+    "raylib.h": "c",
+    "menu.h": "c"
   }
 }
