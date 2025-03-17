@@ -3,9 +3,8 @@
 #include <stdio.h>
 #include <time.h>
 #include "../GLOBALHEADER.h"
-#include "../abass/sfx.h"
-#include "../abass/sfx.c"
-
+#include "../abass/sound.h"
+#include "../abass/sound.c"
 
 void RenderGrid()
 {
@@ -107,7 +106,8 @@ void InitGame()
     player.score = 0;
     player.lives = MAX_LIVES;
 
-    InitGrid(); // Pastikan grid diinisialisasi sebelum menempatkan mobil
+    InitGrid();     // Initialize the grid
+    InitMoveChar(); // Initialize the move character sound effect
 
     for (int i = 0; i < numCars; i++)
     {
@@ -116,14 +116,17 @@ void InitGame()
         do
         {
             lane = rand() % (GRID_HEIGHT - 2);
-        } while (grid[lane][0] == LANE_MARK); // Pastikan bukan garis batas
+        } while (grid[lane][0] == LANE_MARK); // Make sure it's not a lane mark
 
         col = rand() % GRID_WIDTH;
         int direction = (rand() % 2) ? 1 : -1;
 
         cars[i] = (Car){col, lane, carSpeed, direction};
-        cars[i].type = rand() % 3; // Pilih jenis mobil secara acak
+        cars[i].type = rand() % 3; // Randomize car type
     }
+
+    InitBacksound1(); // Initialize background music
+    PlayBacksound1(); // Play background music
 }
 
 void ResetCombo()
@@ -155,9 +158,9 @@ void UpdateGame()
 {
     if (!PermainanBerakhir)
     {
-
         UpdateCarMovement();
-
+        UpdateBacksound1();
+        
         if (IsKeyPressed(KEY_UP))
             movement[0] = true;
         if (IsKeyPressed(KEY_DOWN))
@@ -171,25 +174,25 @@ void UpdateGame()
         {
             player.y -= PLAYER_SPEED;
             movement[0] = false;
-            PlaymoveChar(); // Play the movement sound effect
+            PlayMoveChar(); 
         }
         if (movement[1])
         {
             player.y += PLAYER_SPEED;
             movement[1] = false;
-            PlaymoveChar(); // Play the movement sound effect
+            PlayMoveChar(); 
         }
         if (movement[2])
         {
             player.x -= PLAYER_SPEED;
             movement[2] = false;
-            PlaymoveChar(); // Play the movement sound effect
+            PlayMoveChar();
         }
         if (movement[3])
         {
             player.x += PLAYER_SPEED;
             movement[3] = false;
-            PlaymoveChar(); // Play the movement sound effect
+            PlayMoveChar(); 
         }
 
         if (player.x < 0)
