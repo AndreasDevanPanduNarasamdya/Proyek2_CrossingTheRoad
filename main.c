@@ -1,18 +1,14 @@
-#include "Assets/lib/raylib.h"
-#include "Assets/lib/GLOBALHEADER.h"
+#include "raylib.h"
+#include "GLOBALHEADER.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <time.h>
-#include "Assets/lib/andreas/HeaderAndrew.h"
-#include "Assets/lib/andreas/LibraryAndrew.c"
-#include "Assets/lib/faiz/LibraryFaiz.h"
-#include "Assets/lib/faiz/LibraryFaiz.c"
-#include "Assets/lib/azzam/LibraryAzzam.h"
-#include "Assets/lib/azzam/LibraryAzzam.c"
-#include "Assets/lib/hakim/menu.h"
-#include "Assets/lib/hakim/menu.c"
-#include "Assets/lib/hakim/options.h"
-#include "Assets/lib/hakim/options.c"
+#include "LibraryAndrew.c"
+#include "HeaderAndrew.h"
+#include "LibraryFaiz.h"
+#include "LibraryFaiz.c"
+
 
 void DrawGame(Camera2D camera) {
     BeginDrawing();
@@ -20,17 +16,22 @@ void DrawGame(Camera2D camera) {
 
     BeginMode2D(camera);
 
-    sprintf(coordText, "X: %d, Y: %d", player.x, player.y);
+    sprintf(coordText, "Coordinate: %2d,%2d", player.x, player.y);
 
     RenderGrid();
+    // Menggambar elemen game dalam dunia (terpengaruh oleh kamera)
+    
     RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
     RenderCars(&numCars, cars);
-    RenderCharacter(&PlayerSprite, player);
-
+    RenderFlags();
+    RenderHealths();
+    RenderPoints();
+    RenderCharacter(&PlayerSprite, player); // Selesai menggambar elemen dalam dunia
     EndMode2D();
 
     RenderInstructions(player, coordText, level);
-
+    ResetTimer();
+    
     if (PermainanBerakhir) {
         DrawText("MENANG", player.x * CELL_SIZE, player.y * CELL_SIZE, 40, RED);
     }
@@ -40,58 +41,42 @@ void DrawGame(Camera2D camera) {
         PermainanBerakhir = true;
     }
 
+    EndMode2D();
     EndDrawing();
-}
+}//101, 59
 
 int main() {
+    passed = false;
+    DefineArrayCord();
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
     SetTargetFPS(60);
+    InitGame();
+    LoadAllTextures();
 
-    // **Variabel untuk opsi game**
-    float volume = 1.0f;   // Volume awal 100%
-    bool isFullscreen = false;  // Default mode windowed
+    camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
+    camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+    camera.rotation = 0.0f;
+    camera.zoom = 1.7f;
 
     while (!WindowShouldClose()) {
-        MenuOption selectedMenu = ShowMenu();
+        UpdateGame();
 
-        if (selectedMenu == MENU_EXIT) {
-            CloseWindow();
-            return 0;
-        }
-        
-        // **Tambahkan pemanggilan menu Options**
-        if (selectedMenu == MENU_OPTIONS) {
-            ShowOptions(&volume, &isFullscreen);
-        }
+        CheckpointLogic();
 
-        if (selectedMenu == MENU_START) {
-            // **Hanya memulai game jika "Start Game" dipilih**
-            InitGame();
-            LoadAllTextures();
+        if (!kalah && !PermainanBerakhir) {
+            camera.target.y -= CAMERA_SPEED ; // Kamera selalu bergerak ke depan
 
-            Camera2D camera = {0};
-            camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
-            camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
-            camera.rotation = 0.0f;
-            camera.zoom = 1.0f;
-
-            while (!WindowShouldClose()) {
-                UpdateGame();
-
-                if (!kalah && !PermainanBerakhir) {
-                    camera.target.y -= CAMERA_SPEED;
-                    if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
-                        kalah = true;
-                    }
-                }
-
-                DrawGame(camera);
+            // Cek jika pemain tertinggal terlalu jauh
+            if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
+                kalah = true;
             }
-
-            UnloadAllTextures();
         }
-    }
 
+        DrawGame(camera);
+    }
+    
+
+    UnloadAllTextures();
     CloseWindow();
     return 0;
 }
