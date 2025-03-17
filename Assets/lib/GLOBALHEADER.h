@@ -33,6 +33,10 @@
 #define PLAYER 2
 #define CAR 3
 
+bool isPaused = false; // Apakah game sedang pause
+float volume = 1.0f;   // Volume awal
+bool isFullscreen = false; // Fullscreen mode awal
+
 
 Vector2 CoordArr[SCREEN_WIDTH][SCREEN_HEIGHT];
 

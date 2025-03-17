@@ -14,39 +14,9 @@
 #include "Assets/lib/hakim/options.h"
 #include "Assets/lib/hakim/options.c"
 
-// Variabel global untuk game
-bool isPaused = false; // Apakah game sedang pause
-float volume = 1.0f;   // Volume awal
-bool isFullscreen = false; // Fullscreen mode awal
 
-void DrawGame(Camera2D camera) {
-    BeginDrawing();
-    ClearBackground(WHITE);
 
-    BeginMode2D(camera);
 
-    sprintf(coordText, "X: %d, Y: %d", player.x, player.y);
-
-    RenderGrid();
-    RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
-    RenderCars(&numCars, cars);
-    RenderCharacter(&PlayerSprite, player);
-
-    EndMode2D();
-
-    RenderInstructions(player, coordText, level);
-
-    if (PermainanBerakhir) {
-        DrawText("MENANG", player.x * CELL_SIZE, player.y * CELL_SIZE, 40, RED);
-    }
-
-    if (kalah) {
-        DrawText("GAME OVER", player.x * CELL_SIZE, player.y * CELL_SIZE, 40, RED);
-        PermainanBerakhir = true;
-    }
-
-    EndDrawing();
-}
 
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
@@ -78,7 +48,7 @@ int main() {
         camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
         camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
         camera.rotation = 0.0f;
-        camera.zoom = 1.0f;
+        camera.zoom = 1.7f;
 
         while (!WindowShouldClose()) {
             // **Pause Menu Handling**
@@ -108,6 +78,17 @@ int main() {
             }
 
             UpdateGame();
+            // **Kamera hanya bergerak ke atas & tetap di tengah horizontal**
+            if (!kalah && !PermainanBerakhir) {
+                camera.target.y -= CAMERA_SPEED; // Kamera terus bergerak ke atas
+                camera.target.x = SCREEN_WIDTH / 2; // Kamera tetap di tengah (horizontal)
+
+                // Jika pemain tertinggal terlalu jauh, game over
+                if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
+                    kalah = true;
+                }
+            }
+
             DrawGame(camera);
         }
 
