@@ -3,20 +3,16 @@
 
 #include "../raylib.h"
 
-// GLOBAL
-void CleanUp();
-void InitSounds();
+// Global Variables
+extern Music backgroundMusic1;
+extern Music menuSound;
+extern Sound moveChar;
 
-// BACKSOUND 1
-void InitBacksound1();
-void PlayBacksound1();
-void UpdateBacksound1();
-void StopBacksound1();
-void UnloadBacksound1();
+// Functions Declarations
+void InitSounds();         // Initialize all sounds
+void PlaymenuSound();      // Play and update menu sound
+void PlayBacgroundMusic1(); // Update background music
+void PlayMoveSound();      // Play move character sound effect
+void UnloadSounds();       // Unload all sounds and close audio system
 
-// MOVECHAR
-void InitMoveChar();
-void PlayMoveChar();
-void UnloadMoveChar();
-
-#endif
+#endif // SOUND_H

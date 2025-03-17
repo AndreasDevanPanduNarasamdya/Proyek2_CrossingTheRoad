@@ -61,6 +61,8 @@
   "files.associations": {
     "*.embeddedhtml": "html",
     "raylib.h": "c",
-    "menu.h": "c"
+    "menu.h": "c",
+    "sound.h": "c",
+    "stdio.h": "c"
   }
 }
