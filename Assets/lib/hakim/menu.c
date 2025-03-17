@@ -1,5 +1,6 @@
 #include "menu.h"
-#include "../abass/sound.h" // Include the sound header for function declarations
+#include "../abass/sound.h"
+#include "../abass/sound.c"
 #include <stdio.h>
 
 MenuOption ShowMenu()
