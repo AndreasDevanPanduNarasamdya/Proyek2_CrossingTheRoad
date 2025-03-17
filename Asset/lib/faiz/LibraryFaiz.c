@@ -3,9 +3,7 @@
 #include <stdio.h>
 #include <time.h>
 #include "../GLOBALHEADER.h"
-#include "../abass/sfx.h"
-#include "../abass/sfx.c"
-
+// #include "../fahraj/sfx.c"
 
 void RenderGrid()
 {
@@ -171,25 +169,25 @@ void UpdateGame()
         {
             player.y -= PLAYER_SPEED;
             movement[0] = false;
-            PlaymoveChar(); // Play the movement sound effect
+            // PlayMoveSound(); 
         }
         if (movement[1])
         {
             player.y += PLAYER_SPEED;
             movement[1] = false;
-            PlaymoveChar(); // Play the movement sound effect
+            // PlayMoveSound(); 
         }
         if (movement[2])
         {
             player.x -= PLAYER_SPEED;
             movement[2] = false;
-            PlaymoveChar(); // Play the movement sound effect
+            // PlayMoveSound(); 
         }
         if (movement[3])
         {
             player.x += PLAYER_SPEED;
             movement[3] = false;
-            PlaymoveChar(); // Play the movement sound effect
+            // PlayMoveSound(); 
         }
 
         if (player.x < 0)
