@@ -9,9 +9,11 @@
 		"**/*.exe": true,
 	},
 	"files.associations": {
+		"*.embeddedhtml": "html",
 		"globalheader.h": "c",
 		"headerandrew.h": "c",
 		"libraryfaiz.h": "c",
-		"time.h": "c"
+		"time.h": "c",
+		"stdio.h": "c"
 	}
 }

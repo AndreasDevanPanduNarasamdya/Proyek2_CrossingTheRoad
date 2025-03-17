@@ -1,5 +1,5 @@
 #include "menu.h"
-#include "../fahraj/sfx.h" 
+#include "../fahraj/sfx.h"
 #include "../fahraj/sfx.c"
 #include <stdio.h>
 
@@ -9,9 +9,8 @@ MenuOption ShowMenu()
     const char *menuOptions[] = {"Start Game", "Options", "Exit"};
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
-    // Initialize and start playing the menu background music
-    InitSounds();
-    PlayMenuBacksound();
+    InitSounds();          // Initialize sounds
+    PlayMenuBacksound();   // Start playing the menu background music
 
     while (!WindowShouldClose())
     {
@@ -59,12 +58,12 @@ MenuOption ShowMenu()
         if (IsKeyPressed(KEY_ENTER))
         {
             StopMusicStream(menuSound); // Stop the menu music
-            UnloadSounds(); // Clean up all sound resources
+            UnloadSounds();             // Clean up all sound resources
             return (MenuOption)selectedOption;
         }
     }
 
     StopMusicStream(menuSound); // Stop the menu music
-    UnloadSounds(); // Clean up resources
+    UnloadSounds();             // Clean up resources
     return MENU_EXIT;
 }
