@@ -5,6 +5,7 @@
 
 // GLOBAL
 void CleanUp();
+void InitSounds();
 
 // BACKSOUND 1
 void InitBacksound1();

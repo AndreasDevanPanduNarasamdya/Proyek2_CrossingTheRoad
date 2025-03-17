@@ -6,14 +6,16 @@ void CleanUp()
 {
     UnloadMoveChar();
     UnloadBacksound1();
+    CloseAudioDevice(); 
 }
 
 // BACKSOUND
 Music backsound1;
 void InitBacksound1()
 {
+    // Load background music file
     backsound1 = LoadMusicStream("../../sound/backsound5.wav");
-    SetMusicVolume(backsound1, 0.5f);
+    SetMusicVolume(backsound1, 0.5f); // Set volume to 50%
 }
 void PlayBacksound1()
 {
@@ -38,7 +40,7 @@ void InitMoveChar()
 {
     // Load the sound file for move character
     moveChar = LoadSound("../../sound/moveChar.wav"); 
-    SetSoundVolume(moveChar, 1.0f);                  
+    SetSoundVolume(moveChar, 1.0f); 
 }
 void PlayMoveChar()
 {
@@ -47,4 +49,14 @@ void PlayMoveChar()
 void UnloadMoveChar()
 {
     UnloadSound(moveChar);
+}
+
+// INIT SOUNDS (Unified Initialization)
+void InitSounds()
+{
+    InitAudioDevice(); // Initialize the audio device (required for sound to work)
+
+    // Initialize specific sound components
+    InitBacksound1();
+    InitMoveChar();
 }
