@@ -146,22 +146,6 @@ EXAMPLE_RUNTIME_PATH   ?= $(RAYLIB_RELEASE_PATH)
 # Define default C compiler: gcc
 # NOTE: define g++ compiler if using C++
 CC = gcc
-CFLAGS = -I../abass
-LDFLAGS = -lraylib -lwinmm -lgdi32 -lopengl32
-SRC_DIR = Assets/lib
-BUILD_DIR = build
-
-all: menu main
-
-menu: $(SRC_DIR)/hakim/menu.c $(SRC_DIR)/abass/sound.c
-    $(CC) -o menu $(SRC_DIR)/hakim/menu.c $(SRC_DIR)/abass/sound.c $(CFLAGS) $(LDFLAGS)
-
-main: main.c $(SRC_DIR)/abass/sound.c
-    $(CC) -o main main.c $(SRC_DIR)/abass/sound.c $(CFLAGS) $(LDFLAGS)
-
-clean:
-    rm -f menu main
-
 
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),OSX)
