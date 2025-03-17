@@ -9,7 +9,7 @@ void InitSounds()
     InitAudioDevice(); // Initialize the audio device
     menuSound = LoadMusicStream("../../sound/backsound4.wav");
     backgroundMusic1 = LoadMusicStream("../../sound/backsound4.wav");
-    moveChar = LoadSound("../../sound/sfx_movement.wav");
+    moveChar = LoadSound("../../sound/moveChar.wav");
 
     PlayMusicStream(backgroundMusic1);
 }
