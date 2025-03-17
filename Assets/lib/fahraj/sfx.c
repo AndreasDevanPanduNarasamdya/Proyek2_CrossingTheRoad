@@ -1,4 +1,3 @@
-#include "../raylib.h"
 #include "sfx.h"
 #include <stdio.h>
 
@@ -10,6 +9,10 @@ void InitSounds()
 {
     // Initialize the audio device (required for playing any audio)
     InitAudioDevice();
+    if (!IsAudioDeviceReady()) {
+        TraceLog(LOG_ERROR, "Audio device initialization failed!");
+        return;
+    }
 
     // Load audio files and check for errors
     menuSound = LoadMusicStream("../../sound/backsound4.wav");
