@@ -1,6 +1,5 @@
 #include "menu.h"
-#include "../abass/sound.h" 
-#include "../abass/sound.c" 
+#include "../abass/sound.h" // Include the sound header for function declarations
 #include <stdio.h>
 
 MenuOption ShowMenu()
@@ -10,6 +9,7 @@ MenuOption ShowMenu()
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
     InitSounds(); // Initialize sounds
+    PlayMenuBacksound(); // Start playing menu background music
 
     while (!WindowShouldClose())
     {
@@ -43,7 +43,7 @@ MenuOption ShowMenu()
         EndDrawing();
 
         // Update the menu music
-        PlaymenuSound();
+        PlayMenuBacksound();
 
         // Handle key inputs for navigation
         if (IsKeyPressed(KEY_DOWN))
@@ -56,11 +56,13 @@ MenuOption ShowMenu()
         }
         if (IsKeyPressed(KEY_ENTER))
         {
-            UnloadSounds(); // Unload all sound resources
+            StopMenuBacksound(); // Stop the menu background music
+            UnloadMenuBacksound(); // Cleanup menu sound resources
             return (MenuOption)selectedOption;
         }
     }
 
-    UnloadSounds(); // Cleanup sound resources
+    StopMenuBacksound(); // Stop menu background music
+    UnloadMenuBacksound(); // Cleanup sound resources
     return MENU_EXIT;
 }

@@ -101,7 +101,7 @@ void InitGame()
     InitSounds(); // Initialize all sounds
 
     // Play game background music
-    PlayMusicStream(backgroundMusic1);
+    PlayBacksound1();
 
     player.x = GRID_WIDTH / 2;
     player.y = GRID_HEIGHT - 2;
@@ -128,6 +128,7 @@ void InitGame()
         cars[i].type = rand() % 3; // Randomize car type
     }
 }
+
 
 void ResetCombo()
 {
@@ -159,12 +160,10 @@ void UpdateGame()
     if (!PermainanBerakhir)
     {
         UpdateCarMovement();
-        PlayBacgroundMusic1(); // Update background music stream
-
         if (IsKeyPressed(KEY_UP))
         {
             player.y -= PLAYER_SPEED;
-            PlayMoveSound(); // Play move sound effect
+            PlayMoveSound(); 
         }
         if (IsKeyPressed(KEY_DOWN))
         {

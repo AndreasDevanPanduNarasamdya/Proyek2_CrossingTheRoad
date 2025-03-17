@@ -1,52 +1,90 @@
-#include "../raylib.h"
 #include "sound.h"
 
-// Static variables for sounds
-Music backgroundMusic1, menuSound;
-Sound moveChar;
 
+Music backsound1;       // Background music for the game
+Music menuBacksound;    // Background music for the menu
+Sound moveChar;         // Movement sound effect
+
+// Unified Cleanup
+void CleanUp()
+{
+    UnloadMoveChar();
+    UnloadBacksound1();
+    UnloadMenuBacksound();
+    CloseAudioDevice(); 
+}
+
+void InitBacksound1()
+{
+    backsound1 = LoadMusicStream("../../sound/backsound4.wav");
+    SetMusicVolume(backsound1, 0.5f); 
+}
+void PlayBacksound1()
+{
+    if (!IsMusicStreamPlaying(backsound1)) 
+    {
+        PlayMusicStream(backsound1); 
+    }
+}
+void UpdateBacksound1()
+{
+    UpdateMusicStream(backsound1);
+}
+void StopBacksound1()
+{
+    StopMusicStream(backsound1);
+}
+void UnloadBacksound1()
+{
+    UnloadMusicStream(backsound1);
+}
+
+void InitMoveChar()
+{
+    moveChar = LoadSound("../../sound/moveChar.wav");
+    SetSoundVolume(moveChar, 1.0f); 
+}
+void PlayMoveChar()
+{
+    PlaySound(moveChar);
+}
+void UnloadMoveChar()
+{
+    UnloadSound(moveChar);
+}
+
+// MENU BACKGROUND MUSIC FUNCTIONS
+void InitMenuBacksound()
+{
+    // Load background music file for the menu
+    menuBacksound = LoadMusicStream("../../sound/backsound4.wav");
+    SetMusicVolume(menuBacksound, 0.5f); // Set volume to 50%
+}
+void PlayMenuBacksound()
+{
+    if (!IsMusicStreamPlaying(menuBacksound)) 
+    {
+        PlayMusicStream(menuBacksound); // Play if not already playing
+    }
+}
+void UpdateMenuBacksound()
+{
+    UpdateMusicStream(menuBacksound);
+}
+void StopMenuBacksound()
+{
+    StopMusicStream(menuBacksound);
+}
+void UnloadMenuBacksound()
+{
+    UnloadMusicStream(menuBacksound);
+}
+
+// Unified Initialization
 void InitSounds()
 {
-    InitAudioDevice(); // Initialize the audio device (needed for playing sound)
-
-    // Load audio assets
-    menuSound = LoadMusicStream("../../sound/menuBacksound.wav"); // Replace with actual menu sound file path
-    backgroundMusic1 = LoadMusicStream("../../sound/gameBacksound.wav"); // Replace with actual game sound file path
-    moveChar = LoadSound("../../sound/moveChar.wav");
-    PlayMusicStream(menuSound);
-}
-
-void PlaymenuSound()
-{
-    if (!IsMusicStreamPlaying(menuSound))
-    {
-        PlayMusicStream(menuSound); // Start menu sound if it's not already playing
-    }
-    UpdateMusicStream(menuSound); // Update menu sound for smooth playback
-}
-
-void PlayBacgroundMusic1()
-{
-    UpdateMusicStream(backgroundMusic1); // Update background game music
-}
-
-void PlayMoveSound()
-{
-    PlaySound(moveChar); // Play move sound effect
-}
-
-void UnloadSounds()
-{
-    // Stop and unload all music
-    StopMusicStream(menuSound);
-    StopMusicStream(backgroundMusic1);
-
-    UnloadMusicStream(menuSound);
-    UnloadMusicStream(backgroundMusic1);
-
-    // Unload sound effects
-    UnloadSound(moveChar);
-
-    // Close the audio device
-    CloseAudioDevice();
+    InitAudioDevice(); 
+    InitBacksound1(); 
+    InitMenuBacksound(); 
+    InitMoveChar();  
 }
