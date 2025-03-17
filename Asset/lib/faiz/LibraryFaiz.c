@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <time.h>
 #include "../GLOBALHEADER.h"
-#include "../abass/sound.h"
-#include "../abass/sound.c"
+// #include "../fahraj/sfx.c"
 
 void RenderGrid()
 {
@@ -99,13 +98,6 @@ void checkposition(Player *player)
 void InitGame()
 {
     srand(time(NULL));
-    InitAudioDevice(); // Initialize the audio device (required for sound)
-
-    // Initialize sounds
-    InitMoveChar();
-    InitBacksound1();
-    PlayBacksound1(); // Start background music
-
     player.x = GRID_WIDTH / 2;
     player.y = GRID_HEIGHT - 2;
     checkpoint.x = player.x;
@@ -113,9 +105,8 @@ void InitGame()
     player.score = 0;
     player.lives = MAX_LIVES;
 
-    InitGrid(); // Initialize the grid
+    InitGrid(); // Pastikan grid diinisialisasi sebelum menempatkan mobil
 
-    // Initialize cars in random lanes
     for (int i = 0; i < numCars; i++)
     {
         int lane, col;
@@ -123,13 +114,13 @@ void InitGame()
         do
         {
             lane = rand() % (GRID_HEIGHT - 2);
-        } while (grid[lane][0] == LANE_MARK); // Ensure not lane mark
+        } while (grid[lane][0] == LANE_MARK); // Pastikan bukan garis batas
 
         col = rand() % GRID_WIDTH;
         int direction = (rand() % 2) ? 1 : -1;
 
         cars[i] = (Car){col, lane, carSpeed, direction};
-        cars[i].type = rand() % 3; // Randomize car type
+        cars[i].type = rand() % 3; // Pilih jenis mobil secara acak
     }
 }
 
@@ -162,51 +153,58 @@ void UpdateGame()
 {
     if (!PermainanBerakhir)
     {
-        UpdateCarMovement();
-        UpdateBacksound1(); // Update background music
 
-        // Handle player movement
-        if (IsKeyPressed(KEY_UP)) movement[0] = true;
-        if (IsKeyPressed(KEY_DOWN)) movement[1] = true;
-        if (IsKeyPressed(KEY_LEFT)) movement[2] = true;
-        if (IsKeyPressed(KEY_RIGHT)) movement[3] = true;
+        UpdateCarMovement();
+
+        if (IsKeyPressed(KEY_UP))
+            movement[0] = true;
+        if (IsKeyPressed(KEY_DOWN))
+            movement[1] = true;
+        if (IsKeyPressed(KEY_LEFT))
+            movement[2] = true;
+        if (IsKeyPressed(KEY_RIGHT))
+            movement[3] = true;
 
         if (movement[0])
         {
             player.y -= PLAYER_SPEED;
             movement[0] = false;
-            PlayMoveChar(); // Play move character sound
+            // PlayMoveSound(); 
         }
         if (movement[1])
         {
             player.y += PLAYER_SPEED;
             movement[1] = false;
-            PlayMoveChar();
+            // PlayMoveSound(); 
         }
         if (movement[2])
         {
             player.x -= PLAYER_SPEED;
             movement[2] = false;
-            PlayMoveChar();
+            // PlayMoveSound(); 
         }
         if (movement[3])
         {
             player.x += PLAYER_SPEED;
             movement[3] = false;
-            PlayMoveChar();
+            // PlayMoveSound(); 
         }
 
-        // Keep player within grid bounds
-        if (player.x < 0) player.x = 0;
-        if (player.x >= GRID_WIDTH) player.x = GRID_WIDTH - 1;
-        if (player.y < 0) player.y = 0;
-        if (player.y >= GRID_HEIGHT) player.y = GRID_HEIGHT - 1;
+        if (player.x < 0)
+            player.x = 0;
+        if (player.x >= GRID_WIDTH)
+            player.x = GRID_WIDTH - 1;
+        if (player.y < 0)
+            player.y = 0;
+        if (player.y >= GRID_HEIGHT)
+            player.y = GRID_HEIGHT - 1;
 
         checkposition(&player);
+
         CheckCollision();
     }
 
-    if (player.y == 0) // If player reaches the end
+    if (player.y == 0)
     {
         NextLevel();
     }
