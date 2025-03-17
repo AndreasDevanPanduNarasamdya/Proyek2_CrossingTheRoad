@@ -6,8 +6,8 @@ static Sound moveSound;
 
 void InitSounds()
 {
-    InitAudioDevice(); // Initialize the audio device
-    menuBacksound = LoadMusicStream("../../sound/backsound4.wav");
+    InitAudioDevice(); 
+    menuBacksound = LoadMusicStream("../../sound/backsound5.wav");
     backgroundMusic = LoadMusicStream("../../sound/backsound4.wav");
     moveSound = LoadSound("../../sound/sfx_movement.wav");
 
@@ -24,9 +24,9 @@ void PlayMenuBacksound()
     // Play or update the menu backsound
     if (!IsMusicStreamPlaying(menuBacksound))
     {
-        PlayMusicStream(menuBacksound); // Start playing the menu backsound if it's not already playing
+        PlayMusicStream(menuBacksound); 
     }
-    UpdateMusicStream(menuBacksound); // Keep the music stream updated
+    UpdateMusicStream(menuBacksound);
 }
 
 void PlayMoveSound()
