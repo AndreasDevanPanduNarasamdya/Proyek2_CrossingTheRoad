@@ -216,8 +216,8 @@ void UpdateGame() {
         if (movement[2]) { player.x -= PLAYER_SPEED+1; movement[2] = false; }
         if (movement[3]) { player.x += PLAYER_SPEED+1; movement[3] = false; }
 
-        if (player.x < 0) player.x = 0;
-        if (player.x >= GRID_WIDTH) player.x = GRID_WIDTH - 1;
+        if (player.x < 15) player.x = 15;
+        if (player.x >= GRID_WIDTH-17) player.x = GRID_WIDTH - 17;
         if (player.y < 0) player.y = 0;
         if (player.y >= GRID_HEIGHT) player.y = GRID_HEIGHT - 1;
 
