@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <time.h>
 #include "../GLOBALHEADER.h"
-#include "../abass/sfx.h"
 #include "../abass/sfx.c"
+
 
 void RenderGrid()
 {

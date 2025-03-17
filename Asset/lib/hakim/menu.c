@@ -1,7 +1,7 @@
 #include "menu.h"
 #include <stdio.h>
-#include "../abass/sfx.h"
 #include "../abass/sfx.c"
+
 
 MenuOption ShowMenu() {
     int selectedOption = 0;
