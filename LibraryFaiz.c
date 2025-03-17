@@ -1,5 +1,6 @@
 #include "LibraryFaiz.h"
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <time.h>
 #include "GLOBALHEADER.h"
@@ -7,7 +8,7 @@
 void RenderGrid() {
     for (int i = 0; i < GRID_HEIGHT; i++) {
         for (int j = 0; j < GRID_WIDTH; j++) {
-            Color cellColor = WHITE; // Default warna jalan biasa
+            Color cellColor = DARKGRAY; // Default warna jalan biasa
 
             if (grid[i][j] == LANE_MARK) {
                 cellColor = LANE_COLOR; // Warna garis jalur
@@ -15,6 +16,7 @@ void RenderGrid() {
             else if (grid[i][j] == CHECKPOINT_LINE) {
                 cellColor = BLUE; // Warna garis checkpoint
             }
+
             DrawRectangle(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE, cellColor);
         }
     }
@@ -22,35 +24,51 @@ void RenderGrid() {
 
 
 void UpdateCarMovement() {
-    for (int i = 0; i < numCars; i++) {
-        // Update posisi mobil langsung berdasarkan kecepatan dan arah
-        cars[i].x += cars[i].direction * cars[i].speed;
+    frameCounter++;
+    if (frameCounter >= CAR_MOVE_DELAY) {
+        for (int i = 0; i < numCars; i++) {
+            int newX = cars[i].x + cars[i].direction * cars[i].speed;
+            if (newX < 0) 
+            {
+                
+                    newX = GRID_WIDTH - 1;
+        
+            }
+            if (newX >= GRID_WIDTH) 
+            {
+             
+                    newX = 0;
 
-        // Jika mobil keluar dari batas layar, kembalikan ke sisi lain
-        if (cars[i].x < 0) {
-            cars[i].x = SCREEN_WIDTH;  // Muncul kembali di sisi kanan
+            }
+            grid[cars[i].y][cars[i].x] = ROAD;
+            cars[i].x = newX;
+            grid[cars[i].y][cars[i].x] = CAR;
         }
-        if (cars[i].x > SCREEN_WIDTH) {
-            cars[i].x = 0;  // Muncul kembali di sisi kiri
-        }
-    }
-}
+        frameCounter = 0;
+}}
 
 
 void InitGrid() {
     for (int i = 0; i < GRID_HEIGHT; i++) {
         for (int j = 0; j < GRID_WIDTH; j++) {
-            if (i >= 300 && i < 310) {
-                grid[i][j] = CHECKPOINT_LINE; // Mengosongkan area di antara 100-110
-            }  else if (i % 18 == 0) {
-                grid[i][j] = LANE_MARK; // Garis hita, tiap 18 baris
-            } else if (i % 9 == 0) {
-                grid[i][j] = putihs; // Jalan normal
-            } else if(i == 305) {
-                grid[i][j] = check;
-            } else{
-                grid[i][j] = ROAD;
+            if ((i == 165 && j == 23) || (i == 39 && j == 53)) {
+                grid[i][j] = CHECKPOINT_LINE; // Garis biru setiap 50 baris
+            } //else if (i % 8 == 0) {
+                //grid[i][j] = LANE_MARK; // Garis putih tiap 8 baris
+            
+            else if ((i == 131 && j == 51) || (i == 53 && j == 37)) {
+                grid[i][j] = HEALTH_UP; // Garis biru setiap 50 baris
             }
+            else if ((i == 151 && j == 29) || (i == 21 && j == 55)) {
+                grid[i][j] = POINTS;
+            }
+            else {
+                grid[i][j] = ROAD;  //Jalan normal
+            }
+            //grid [209][j] = LANE_MARK;
+            //grid [203][j] = LANE_MARK;
+            //grid [199][j] = LANE_MARK;
+            //grid [187][j] = LANE_MARK;
         }
     }
 }
@@ -58,48 +76,65 @@ void InitGrid() {
 
 
 void checkposition(Player *player) {
-    if (grid[player->y][player->x] == check && player->y != ScorTerakhir) {
+    if (grid[player->y][player->x] == CHECKPOINT_LINE) 
+    {
+        passed = true;
         checkpoint.x = player->x; 
         checkpoint.y = player->y;
-        
-        comboStreak++;
-        if (comboStreak >= comboThreshold) {
-            comboMultiplier++;
-            comboStreak = 0; // Reset streak setelah naik level multiplier
-        }
-        
-        player->score += 10 * comboMultiplier; // Gunakan multiplier untuk skor
+        player->score += 10;
         ScorTerakhir = player->y;
+
+
+        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
         grid[player->y][player->x] = ROAD;
     }
+    else if (grid[player->y][player->x] == HEALTH_UP) 
+    {
+        //health_upgrade = true;
+        ++player->lives;
+
+        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
+        grid[player->y][player->x] = ROAD;
+    }
+    else if (grid[player->y][player->x] == POINTS) 
+    {
+        player->score += 10;
+
+        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
+        
+    }
 }
+
 
 
 void InitGame() {
     srand(time(NULL));
     player.x = GRID_WIDTH / 2;
-    player.y = GRID_HEIGHT - 2;
+    player.y = GRID_HEIGHT;
     checkpoint.x = player.x;
     checkpoint.y = player.y;
     player.score = 0;
     player.lives = MAX_LIVES;
+    int array[24] = {9, 14, 27, 32, 49, 55, 61, 67, 95, 101, 115, 121, 127, 133, 139, 145, 151, 157, 175, 181, 187, 193, 205, 211};
+    int directray[24] = {-1, -1, 1, 1, -1, -1, 1, 1,/**/ 1, /**/-1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1 };
     
     InitGrid();  // Pastikan grid diinisialisasi sebelum menempatkan mobil
 
     for (int i = 0; i < numCars; i++) {
-        int lane, col;
+      /*  */int /*lane*/ col;
 
-        do {
-            lane = rand() % (GRID_HEIGHT - 2);
-        } while (grid[lane][0] == LANE_MARK);  // Pastikan bukan garis batas
+        //do {
+            //lane = rand() % (GRID_HEIGHT - 2);
+        //} while (grid[lane][0] == LANE_MARK);  // Pastikan bukan garis batas
 
-        col = rand() % GRID_WIDTH;
-        int direction = (rand() % 2) ? 1 : -1;
+        col = rand() % (GRID_WIDTH - GRID_START);
+        int direction = directray[i];
 
-        cars[i] = (Car){col, lane, carSpeed, direction};
-        cars[i].type = rand() % 3;  // Pilih jenis mobil secara acak
+        cars[i] = (Car){col, array[i], carSpeed, direction};
+        cars[i].type = (rand() % 4), (rand() % 4), (rand() % 4);  // Pilih jenis mobil secara acak
     }
 }
+
 
 
 void NextLevel() {
@@ -125,15 +160,29 @@ void ResetCombo() {
 
 void CheckCollision() {
     for (int i = 0; i < numCars; i++) {
-        if (player.x + 4 == cars[i].x  && player.y == cars[i].y) {
+        if (cars[i].direction == 1)
+        {
+            if (((player.x <= cars[i].x+7) && (player.x >= cars[i].x-2.3)) && ((player.y <= cars[i].y+2.7) && (player.y >= cars[i].y-2))) {
             player.x = checkpoint.x;
             player.y = checkpoint.y;
             player.lives--;
-            ResetCombo(); // Reset combo jika tertabrak
             if (player.lives <= 0) {
                 kalah = true;
             }
             break;
+            }
+        }
+        else
+        {
+            if (((player.x <= cars[i].x-3) && (player.x >= cars[i].x-9.3)) && ((player.y <= cars[i].y+2.7) && (player.y >= cars[i].y-2))) {
+            player.x = checkpoint.x;
+            player.y = checkpoint.y;
+            player.lives--;
+            if (player.lives <= 0) {
+                kalah = true;
+            }
+            break;
+            }
         }
     }
 }
