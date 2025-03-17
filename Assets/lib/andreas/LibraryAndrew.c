@@ -1,7 +1,7 @@
-#include "raylib.h"
-#include "GLOBALHEADER.h"
+#include "../raylib.h"
+#include "../GLOBALHEADER.h"
 #include "HeaderAndrew.h"
-#include "LibraryFaiz.h"
+#include "../faiz/LibraryFaiz.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -150,17 +150,17 @@ void UnloadAllTextures()
 
 void LoadAllTextures()
 {
-    TaxiTexture = LoadTexture("Assets/taxi.png");
-    TruckTexture = LoadTexture("Assets/gruppesechs_van.png");
-    VanTexture = LoadTexture("Assets/vanbankk.png");
-    Mustang = LoadTexture("Assets/mustang.png");
-    PlayerSprite = LoadTexture("Assets/npcmoment.png");
-    background = LoadTexture("Assets/mapproyek2.png");
-    logs = LoadTexture("Assets/logbridge.png");
-    checkpointflag = LoadTexture("Assets/checkpointflag.png");
-    checkpointtxt = LoadTexture("Assets/checkpointtxt.png");
-    healthup = LoadTexture("Assets/healthpowerup.png");
-    points = LoadTexture("Assets/pointsup.png");
+    TaxiTexture = LoadTexture("Assets/sprite/taxi.png");
+    TruckTexture = LoadTexture("Assets/sprite/gruppesechs_van.png");
+    VanTexture = LoadTexture("Assets/sprite/vanbankk.png");
+    Mustang = LoadTexture("Assets/sprite/mustang.png");
+    PlayerSprite = LoadTexture("Assets/sprite/npcmoment.png");
+    background = LoadTexture("Assets/sprite/mapproyek2.png");
+    logs = LoadTexture("Assets/sprite/logbridge.png");
+    checkpointflag = LoadTexture("Assets/sprite/checkpointflag.png");
+    checkpointtxt = LoadTexture("Assets/sprite/checkpointtxt.png");
+    healthup = LoadTexture("Assets/sprite/healthpowerup.png");
+    points = LoadTexture("Assets/sprite/pointsup.png");
 }
 
 void RenderInstructions(Player player, char *coordText, int level)

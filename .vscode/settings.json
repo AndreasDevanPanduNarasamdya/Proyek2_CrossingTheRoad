@@ -7,13 +7,11 @@
 		"**/.DS_Store": true,
 		"**/*.o": true,
 		"**/*.exe": true,
-<<<<<<< HEAD
-=======
 	},
 	"files.associations": {
+		"globalheader.h": "c",
+		"headerandrew.h": "c",
 		"libraryfaiz.h": "c",
-		"stdlib.h": "c",
-		"globalheader.h": "c"
->>>>>>> main
+		"time.h": "c"
 	}
 }
