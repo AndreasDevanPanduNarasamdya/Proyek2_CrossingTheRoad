@@ -1,3 +1,4 @@
+#include "../raylib.h"
 #include "sfx.h"
 
 static Music backgroundMusic, menuBacksound;
