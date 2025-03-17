@@ -12,7 +12,7 @@ void InitSounds()
     moveChar = LoadSound("../../sound/sfx_movement.wav");
 
     PlayMusicStream(backgroundMusic1);
-};
+}
 
 void PlaymenuSound()
 {
@@ -22,17 +22,17 @@ void PlaymenuSound()
         PlayMusicStream(menuSound); // Start playing the menu backsound if it's not already playing
     }
     UpdateMusicStream(menuSound); // Keep the music stream updated
-};
+}
 
 void PlayBacgroundMusic1()
 {
     UpdateMusicStream(backgroundMusic1);
-};
+}
 
 void PlaymoveChar()
 {
     PlaySound(moveChar);
-};
+}
 
 void UnloadSounds()
 {
@@ -44,4 +44,4 @@ void UnloadSounds()
 
     UnloadSound(moveChar);
     CloseAudioDevice();
-};
+}
