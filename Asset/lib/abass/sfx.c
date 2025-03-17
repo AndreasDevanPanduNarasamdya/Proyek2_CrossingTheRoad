@@ -2,14 +2,14 @@
 #include "sfx.h"
 
 static Music backgroundMusic, menuBacksound;
-static Sound moveSound;
+static Sound moveChar;
 
 void InitSounds()
 {
     InitAudioDevice(); // Initialize the audio device
     menuBacksound = LoadMusicStream("../../sound/backsound4.wav");
     backgroundMusic = LoadMusicStream("../../sound/backsound4.wav");
-    moveSound = LoadSound("../../sound/sfx_movement.wav");
+    moveChar = LoadSound("../../sound/sfx_movement.wav");
 
     PlayMusicStream(backgroundMusic);
 };
@@ -29,9 +29,9 @@ void PlayBacgroundMusic()
     UpdateMusicStream(backgroundMusic);
 };
 
-void PlayMoveSound()
+void PlaymoveChar()
 {
-    PlaySound(moveSound);
+    PlaySound(moveChar);
 };
 
 void UnloadSounds()
@@ -42,6 +42,6 @@ void UnloadSounds()
     UnloadMusicStream(menuBacksound);
     UnloadMusicStream(backgroundMusic);
 
-    UnloadSound(moveSound);
+    UnloadSound(moveChar);
     CloseAudioDevice();
 };

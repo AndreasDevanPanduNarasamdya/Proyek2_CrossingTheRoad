@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <time.h>
 #include "../GLOBALHEADER.h"
+#include "../abass/sfx.h"
 #include "../abass/sfx.c"
 
 
@@ -170,25 +171,25 @@ void UpdateGame()
         {
             player.y -= PLAYER_SPEED;
             movement[0] = false;
-            PlayMoveSound(); // Play the movement sound effect
+            PlaymoveChar(); // Play the movement sound effect
         }
         if (movement[1])
         {
             player.y += PLAYER_SPEED;
             movement[1] = false;
-            PlayMoveSound(); // Play the movement sound effect
+            PlaymoveChar(); // Play the movement sound effect
         }
         if (movement[2])
         {
             player.x -= PLAYER_SPEED;
             movement[2] = false;
-            PlayMoveSound(); // Play the movement sound effect
+            PlaymoveChar(); // Play the movement sound effect
         }
         if (movement[3])
         {
             player.x += PLAYER_SPEED;
             movement[3] = false;
-            PlayMoveSound(); // Play the movement sound effect
+            PlaymoveChar(); // Play the movement sound effect
         }
 
         if (player.x < 0)
