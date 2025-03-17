@@ -21,15 +21,15 @@ void PlayMenuBacksound()
         PlayMusicStream(menuBacksound); // Start playing the menu backsound if it's not already playing
     }
     UpdateMusicStream(menuBacksound); // Keep the music stream updated
-}
+};
 void PlayBacgroundMusic()
 {
     UpdateMusicStream(backgroundMusic);
-}
+};
 void PlayMoveSound()
 {
     PlaySound(moveSound);
-}
+};
 void UnloadSounds()
 {
     StopMusicStream(menuBacksound);
@@ -40,4 +40,4 @@ void UnloadSounds()
 
     UnloadSound(moveSound);
     CloseAudioDevice();
-}
+};
