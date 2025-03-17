@@ -3,9 +3,9 @@
 
 
 void InitSounds();
-void PlayBackgroundMusic();
-void PlayMenuBacksound();
-void PlayMoveSound();
+void PlaybackgroundMusic1();
+void PlaymenuMusic();
+void PlaymoveChar();
 void UnloadSounds();
 
 #endif
