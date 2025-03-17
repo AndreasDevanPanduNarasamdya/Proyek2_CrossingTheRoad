@@ -1,6 +1,6 @@
 #include "menu.h"
-#include "../abass/sound.h"
-#include "../abass/sound.c"
+#include "../fahraj/sfx.h" 
+#include "../fahraj/sfx.c"
 #include <stdio.h>
 
 MenuOption ShowMenu()
@@ -9,8 +9,9 @@ MenuOption ShowMenu()
     const char *menuOptions[] = {"Start Game", "Options", "Exit"};
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
-    InitSounds(); // Initialize sounds
-    PlayMenuBacksound(); // Start playing menu background music
+    // Initialize and start playing the menu background music
+    InitSounds();
+    PlayMenuBacksound();
 
     while (!WindowShouldClose())
     {
@@ -43,7 +44,7 @@ MenuOption ShowMenu()
 
         EndDrawing();
 
-        // Update the menu music
+        // Update the menu background music
         PlayMenuBacksound();
 
         // Handle key inputs for navigation
@@ -57,13 +58,13 @@ MenuOption ShowMenu()
         }
         if (IsKeyPressed(KEY_ENTER))
         {
-            StopMenuBacksound(); // Stop the menu background music
-            UnloadMenuBacksound(); // Cleanup menu sound resources
+            StopMusicStream(menuSound); // Stop the menu music
+            UnloadSounds(); // Clean up all sound resources
             return (MenuOption)selectedOption;
         }
     }
 
-    StopMenuBacksound(); // Stop menu background music
-    UnloadMenuBacksound(); // Cleanup sound resources
+    StopMusicStream(menuSound); // Stop the menu music
+    UnloadSounds(); // Clean up resources
     return MENU_EXIT;
 }
