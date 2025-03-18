@@ -13,6 +13,8 @@
 #include "Assets/lib/hakim/menu.c"
 #include "Assets/lib/hakim/options.h"
 #include "Assets/lib/hakim/options.c"
+#include "Assets/lib/hakim/tryagain.h"
+#include "Assets/lib/hakim/tryagain.c"
 
 
 int main() {
@@ -58,6 +60,13 @@ int main() {
                     if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
                         kalah = true;
                     }
+                }
+                
+                // **Panggil HandleGameOver() setelah keluar dari loop game**
+                if (kalah || PermainanBerakhir) {
+                    printf("Game over! Memanggil HandleGameOver()\n");
+                    HandleGameOver(&kalah, &PermainanBerakhir);
+                    printf("Kembali ke loop utama setelah HandleGameOver()\n");
                 }   
             
                 // **Pause Menu Handling**
