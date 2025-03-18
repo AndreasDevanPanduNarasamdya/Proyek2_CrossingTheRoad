@@ -6,7 +6,7 @@
 #include "Assets/lib/andreas/HeaderAndrew.h"
 #include "Assets/lib/andreas/LibraryAndrew.c"
 #include "Assets/lib/fahraj/sfx.h"
-#include "Assets/lib/fahraj/sfx.c"
+
 #include "Assets/lib/faiz/LibraryFaiz.h"
 #include "Assets/lib/faiz/LibraryFaiz.c"
 #include "Assets/lib/azzam/LibraryAzzam.h"
@@ -68,7 +68,7 @@ int main()
                 }
 
                 // **Pause Menu Handling**
-#include "sfx.h" // Ensure this includes the PlayPausedSound() function
+ // Ensure this includes the PlayPausedSound() function
 
                 // In your main game loop
                 if (IsKeyPressed(KEY_SPACE))
