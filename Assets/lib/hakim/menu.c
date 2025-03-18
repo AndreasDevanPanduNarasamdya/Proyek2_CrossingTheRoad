@@ -9,12 +9,13 @@ MenuOption ShowMenu()
     const char *menuOptions[] = {"Start Game", "Options", "Exit"};
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
-    InitSounds();          // Initialize sounds
-    PlayMenuBacksound();   // Start playing the menu background music (only once)
+    // Initialize sounds and play menu music
+    InitSounds();
+    PlayMenuBacksound(); // Start playing the menu background music (set to loop)
 
     while (!WindowShouldClose())
     {
-        // **Update the menu background music stream**
+        // Keep updating the music stream to loop seamlessly
         UpdateMusicStream(menuSound);
 
         BeginDrawing();
@@ -35,7 +36,7 @@ MenuOption ShowMenu()
 
             Color textColor = (i == selectedOption) ? WHITE : BLACK;
 
-            // Highlight selected option
+            // Highlight the selected option
             if (i == selectedOption)
             {
                 DrawRectangle(posX - 10, posY - 5, textWidth + 20, 40, RED);
@@ -57,13 +58,15 @@ MenuOption ShowMenu()
         }
         if (IsKeyPressed(KEY_ENTER))
         {
+            // Stop and clean up music resources when exiting the menu
             StopMusicStream(menuSound); // Stop the menu music
-            UnloadSounds();             // Clean up all sound resources
+            UnloadSounds();             // Unload all sound resources
             return (MenuOption)selectedOption;
         }
     }
 
-    StopMusicStream(menuSound); // Stop the menu music on exit
-    UnloadSounds();             // Clean up resources
+    // Stop and clean up music resources on exit
+    StopMusicStream(menuSound);
+    UnloadSounds();
     return MENU_EXIT;
 }
