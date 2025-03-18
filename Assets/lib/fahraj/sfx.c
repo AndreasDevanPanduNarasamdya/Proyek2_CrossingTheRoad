@@ -21,7 +21,7 @@ void InitSounds()
     moveChar = LoadSound("../../sound/moveChar.wav");
     getHealth = LoadSound("../../sound/getHealth.wav");
     getCheckpoint = LoadSound("../../sound/getCheckpoint.wav");
-    pausedSound = LoadSound("../../sound/paused.wav");
+    pausedSound = LoadSound("../../sound/pause.wav");
     carSound = LoadSound("../../sound/car.wav");
 
     // Set initial volume levels
