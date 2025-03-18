@@ -1,6 +1,7 @@
 #ifndef GLOBALHEADER_H
 #define GLOBALHEADER_H
 #include <stdlib.h>
+#include "raylib.h"
 #include <stdio.h>
 #include <time.h>
 
