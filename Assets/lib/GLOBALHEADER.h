@@ -13,7 +13,7 @@
 #define PLAYER_SIZE 10
 #define CAR_WIDTH 20
 #define CAR_HEIGHT 10
-#define NUM_CARS_START 20
+#define NUM_CARS_START 24
 #define PLAYER_SPEED 1
 #define CAR_SPEED_START 1
 #define CAR_MOVE_DELAY 6
@@ -32,6 +32,10 @@
 #define HEALTH_UP 4
 #define PLAYER 2
 #define CAR 3
+
+bool isPaused = false; // Apakah game sedang pause
+float volume = 1.0f;   // Volume awal
+bool isFullscreen = false; // Fullscreen mode awal
 
 
 Vector2 CoordArr[SCREEN_WIDTH][SCREEN_HEIGHT];

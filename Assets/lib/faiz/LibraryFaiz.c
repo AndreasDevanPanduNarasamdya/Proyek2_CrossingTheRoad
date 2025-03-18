@@ -4,8 +4,7 @@
 #include <stdio.h>
 #include <time.h>
 #include "../GLOBALHEADER.h"
-
-
+#include "../azzam/LibraryAzzam.h"
 
 
 void RenderGrid() {
@@ -29,17 +28,25 @@ void DrawGame(Camera2D camera) {
     BeginDrawing();
     ClearBackground(WHITE);
     BeginMode2D(camera);
-    sprintf(coordText, "Coordinate: %2d,%2d", player.x, player.y);
 
+    sprintf(coordText, "Coordinate: %2d,%2d", player.x, player.y);
     // Menggambar elemen game dalam dunia (terpengaruh oleh kamera)
     RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
+
     RenderCars(&numCars, cars);
+
     RenderFlags();
+
     RenderHealths();
+
     RenderPoints();
-    RenderCharacter(&PlayerSprite, player); // Selesai menggambar elemen dalam dunia
+    
+    RenderCharacter(&PlayerSprite, player);
+     // Selesai menggambar elemen dalam dunia
     EndMode2D();
+
     RenderInstructions(player, coordText, level);
+
     ResetTimer();
     if (PermainanBerakhir) {
         DrawText("MENANG", player.x * CELL_SIZE, player.y * CELL_SIZE, 40, RED);
@@ -49,6 +56,7 @@ void DrawGame(Camera2D camera) {
         DrawText("GAME OVER", player.x * CELL_SIZE, player.y * CELL_SIZE, 40, RED);
         PermainanBerakhir = true;
     }
+    
     EndMode2D();
     EndDrawing();
 }//101, 59
@@ -60,22 +68,19 @@ void UpdateCarMovement() {
             int newX = cars[i].x + cars[i].direction * cars[i].speed;
             if (newX < 0) 
             {
-                
-                    newX = GRID_WIDTH - 1;
-        
+               newX = GRID_WIDTH - 1;
             }
             if (newX >= GRID_WIDTH) 
             {
-             
-                    newX = 0;
-
+                newX = 0;
             }
             grid[cars[i].y][cars[i].x] = ROAD;
             cars[i].x = newX;
             grid[cars[i].y][cars[i].x] = CAR;
         }
         frameCounter = 0;
-}}
+    }
+}
 
 
 void InitGrid() {
@@ -85,7 +90,7 @@ void InitGrid() {
                 grid[i][j] = CHECKPOINT_LINE; // Garis biru setiap 50 baris
             } //else if (i % 8 == 0) {
                 //grid[i][j] = LANE_MARK; // Garis putih tiap 8 baris
-            
+    
             else if ((i == 131 && j == 51) || (i == 53 && j == 37)) {
                 grid[i][j] = HEALTH_UP; // Garis biru setiap 50 baris
             }
@@ -114,25 +119,23 @@ void checkposition(Player *player) {
         player->score += 10;
         ScorTerakhir = player->y;
 
-
         // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
         grid[player->y][player->x] = ROAD;
     }
     else if (grid[player->y][player->x] == HEALTH_UP) 
     {
-        //health_upgrade = true;
         ++player->lives;
-
+        
         // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
         grid[player->y][player->x] = ROAD;
     }
     else if (grid[player->y][player->x] == POINTS) 
     {
         player->score += 10;
-
-        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
         
-    }
+        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
+        grid[player->y][player->x] = ROAD;
+    } 
 }
 
 
@@ -151,11 +154,9 @@ void InitGame() {
     InitGrid();  // Pastikan grid diinisialisasi sebelum menempatkan mobil
 
     for (int i = 0; i < numCars; i++) {
-      /*  */int /*lane*/ col;
+         int  col;
 
-        //do {
-            //lane = rand() % (GRID_HEIGHT - 2);
-        //} while (grid[lane][0] == LANE_MARK);  // Pastikan bukan garis batas
+      
 
         col = rand() % (GRID_WIDTH - GRID_START);
         int direction = directray[i];
@@ -201,7 +202,8 @@ void CheckCollision() {
     }
 }
 
-void UpdateGame() {
+
+void UpdateGame(Camera2D *camera) {
     if (!PermainanBerakhir) {
         
         UpdateCarMovement();
@@ -216,8 +218,8 @@ void UpdateGame() {
         if (movement[2]) { player.x -= PLAYER_SPEED+1; movement[2] = false; }
         if (movement[3]) { player.x += PLAYER_SPEED+1; movement[3] = false; }
 
-        if (player.x < 0) player.x = 0;
-        if (player.x >= GRID_WIDTH) player.x = GRID_WIDTH - 1;
+        if (player.x < 15) player.x = 15;
+        if (player.x >= GRID_WIDTH-17) player.x = GRID_WIDTH - 17;
         if (player.y < 0) player.y = 0;
         if (player.y >= GRID_HEIGHT) player.y = GRID_HEIGHT - 1;
 
@@ -225,8 +227,8 @@ void UpdateGame() {
 
         CheckCollision();
     }
-
+   
     if (player.y == 0) {
-        NextLevel();
+        NextLevel(camera,&player);
     }
 }

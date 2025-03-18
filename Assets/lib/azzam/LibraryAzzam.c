@@ -1,19 +1,20 @@
 #include "LibraryAzzam.h"
 #include "../faiz/LibraryFaiz.h"
 
-void NextLevel() {
-    PermainanBerakhir = (level == 2);
 
-    if (!PermainanBerakhir) {
-        level++;
-        numCars += 5; 
-        carSpeed = (carSpeed < 5) ? carSpeed + 1 : 5; 
-        
-        player.x = GRID_WIDTH / 2;
-        player.y = GRID_HEIGHT - 2;
-        checkpoint.x = player.x;
-        checkpoint.y = player.y;
+void NextLevel(Camera2D *camera, Player *player) {
+    // Tingkatkan level
+    level++;
+    
+    // Reset posisi pemain ke tengah bawah grid
+    player->x = GRID_WIDTH / 2;
+    player->y = GRID_HEIGHT - 2;  // Kurangi 2 agar tidak keluar batas
+    
+    checkpoint.x = player->x;
+    checkpoint.y = player->y;
 
-        InitGame(); 
-    }
+    // Reset posisi kamera ke awal
+    camera->target.y = player->y * CELL_SIZE;
+    // Inisialisasi ulang game untuk level baru
+    InitGame();
 }

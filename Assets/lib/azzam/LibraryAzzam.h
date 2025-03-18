@@ -5,6 +5,6 @@
 #include "../raylib.h"
 #include "../faiz/LibraryFaiz.h"
 
-void NextLevel(); // Deklarasi fungsi NextLevel()
+void NextLevel(Camera2D *camera, Player *player); // Deklarasi fungsi NextLevel()
 
 #endif
