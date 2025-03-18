@@ -83,7 +83,7 @@ int main() {
                 continue; // Jangan jalankan UpdateGame() saat pause
             }
 
-            UpdateGame();
+            UpdateGame(&camera);
             // **Kamera hanya bergerak ke atas & tetap di tengah horizontal**
             if (!kalah && !PermainanBerakhir) {
                 camera.target.y -= CAMERA_SPEED; // Kamera terus bergerak ke atas
