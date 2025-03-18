@@ -3,9 +3,9 @@ CC = gcc
 RAYLIB_PATH = C:/raylib/raylib
 SRC_DIR = src
 OBJ_DIR = obj
-INCLUDE_PATHS = -I$(RAYLIB_PATH)/include
-LDFLAGS = -L$(RAYLIB_PATH)/lib
-LDLIBS = -lraylib
+INCLUDE_PATHS = -I$(RAYLIB_PATH)/include -IC:/raylib/raylib/src
+LDFLAGS = -L$(RAYLIB_PATH)/lib -LC:/raylib/raylib/src
+LDLIBS = -lraylib -lopengl32 -lgdi32 -lwinmm
 CFLAGS = -Wall -g
 PLATFORM = PLATFORM_DESKTOP
 EXT = .exe
@@ -30,8 +30,3 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 clean:
     rm -rf $(OBJ_DIR)/*.o $(PROJECT_NAME)$(EXT)  # Adjust for Windows if needed
     @echo Cleaning done.
-debug:
-    @echo "SRC_DIR=$(SRC_DIR)"
-    @echo "OBJ_DIR=$(OBJ_DIR)"
-    @echo "OBJS=$(OBJS)"
-    @echo "CFLAGS=$(CFLAGS)"
