@@ -16,8 +16,6 @@
 #include "Assets/lib/hakim/options.c"
 
 
-
-
 int main() {
     passed = false;
     DefineArrayCord();
@@ -45,7 +43,7 @@ int main() {
             // *Hanya memulai game jika "Start Game" dipilih*
             InitGame();
             LoadAllTextures();
-
+            
             Camera2D camera = {0};
             camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
             camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
@@ -53,7 +51,7 @@ int main() {
             camera.zoom = 1.7f;
 
             while (!WindowShouldClose()) {
-                UpdateGame();
+                UpdateGame(&camera);
 
                 if (!kalah && !PermainanBerakhir) {
                     camera.target.y -= CAMERA_SPEED;
