@@ -30,6 +30,6 @@ void InitGrid();
 void UpdateCarMovement();
 void CheckCollision();
 void ResetCombo();
-
+void DrawCenteredText(const char *text, int fontSize, Color color);
 
 #endif
