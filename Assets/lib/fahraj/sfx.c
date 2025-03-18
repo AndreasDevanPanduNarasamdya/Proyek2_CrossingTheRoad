@@ -15,8 +15,8 @@ void InitSounds()
     }
 
     // Load audio files and check for errors
-    menuSound = LoadMusicStream("../../sound/menu.wav");
-    backgroundMusic1 = LoadMusicStream("../../sound/background5.wav");
+    menuSound = LoadMusicStream("../../sound/backsound3.wav");
+    backgroundMusic1 = LoadMusicStream("../../sound/backsound5.wav");
 
     moveChar = LoadSound("../../sound/moveChar.wav");
     getHealth = LoadSound("../../sound/getHealth.wav");

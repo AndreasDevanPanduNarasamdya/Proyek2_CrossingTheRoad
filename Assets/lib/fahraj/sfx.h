@@ -11,7 +11,7 @@ void PlayMoveChar();
 void PlayGetHealth();
 void PlayGetCheckpoint();
 void PlayPausedSound();
-void PlayCarSound(); // "Mobil" in English for consistency
+void PlayCarSound(); 
 void UnloadSounds();
 
 #endif

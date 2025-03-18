@@ -10,10 +10,13 @@ MenuOption ShowMenu()
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
     InitSounds();          // Initialize sounds
-    PlayMenuBacksound();   // Start playing the menu background music
+    PlayMenuBacksound();   // Start playing the menu background music (only once)
 
     while (!WindowShouldClose())
     {
+        // **Update the menu background music stream**
+        UpdateMusicStream(menuSound);
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
@@ -43,9 +46,6 @@ MenuOption ShowMenu()
 
         EndDrawing();
 
-        // Update the menu background music
-        PlayMenuBacksound();
-
         // Handle key inputs for navigation
         if (IsKeyPressed(KEY_DOWN))
         {
@@ -63,7 +63,7 @@ MenuOption ShowMenu()
         }
     }
 
-    StopMusicStream(menuSound); // Stop the menu music
+    StopMusicStream(menuSound); // Stop the menu music on exit
     UnloadSounds();             // Clean up resources
     return MENU_EXIT;
 }
