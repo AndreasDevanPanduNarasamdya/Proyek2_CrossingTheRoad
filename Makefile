@@ -146,6 +146,21 @@ EXAMPLE_RUNTIME_PATH   ?= $(RAYLIB_RELEASE_PATH)
 # Define default C compiler: gcc
 # NOTE: define g++ compiler if using C++
 CC = gcc
+CFLAGS = -Wall -std=c99 -IAssets/lib
+LDFLAGS = -LC:/raylib/lib
+LDLIBS = -lraylib -lopengl32 -lgdi32 -lwinmm
+
+# Target name
+TARGET = main.exe
+
+# Source files
+SRCS = main.c \
+       Assets/lib/andreas/LibraryAndrew.c \
+       Assets/lib/faiz/LibraryFaiz.c \
+       Assets/lib/azzam/LibraryAzzam.c \
+       Assets/lib/hakim/menu.c \
+       Assets/lib/hakim/options.c \
+       Assets/lib/fahraj/sfx.c
 
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),OSX)

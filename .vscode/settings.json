@@ -15,7 +15,8 @@
     "libraryfaiz.h": "c",
     "time.h": "c",
     "menu.h": "c",
-    "sfx.h": "c"
+    "sfx.h": "c",
+    "options.h": "c"
   },
 	"C_Cpp.errorSquiggles": "disabled"
 }

@@ -14,7 +14,7 @@
 #include "Assets/lib/hakim/options.h"
 #include "Assets/lib/hakim/options.c"
 #include "Assets/lib/fahraj/sfx.h"
-#include "Assets/lib/fahraj/sfx.c"
+
 
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");

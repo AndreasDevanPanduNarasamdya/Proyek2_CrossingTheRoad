@@ -1,5 +1,7 @@
 #include "menu.h"
 #include <stdio.h>
+#include "../fahraj/sfx.h"
+#include "../fahraj/sfx.c"
 
 MenuOption ShowMenu() {
     int selectedOption = 0;
