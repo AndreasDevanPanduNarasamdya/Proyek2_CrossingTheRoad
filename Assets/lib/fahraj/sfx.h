@@ -9,9 +9,6 @@ extern Sound moveChar, getHealth, getCheckpoint, pausedSound, carSound;
 
 // Fungsi inisialisasi audio
 void InitSounds();
-// Fungsi untuk memperbarui volume suara
-void UpdateVolume(float volume);
-
 
 // Fungsi pemutaran musik
 void PlayMenuBacksound();
@@ -23,6 +20,9 @@ void PlayGetHealth();
 void PlayGetCheckpoint();
 void PlayPausedSound();
 void PlayCarSound();
+
+// Fungsi untuk memperbarui volume
+void UpdateVolume(float volume);
 
 // Fungsi untuk membersihkan dan melepas audio
 void UnloadSounds();

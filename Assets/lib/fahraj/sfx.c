@@ -37,6 +37,17 @@ void InitSounds() {
     PlayMusicStream(menuSound);
 }
 
+void UpdateVolume(float volume) {
+    // Mengatur volume untuk musik dan semua efek suara
+    SetMusicVolume(menuSound, volume);
+    SetMusicVolume(backgroundMusic1, volume);
+    SetSoundVolume(moveChar, volume);
+    SetSoundVolume(getHealth, volume);
+    SetSoundVolume(getCheckpoint, volume);
+    SetSoundVolume(pausedSound, volume);
+    SetSoundVolume(carSound, volume);
+}
+
 void PlayMenuBacksound() {
     // Memutar ulang musik jika belum dimainkan
     if (!IsMusicStreamPlaying(menuSound)) {

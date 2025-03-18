@@ -9,11 +9,13 @@
 		"**/*.exe": true,
 	},
 	"files.associations": {
-		"globalheader.h": "c",
-		"headerandrew.h": "c",
-		"libraryfaiz.h": "c",
-		"time.h": "c",
-		"menu.h": "c"
-	},
+    "*.embeddedhtml": "html",
+    "globalheader.h": "c",
+    "headerandrew.h": "c",
+    "libraryfaiz.h": "c",
+    "time.h": "c",
+    "menu.h": "c",
+    "sfx.h": "c"
+  },
 	"C_Cpp.errorSquiggles": "disabled"
 }
