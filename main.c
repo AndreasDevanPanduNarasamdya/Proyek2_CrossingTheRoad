@@ -19,6 +19,7 @@
 int main()
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
+    InitSounds(); // Initialize sounds
     SetTargetFPS(60);
 
     // Pastikan fullscreen aktif jika dipilih dari Options
@@ -27,12 +28,15 @@ int main()
         ToggleFullscreen();
     }
 
+    PlayMenuBacksound(); // Start playing the menu backsound
+
     while (!WindowShouldClose())
     {
         MenuOption selectedMenu = ShowMenu();
 
         if (selectedMenu == MENU_EXIT)
         {
+            UnloadSounds();  // Unload sounds before closing
             CloseWindow();
             return 0;
         }
@@ -46,7 +50,9 @@ int main()
 
         if (selectedMenu == MENU_START)
         {
-            // *Hanya memulai game jika "Start Game" dipilih*
+            StopMusicStream(menuSound);    // Stop menu music
+            PlayBackgroundMusic1();       // Start game background music
+
             InitGame();
             LoadAllTextures();
 
@@ -58,6 +64,9 @@ int main()
 
             while (!WindowShouldClose())
             {
+                // Update the background music stream
+                UpdateMusicStream(backgroundMusic1);
+
                 if (!kalah && !PermainanBerakhir)
                 {
                     camera.target.y -= CAMERA_SPEED;
@@ -68,18 +77,14 @@ int main()
                 }
 
                 // **Pause Menu Handling**
- // Ensure this includes the PlayPausedSound() function
-
-                // In your main game loop
                 if (IsKeyPressed(KEY_SPACE))
                 {
                     isPaused = !isPaused; // Toggle pause state
-                    PlayPausedSound();    // Play the pause/resume sound
+                    PlayPausedSound();    // Play pause/resume sound
                 }
 
                 if (isPaused)
                 {
-                    // Handle Pause Menu
                     BeginDrawing();
                     ClearBackground(GRAY);
 
@@ -103,14 +108,18 @@ int main()
                 }
 
                 UpdateGame(&camera);
-                // **Kamera hanya bergerak ke atas & tetap di tengah horizontal**
+                BeginDrawing();
+                ClearBackground(RAYWHITE);
                 DrawGame(camera);
+                EndDrawing();
             }
 
             UnloadAllTextures();
         }
-
-        CloseWindow();
-        return 0;
     }
+
+    // Cleanup resources on exit
+    UnloadSounds();
+    CloseWindow();
+    return 0;
 }
