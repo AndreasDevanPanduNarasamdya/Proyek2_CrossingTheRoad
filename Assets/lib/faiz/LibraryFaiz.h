@@ -3,7 +3,6 @@
 #include "../GLOBALHEADER.h"
 #include "../raylib.h"
 
-
 Player player;
 vector checkpoint;
 Car cars[NUM_CARS_START * 2];
@@ -23,10 +22,9 @@ int comboThreshold = 3;
 
 int grid[GRID_HEIGHT][GRID_WIDTH];
 
-
+void DrawGame(Camera2D camera);
 void InitGame();
-void UpdateGame();
-void NextLevel();
+void UpdateGame(Camera2D *camera);
 void checkposition(Player *player);
 void InitGrid();
 void UpdateCarMovement();

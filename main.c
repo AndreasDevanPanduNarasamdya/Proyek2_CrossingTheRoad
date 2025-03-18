@@ -15,9 +15,6 @@
 #include "Assets/lib/hakim/options.c"
 
 
-
-
-
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
     SetTargetFPS(60);
@@ -41,19 +38,28 @@ int main() {
             continue; // Kembali ke menu utama setelah keluar dari Options
         }
 
-        // Memulai game
-        InitGame();
-        LoadAllTextures();
+        if (selectedMenu == MENU_START) {
+            // *Hanya memulai game jika "Start Game" dipilih*
+            InitGame();
+            LoadAllTextures();
+            
+            Camera2D camera = {0};
+            camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
+            camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+            camera.rotation = 0.0f;
+            camera.zoom = 1.7f;
 
-        camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
-        camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
-        camera.rotation = 0.0f;
-        camera.zoom = 1.7f;
+            while (!WindowShouldClose()) {
+                UpdateGame(&camera);
 
-        while (!WindowShouldClose()) {
-            // **Pause Menu Handling**
-            if (IsKeyPressed(KEY_SPACE)) {
-                isPaused = !isPaused; // Toggle Pause
+                if (!kalah && !PermainanBerakhir) {
+                    camera.target.y -= CAMERA_SPEED;
+                    if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
+                        kalah = true;
+                    }
+                }
+
+                DrawGame(camera);
             }
 
             if (isPaused) {
