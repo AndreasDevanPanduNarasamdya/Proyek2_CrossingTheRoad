@@ -4,22 +4,18 @@
 #include <stdio.h>
 #include <time.h>
 #include "Assets/lib/andreas/HeaderAndrew.h"
-#include "Assets/lib/andreas/LibraryAndrew.c"
 #include "Assets/lib/faiz/LibraryFaiz.h"
-#include "Assets/lib/faiz/LibraryFaiz.c"
 #include "Assets/lib/azzam/LibraryAzzam.h"
-#include "Assets/lib/azzam/LibraryAzzam.c"
 #include "Assets/lib/hakim/menu.h"
-#include "Assets/lib/hakim/menu.c"
 #include "Assets/lib/hakim/options.h"
-#include "Assets/lib/hakim/options.c"
-#include "Assets/lib/fahraj/sfx.h"
-
+#include "Assets/lib/fahraj/sfx.h" 
 
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
     InitAudioDevice();
     SetTargetFPS(60);
+
+    InitSounds();  // Initialize all sound resources
 
     float volume = 1.0f;
     bool isFullscreen = false;
@@ -28,13 +24,13 @@ int main() {
         ToggleFullscreen();
     }
 
-    InitSounds();
-
     while (!WindowShouldClose()) {
+        PlayMenuBacksound();  // Play menu background sound
+
         MenuOption selectedMenu = ShowMenu();
 
         if (selectedMenu == MENU_EXIT) {
-            UnloadSounds();
+            UnloadSounds();  // Unload all audio resources
             CloseAudioDevice();
             CloseWindow();
             return 0;
@@ -42,7 +38,7 @@ int main() {
 
         if (selectedMenu == MENU_OPTIONS) {
             ShowOptions(&volume, &isFullscreen);
-            UpdateVolume(volume);
+            UpdateVolume(volume);  // Update sound volumes if changed
             continue;
         }
 
@@ -99,7 +95,7 @@ int main() {
         }
     }
 
-    UnloadSounds();
+    UnloadSounds();  // Unload sound resources before exiting
     CloseAudioDevice();
     CloseWindow();
     return 0;

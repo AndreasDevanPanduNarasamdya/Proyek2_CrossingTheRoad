@@ -1,7 +1,6 @@
 #include "menu.h"
-#include <stdio.h>
 #include "../fahraj/sfx.h"
-#include "../fahraj/sfx.c"
+#include <stdio.h>
 
 MenuOption ShowMenu() {
     int selectedOption = 0;
@@ -11,7 +10,13 @@ MenuOption ShowMenu() {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
+    // Play the menu background music
+    PlayMenuBacksound();
+
     while (!WindowShouldClose()) {
+        // Update the music stream to ensure seamless playback
+        PlayMenuBacksound();
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
