@@ -1,5 +1,6 @@
 #include "menu.h"
 #include "../fahraj/sfx.h"
+#include "../fahraj/sfx.c"
 #include <stdio.h>
 
 MenuOption ShowMenu()
