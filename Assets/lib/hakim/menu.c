@@ -9,25 +9,25 @@ MenuOption ShowMenu()
     const char *menuOptions[] = {"Start Game", "Options", "Exit"};
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
-    // Initialize sounds and play menu music
+    // Inisialisasi audio dan mulai memutar musik menu
     InitSounds();
-    PlayMenuBacksound(); // Start playing the menu background music (set to loop)
+    PlayMenuBacksound(); // Mulai memutar musik menu (diatur untuk loop)
 
     while (!WindowShouldClose())
     {
-        // Keep updating the music stream to loop seamlessly
+        // Update musik untuk memastikan pemutaran yang lancar
         UpdateMusicStream(menuSound);
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        // Display Title
+        // Tampilkan Judul
         int screenWidth = GetScreenWidth();
         int screenHeight = GetScreenHeight();
         int titleWidth = MeasureText("Crossing The Road", 40);
         DrawText("Crossing The Road", (screenWidth - titleWidth) / 2, screenHeight / 4, 40, DARKGRAY);
 
-        // Display Menu Options
+        // Tampilkan Opsi Menu
         for (int i = 0; i < totalOptions; i++)
         {
             int textWidth = MeasureText(menuOptions[i], 30);
@@ -36,7 +36,7 @@ MenuOption ShowMenu()
 
             Color textColor = (i == selectedOption) ? WHITE : BLACK;
 
-            // Highlight the selected option
+            // Sorot opsi yang dipilih
             if (i == selectedOption)
             {
                 DrawRectangle(posX - 10, posY - 5, textWidth + 20, 40, RED);
@@ -47,7 +47,7 @@ MenuOption ShowMenu()
 
         EndDrawing();
 
-        // Handle key inputs for navigation
+        // Handle input untuk navigasi menu
         if (IsKeyPressed(KEY_DOWN))
         {
             selectedOption = (selectedOption + 1) % totalOptions;
@@ -58,14 +58,14 @@ MenuOption ShowMenu()
         }
         if (IsKeyPressed(KEY_ENTER))
         {
-            // Stop and clean up music resources when exiting the menu
-            StopMusicStream(menuSound); // Stop the menu music
-            UnloadSounds();             // Unload all sound resources
+            // Hentikan musik dan bersihkan resource audio sebelum keluar dari menu
+            StopMusicStream(menuSound);
+            UnloadSounds();
             return (MenuOption)selectedOption;
         }
     }
 
-    // Stop and clean up music resources on exit
+    // Hentikan musik dan bersihkan resource audio saat keluar
     StopMusicStream(menuSound);
     UnloadSounds();
     return MENU_EXIT;

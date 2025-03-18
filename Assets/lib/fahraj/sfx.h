@@ -2,7 +2,6 @@
 #define SFX_H
 
 #include "../raylib.h"
-
 // Function declarations for initializing, playing, and unloading sounds
 void InitSounds();
 void PlayBackgroundMusic1();
