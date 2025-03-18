@@ -50,15 +50,16 @@ int main() {
             camera.zoom = 1.7f;
 
             while (!WindowShouldClose()) {
-                UpdateGame(&camera);
-
                 if (!kalah && !PermainanBerakhir) {
                     camera.target.y -= CAMERA_SPEED;
                     if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
                         kalah = true;
                     }
-                }
-
+            }   
+            
+            // **Pause Menu Handling**
+            if (IsKeyPressed(KEY_SPACE)) {
+                isPaused = !isPaused; // Toggle Pause
                 DrawGame(camera);
             }
 
@@ -85,16 +86,6 @@ int main() {
 
             UpdateGame(&camera);
             // **Kamera hanya bergerak ke atas & tetap di tengah horizontal**
-            if (!kalah && !PermainanBerakhir) {
-                camera.target.y -= CAMERA_SPEED; // Kamera terus bergerak ke atas
-                camera.target.x = SCREEN_WIDTH / 2; // Kamera tetap di tengah (horizontal)
-
-                // Jika pemain tertinggal terlalu jauh, game over
-                if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
-                    kalah = true;
-                }
-            }
-
             DrawGame(camera);
         }
 
@@ -103,4 +94,6 @@ int main() {
 
     CloseWindow();
     return 0;
+}
+
 }
