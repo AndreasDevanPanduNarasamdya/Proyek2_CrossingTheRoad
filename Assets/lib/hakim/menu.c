@@ -1,6 +1,5 @@
 #include "menu.h"
 #include "../fahraj/sfx.h"
-#include "../fahraj/sfx.c"
 #include <stdio.h>
 
 MenuOption ShowMenu()
@@ -11,12 +10,12 @@ MenuOption ShowMenu()
 
     // Inisialisasi audio dan mulai memutar musik menu
     InitSounds();
-    PlayMenuBacksound(); // Mulai memutar musik menu (diatur untuk loop)
+    PlayMenuBacksound(); // Mulai memutar musik menu
 
     while (!WindowShouldClose())
     {
-        // Update musik untuk memastikan pemutaran yang lancar
-        UpdateMusicStream(menuSound);
+        // Update musik menu melalui fungsi di sfx.h
+        PlayMenuBacksound();
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -59,14 +58,12 @@ MenuOption ShowMenu()
         if (IsKeyPressed(KEY_ENTER))
         {
             // Hentikan musik dan bersihkan resource audio sebelum keluar dari menu
-            StopMusicStream(menuSound);
             UnloadSounds();
             return (MenuOption)selectedOption;
         }
     }
 
     // Hentikan musik dan bersihkan resource audio saat keluar
-    StopMusicStream(menuSound);
     UnloadSounds();
     return MENU_EXIT;
 }

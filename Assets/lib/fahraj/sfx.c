@@ -2,20 +2,18 @@
 #include <stdio.h>
 
 // Static Sound Variables
-static Music backgroundMusic1, menuSound;
-static Sound moveChar, getHealth, getCheckpoint, pausedSound, carSound;
+Music backgroundMusic1, menuSound;
+Sound moveChar, getHealth, getCheckpoint, pausedSound, carSound;
 
 void InitSounds()
 {
-    // Initialize the audio device (required for playing any audio)
     InitAudioDevice();
     if (!IsAudioDeviceReady()) {
         TraceLog(LOG_ERROR, "Audio device initialization failed!");
         return;
     }
 
-    // Load audio files and check for errors
-    menuSound = LoadMusicStream("backsound4.wav");
+    menuSound = LoadMusicStream("../../sound/backsound4.wav");
     backgroundMusic1 = LoadMusicStream("../../sound/backsound4.wav");
 
     moveChar = LoadSound("../../sound/moveChar.wav");
@@ -24,7 +22,6 @@ void InitSounds()
     pausedSound = LoadSound("../../sound/pause.wav");
     carSound = LoadSound("../../sound/car.wav");
 
-    // Set initial volume levels
     SetMusicVolume(menuSound, 1.0f);
     SetMusicVolume(backgroundMusic1, 1.0f);
     SetSoundVolume(moveChar, 1.0f);
@@ -33,7 +30,6 @@ void InitSounds()
     SetSoundVolume(pausedSound, 1.0f);
     SetSoundVolume(carSound, 1.0f);
 
-    // Play the menu sound as the default background music
     PlayMusicStream(menuSound);
 }
 

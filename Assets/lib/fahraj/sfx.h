@@ -2,15 +2,26 @@
 #define SFX_H
 
 #include "../raylib.h"
-// Function declarations for initializing, playing, and unloading sounds
+
+// Deklarasi variabel audio (musik dan efek suara)
+extern Music backgroundMusic1, menuSound;
+extern Sound moveChar, getHealth, getCheckpoint, pausedSound, carSound;
+
+// Fungsi inisialisasi audio
 void InitSounds();
-void PlayBackgroundMusic1();
+
+// Fungsi pemutaran musik
 void PlayMenuBacksound();
+void PlayBackgroundMusic1();
+
+// Fungsi pemutaran efek suara
 void PlayMoveChar();
 void PlayGetHealth();
 void PlayGetCheckpoint();
 void PlayPausedSound();
-void PlayCarSound(); 
+void PlayCarSound();
+
+// Fungsi untuk membersihkan dan melepas audio
 void UnloadSounds();
 
-#endif
+#endif // SFX_H
