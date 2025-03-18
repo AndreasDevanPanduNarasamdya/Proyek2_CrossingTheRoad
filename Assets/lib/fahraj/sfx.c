@@ -5,23 +5,26 @@
 Music backgroundMusic1, menuSound;
 Sound moveChar, getHealth, getCheckpoint, pausedSound, carSound;
 
-void InitSounds()
-{
+void InitSounds() {
+    // Inisialisasi perangkat audio
     InitAudioDevice();
     if (!IsAudioDeviceReady()) {
         TraceLog(LOG_ERROR, "Audio device initialization failed!");
         return;
     }
 
-    menuSound = LoadMusicStream("../../sound/backsound4.wav");
-    backgroundMusic1 = LoadMusicStream("../../sound/backsound4.wav");
+    // Memuat musik
+    menuSound = LoadMusicStream("../sound/backsound4.wav");
+    backgroundMusic1 = LoadMusicStream("../sound/backsound4.wav");
 
+    // Memuat efek suara
     moveChar = LoadSound("../../sound/moveChar.wav");
     getHealth = LoadSound("../../sound/getHealth.wav");
     getCheckpoint = LoadSound("../../sound/getCheckpoint.wav");
     pausedSound = LoadSound("../../sound/pause.wav");
     carSound = LoadSound("../../sound/car.wav");
 
+    // Pengaturan volume default
     SetMusicVolume(menuSound, 1.0f);
     SetMusicVolume(backgroundMusic1, 1.0f);
     SetSoundVolume(moveChar, 1.0f);
@@ -30,57 +33,52 @@ void InitSounds()
     SetSoundVolume(pausedSound, 1.0f);
     SetSoundVolume(carSound, 1.0f);
 
+    // Memulai musik menu
     PlayMusicStream(menuSound);
 }
 
-void PlayMenuBacksound()
-{
-    if (!IsMusicStreamPlaying(menuSound))
-    {
+void PlayMenuBacksound() {
+    // Memutar ulang musik jika belum dimainkan
+    if (!IsMusicStreamPlaying(menuSound)) {
         PlayMusicStream(menuSound);
     }
     UpdateMusicStream(menuSound);
 }
 
-void PlayBackgroundMusic1()
-{
-    if (!IsMusicStreamPlaying(backgroundMusic1))
-    {
+void PlayBackgroundMusic1() {
+    // Memutar ulang musik latar jika belum dimainkan
+    if (!IsMusicStreamPlaying(backgroundMusic1)) {
         PlayMusicStream(backgroundMusic1);
     }
     UpdateMusicStream(backgroundMusic1);
 }
 
-void PlayMoveChar()
-{
+void PlayMoveChar() {
     PlaySound(moveChar);
 }
 
-void PlayGetHealth()
-{
+void PlayGetHealth() {
     PlaySound(getHealth);
 }
 
-void PlayGetCheckpoint()
-{
+void PlayGetCheckpoint() {
     PlaySound(getCheckpoint);
 }
 
-void PlayPausedSound()
-{
+void PlayPausedSound() {
     PlaySound(pausedSound);
 }
 
-void PlayCarSound()
-{
+void PlayCarSound() {
     PlaySound(carSound);
 }
 
-void UnloadSounds()
-{
+void UnloadSounds() {
+    // Berhenti memutar musik
     StopMusicStream(menuSound);
     StopMusicStream(backgroundMusic1);
 
+    // Melepas musik dan efek suara
     UnloadMusicStream(menuSound);
     UnloadMusicStream(backgroundMusic1);
     UnloadSound(moveChar);
@@ -89,5 +87,6 @@ void UnloadSounds()
     UnloadSound(pausedSound);
     UnloadSound(carSound);
 
+    // Menutup perangkat audio
     CloseAudioDevice();
 }
