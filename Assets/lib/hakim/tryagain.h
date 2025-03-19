@@ -4,6 +4,6 @@
 #include "raylib.h"
 
 void ShowTryAgain(bool *restartGame);
-void HandleGameOver(bool *kalah, bool *PermainanBerakhir); 
+void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera); 
 
 #endif

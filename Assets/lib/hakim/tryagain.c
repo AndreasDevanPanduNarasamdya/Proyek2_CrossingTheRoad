@@ -44,7 +44,7 @@ void ShowTryAgain(bool *restartGame) {
 }
 
 // **Tambahkan fungsi ini agar main.c bisa lebih bersih**
-void HandleGameOver(bool *kalah, bool *PermainanBerakhir) {
+void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera) {
     printf("HandleGameOver() DIPANGGIL! Game Over terjadi!\n");
 
     bool restartGame = false;
@@ -56,13 +56,15 @@ void HandleGameOver(bool *kalah, bool *PermainanBerakhir) {
         // **Reset semua variabel sebelum InitGame**
         *kalah = false;
         *PermainanBerakhir = false;
-        player.lives = MAX_LIVES; // Reset nyawa sebelum InitGame()
+          // Reset nyawa sebelum InitGame()
 
         printf("Sebelum InitGame(): kalah = %d, PermainanBerakhir = %d, lives = %d\n", 
                *kalah, *PermainanBerakhir, player.lives);
 
         InitGame(); // **Reset game**
-        
+
+        camera->target.y = player.y * CELL_SIZE; // reset kamera
+
         printf("Setelah InitGame(): kalah = %d, PermainanBerakhir = %d, lives = %d\n", 
                *kalah, *PermainanBerakhir, player.lives);
 

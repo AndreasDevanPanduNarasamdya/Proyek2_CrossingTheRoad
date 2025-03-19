@@ -54,18 +54,22 @@ int main() {
             camera.rotation = 0.0f;
             camera.zoom = 1.7f;
 
+            
+
             while (!WindowShouldClose()) {
                 if (!kalah && !PermainanBerakhir) {
-                    camera.target.y -= CAMERA_SPEED;
-                    if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
-                        kalah = true;
+                    if (!isPaused){
+                        camera.target.y -= CAMERA_SPEED;
+                        if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
+                            kalah = true;
+                        }
                     }
                 }
                 
                 // **Panggil HandleGameOver() setelah keluar dari loop game**
                 if (kalah || PermainanBerakhir) {
                     printf("Game over! Memanggil HandleGameOver()\n");
-                    HandleGameOver(&kalah, &PermainanBerakhir);
+                    HandleGameOver(&kalah, &PermainanBerakhir, &camera);
                     printf("Kembali ke loop utama setelah HandleGameOver()\n");
                 }   
             
@@ -85,6 +89,7 @@ int main() {
                     DrawText("Press ESC to Exit to Main Menu", SCREEN_WIDTH / 2 - MeasureText("Press ESC to Exit to Main Menu", 20) / 2, SCREEN_HEIGHT / 2 + 60, 20, BLACK);
 
                     EndDrawing();
+                    
 
                     if (IsKeyPressed(KEY_ENTER)) {
                         ShowOptions(&volume, &isFullscreen);

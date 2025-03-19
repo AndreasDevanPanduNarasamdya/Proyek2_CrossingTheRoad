@@ -86,7 +86,7 @@ void UpdateCarMovement() {
 void InitGrid() {
     for (int i = 0; i < GRID_HEIGHT; i++) {
         for (int j = 0; j < GRID_WIDTH; j++) {
-            if ((i == 165 && j == 23) || (i == 39 && j == 53)) {
+            if ((i == 166 && j == 23) || (i == 38 && j == 53)) {
                 grid[i][j] = CHECKPOINT_LINE; // Garis biru setiap 50 baris
             } //else if (i % 8 == 0) {
                 //grid[i][j] = LANE_MARK; // Garis putih tiap 8 baris
@@ -139,7 +139,6 @@ void checkposition(Player *player) {
 }
 
 
-
 void InitGame() {
     printf("MEMULAI INITGAME! Reset semua variabel...\n");
 
@@ -158,10 +157,12 @@ void InitGame() {
     checkpoint.x = player.x;
     checkpoint.y = player.y;
 
+
     printf("Game di-reset: lives = %d, score = %d, posisi = (%d, %d)\n",
            player.lives, player.score, player.x, player.y);
 
     InitGrid();
+
     printf("Grid berhasil di-reset\n");
 
     int array[24] = {9, 14, 27, 32, 49, 55, 61, 67, 95, 101, 115, 121, 127, 133, 139, 145, 151, 157, 175, 181, 187, 193, 205, 211};
