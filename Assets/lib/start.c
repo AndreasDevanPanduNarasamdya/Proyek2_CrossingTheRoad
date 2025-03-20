@@ -1,18 +1,24 @@
-#include "Assets/lib/raylib.h"
-#include "Assets/lib/andreas/HeaderAndrew.h"
-#include "Assets/lib/faiz/LibraryFaiz.h"
-#include "Assets/lib/azzam/LibraryAzzam.h"
-#include "Assets/lib/hakim/menu.h"
-#include "Assets/lib/hakim/options.h"
-#include "Assets/lib/fahraj/sfx.h"
-#include "start.h"
+#include "raylib.h"
+// .h
+#include "../andreas/HeaderAndrew.h"
+#include "../faiz/LibraryFaiz.h"
+#include "../azzam/LibraryAzzam.h"
+#include "../hakim/menu.h"
+#include "../hakim/options.h"
+#include "../lib/fahraj/sfx.h"
+
+//.c
+#include "../andreas/LibraryAnrew.c"
+#include "../faiz/LibraryFaiz.c"
+#include "../azzam/LibraryAzzam.c"
+#include "../hakim/menu.c"
+#include "../hakim/options.c"
+#include "../lib/fahraj/sfx.c"
 
 void startGame() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
-    InitAudioDevice();
     SetTargetFPS(60);
 
-    InitSounds();  // Initialize all sound resources
 
     float volume = 1.0f;
     bool isFullscreen = false;
@@ -22,7 +28,6 @@ void startGame() {
     }
 
     while (!WindowShouldClose()) {
-        PlayMenuBacksound();  // Play menu background sound
 
         MenuOption selectedMenu = ShowMenu();
 
@@ -35,7 +40,6 @@ void startGame() {
 
         if (selectedMenu == MENU_OPTIONS) {
             ShowOptions(&volume, &isFullscreen);
-            UpdateVolume(volume);  // Update sound volumes if changed
             continue;
         }
 
