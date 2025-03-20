@@ -13,12 +13,16 @@
 #include "Assets/lib/hakim/menu.c"
 #include "Assets/lib/hakim/options.h"
 #include "Assets/lib/hakim/options.c"
+#include "Assets/lib/hakim/tryagain.h"
+#include "Assets/lib/hakim/tryagain.c"
 
 int main()
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
+    InitAudioDevice();
     SetTargetFPS(60);
 
+    float volume = 1.0f;
     // Pastikan fullscreen aktif jika dipilih dari Options
     if (isFullscreen)
     {
