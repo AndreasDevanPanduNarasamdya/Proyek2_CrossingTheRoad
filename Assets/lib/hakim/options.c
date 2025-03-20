@@ -1,9 +1,11 @@
 #include "raylib.h"
 
 // Fungsi untuk menampilkan menu Options
-void ShowOptions(float *volume, bool *isFullscreen) {
+void ShowOptions(float *volume, bool *isFullscreen)
+{
     int selectedOption = 0;
-    while (!WindowShouldClose()) {
+    while (!WindowShouldClose())
+    {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
@@ -14,16 +16,22 @@ void ShowOptions(float *volume, bool *isFullscreen) {
 
         EndDrawing();
 
-        if (IsKeyPressed(KEY_DOWN)) selectedOption = (selectedOption + 1) % 3;
-        if (IsKeyPressed(KEY_UP)) selectedOption = (selectedOption - 1 + 3) % 3;
-        if (IsKeyPressed(KEY_ENTER)) {
-            if (selectedOption == 0) {  // Volume (belum diimplementasikan)
+        if (IsKeyPressed(KEY_DOWN))
+            selectedOption = (selectedOption + 1) % 3;
+        if (IsKeyPressed(KEY_UP))
+            selectedOption = (selectedOption - 1 + 3) % 3;
+        if (IsKeyPressed(KEY_ENTER))
+        {
+            if (selectedOption == 0)
+            { // Volume (belum diimplementasikan)
             }
-            else if (selectedOption == 1) {  // Fullscreen Toggle
+            else if (selectedOption == 1)
+            { // Fullscreen Toggle
                 *isFullscreen = !(*isFullscreen);
                 ToggleFullscreen();
             }
-            else if (selectedOption == 2) {  // Back
+            else if (selectedOption == 2)
+            { // Back
                 return;
             }
         }
