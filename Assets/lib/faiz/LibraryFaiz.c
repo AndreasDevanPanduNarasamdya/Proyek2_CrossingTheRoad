@@ -141,30 +141,45 @@ void checkposition(Player *player) {
 
 
 void InitGame() {
+    printf("MEMULAI INITGAME! Reset semua variabel...\n");
+
     srand(time(NULL));
-    player.x = GRID_WIDTH / 2;
-    player.y = GRID_HEIGHT;
-    checkpoint.x = player.x;
-    checkpoint.y = player.y;
+
+    // **Reset semua kondisi permainan**
+    kalah = false;
+    PermainanBerakhir = false;
     player.score = 0;
     player.lives = MAX_LIVES;
+    numCars = NUM_CARS_START;
+    carSpeed = CAR_SPEED_START;
+
+    player.x = GRID_WIDTH / 2;
+    player.y = GRID_HEIGHT - 2;
+    checkpoint.x = player.x;
+    checkpoint.y = player.y;
+
+    printf("Game di-reset: lives = %d, score = %d, posisi = (%d, %d)\n",
+           player.lives, player.score, player.x, player.y);
+
+    InitGrid();
+    printf("Grid berhasil di-reset\n");
+
     int array[24] = {9, 14, 27, 32, 49, 55, 61, 67, 95, 101, 115, 121, 127, 133, 139, 145, 151, 157, 175, 181, 187, 193, 205, 211};
-    int directray[24] = {-1, -1, 1, 1, -1, -1, 1, 1,/**/ 1, /**/-1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1 };
-    
-    InitGrid();  // Pastikan grid diinisialisasi sebelum menempatkan mobil
+    int directray[24] = {-1, -1, 1, 1, -1, -1, 1, 1, 1, -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1};
 
     for (int i = 0; i < numCars; i++) {
-         int  col;
-
-      
-
-        col = rand() % (GRID_WIDTH - GRID_START);
+        int col = rand() % (GRID_WIDTH - GRID_START);
         int direction = directray[i];
 
         cars[i] = (Car){col, array[i], carSpeed, direction};
-        cars[i].type = (rand() % 4), (rand() % 4), (rand() % 4);  // Pilih jenis mobil secara acak
+        cars[i].type = (rand() % 4), (rand() % 4), (rand() % 4);
     }
+
+    printf("Mobil berhasil di-reset: jumlah = %d\n", numCars);
 }
+
+
+
 
 
 void ResetCombo() {
