@@ -1,6 +1,8 @@
 #include "raylib.h"
-#include "Assets/lib/fahraj/sfx.h"
-#include "Assets/lib/fahraj/sfx.c"
+
+#include "Assets/lib/fahraj/music.c"
+#include "Assets/lib/fahraj/sound.c"
+
 #include "Assets/lib/raylib.h"
 #include "Assets/lib/GLOBALHEADER.h"
 #include <stdlib.h>
