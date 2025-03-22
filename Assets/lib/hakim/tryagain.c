@@ -1,5 +1,4 @@
-#include "tryagain.h"
-#include <stdio.h>
+#include "../header.h"
 #define TRYAGAIN_C
 
 void ShowTryAgain(bool *restartGame) {

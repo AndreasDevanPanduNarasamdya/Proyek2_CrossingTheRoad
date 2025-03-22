@@ -1,5 +1,4 @@
-#include "sfx.h"
-#include <stdio.h>
+#include "../header.h"
 
 // Static music variables
 Music backgroundMusic1, menuSound;

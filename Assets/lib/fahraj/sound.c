@@ -1,5 +1,4 @@
-#include "sfx.h"
-#include <stdio.h>
+#include "../header.h"
 
 // Static sound effect variables
 Sound moveChar, getHealth, getCheckpoint, pausedSound, carSound;

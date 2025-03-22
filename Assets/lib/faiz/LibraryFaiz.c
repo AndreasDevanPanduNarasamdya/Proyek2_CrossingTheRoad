@@ -1,11 +1,4 @@
-#include "LibraryFaiz.h"
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <time.h>
-#include "../GLOBALHEADER.h"
-#include "../azzam/LibraryAzzam.h"
-
+#include "../header.h"
 
 void RenderGrid() {
     for (int i = 0; i < GRID_HEIGHT; i++) {

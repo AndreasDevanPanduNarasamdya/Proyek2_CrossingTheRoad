@@ -1,5 +1,4 @@
-#include "LibraryAzzam.h"
-#include "../faiz/LibraryFaiz.h"
+#include "../header.h"
 
 
 void NextLevel(Camera2D *camera, Player *player) {

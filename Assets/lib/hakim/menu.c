@@ -1,7 +1,4 @@
-#include "menu.h"
-
-#include <stdio.h>
-
+#include "../header.h"
 MenuOption ShowMenu() {
     int selectedOption = 0;
     const char *menuOptions[] = {"Start Game", "Options", "Exit"};
@@ -11,11 +8,11 @@ MenuOption ShowMenu() {
     int screenHeight = GetScreenHeight();
 
     // Play the menu background music
-    PlayMenuBacksound();
+
 
     while (!WindowShouldClose()) {
         // Update the music stream to ensure seamless playback
-        UpdateMusicStream(menuSound);
+
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -45,14 +42,14 @@ MenuOption ShowMenu() {
         // Handle input
         if (IsKeyPressed(KEY_DOWN)) {
             selectedOption = (selectedOption + 1) % totalOptions;  // Move selection down
-            PlayMoveChar(); // Play sound effect for navigation
+
         }
         if (IsKeyPressed(KEY_UP)) {
             selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;  // Move selection up
-            PlayMoveChar(); // Play sound effect for navigation
+
         }
         if (IsKeyPressed(KEY_ENTER)) {
-            PlayGetCheckpoint(); // Play sound effect for selection
+
             return (MenuOption)selectedOption;
         }
     }

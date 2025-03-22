@@ -1,7 +1,7 @@
 #ifndef TRYAGAIN_H
 #define TRYAGAIN_H
 
-#include "raylib.h"
+#include "../raylib.h"
 
 void ShowTryAgain(bool *restartGame);
 void HandleGameOver(bool *kalah, bool *PermainanBerakhir); 
