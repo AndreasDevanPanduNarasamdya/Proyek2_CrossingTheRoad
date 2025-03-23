@@ -1,31 +1,33 @@
-#include "menu.h"
-#include <stdio.h>
-
+#include "../header.h"
 MenuOption ShowMenu() {
     int selectedOption = 0;
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
     const char *menuOptions[] = {"Start Game", "Options", "Exit"};
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
-    // **Dapatkan ukuran layar**
-    int screenWidth = GetScreenWidth();
-    int screenHeight = GetScreenHeight();
+    // Mainkan backsound menu jika belum diputar
+    if (!IsMusicStreamPlaying(menuBacksound) && isInMainMenu) {
+        PlayMenuBacksound();
+    }    
 
     while (!WindowShouldClose()) {
+        UpdateMusicStream(menuBacksound); // Update musik backsound setiap frame
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
-
-        // **Judul Game di Tengah**
-        int titleWidth = MeasureText("Crossing The Road", 40);
+         int titleWidth = MeasureText("Crossing The Road", 40);
         DrawText("Crossing The Road", (screenWidth - titleWidth) / 2, screenHeight / 4, 40, DARKGRAY);
 
+
+        // Draw menu options
         for (int i = 0; i < totalOptions; i++) {
             int textWidth = MeasureText(menuOptions[i], 30);
-            int posX = (screenWidth - textWidth) / 2;
-            int posY = (screenHeight / 2) + i * 50;
+            int posX = (GetScreenWidth() - textWidth) / 2;
+            int posY = (GetScreenHeight() / 2) + i * 50;
 
             Color textColor = (i == selectedOption) ? WHITE : BLACK;
 
-            // **Kotak highlight di belakang opsi yang dipilih**
             if (i == selectedOption) {
                 DrawRectangle(posX - 10, posY - 5, textWidth + 20, 40, RED);
             }
@@ -35,15 +37,19 @@ MenuOption ShowMenu() {
 
         EndDrawing();
 
+        // Handle input
         if (IsKeyPressed(KEY_DOWN)) {
-            selectedOption = (selectedOption + 1) % totalOptions;
+            selectedOption = (selectedOption + 1) % totalOptions; // Move selection down
+            menusound(); // Mainkan suara navigasi menu
         }
         if (IsKeyPressed(KEY_UP)) {
-            selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
+            selectedOption = (selectedOption - 1 + totalOptions) % totalOptions; // Move selection up
+            menusound(); // Mainkan suara navigasi menu
         }
         if (IsKeyPressed(KEY_ENTER)) {
-            if (selectedOption == MENU_EXIT) {
-                CloseWindow();
+            if (selectedOption == 1) { // Jika memilih Options
+                isInMainMenu = true; // Tetap di menu utama
+                return MENU_OPTIONS;
             }
             return (MenuOption)selectedOption;
         }

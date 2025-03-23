@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "Assets/lib/raylib.h"
 #include "Assets/lib/GLOBALHEADER.h"
 #include <stdlib.h>
@@ -102,3 +103,10 @@ int main() {
     CloseWindow();
     return 0;
 }
+=======
+#include "Assets/lib/header.h"
+int main(){
+    start();
+    return 0;
+}
+>>>>>>> main
