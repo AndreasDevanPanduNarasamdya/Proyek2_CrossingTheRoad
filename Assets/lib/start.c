@@ -4,10 +4,10 @@ void start() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
     InitAudioDevice();
 
-    // Muat semua suara dan musik
+    
     LoadAllSounds();
 
-    // Mainkan backsound menu
+    
     PlayMenuBacksound();
 
     SetTargetFPS(60);
@@ -16,7 +16,7 @@ void start() {
     bool isFullscreen = false;
 
     while (!WindowShouldClose()) {
-        if (isInMainMenu) {  // ✅ Tambahkan kondisi ini
+        if (isInMainMenu) {  
             MenuOption selectedMenu = ShowMenu();
         
             if (selectedMenu == MENU_EXIT) {
@@ -33,7 +33,7 @@ void start() {
             }
     
             if (selectedMenu == MENU_START) {
-                isInMainMenu = false;  // ✅ Pastikan kita keluar dari menu
+                isInMainMenu = false;  
                 StopMenuBacksound();
                 InitGame();
                 LoadAllTextures();
@@ -45,7 +45,7 @@ void start() {
                 camera.zoom = 1.7f;
     
                 while (!WindowShouldClose()) {
-                    UpdateMusicStream(backgroundMusic1); // ✅ Update musik
+                    UpdateMusicStream(backgroundMusic1); 
                     
                     if (!kalah && !PermainanBerakhir) {
                         camera.target.y -= CAMERA_SPEED;
@@ -57,12 +57,10 @@ void start() {
                     if (kalah || PermainanBerakhir) {
                         HandleGameOver(&kalah, &PermainanBerakhir, &camera);
     
-                        if (isInMainMenu) {  // ✅ Tambahkan ini agar kembali ke menu utama
-                            printf("Kembali ke Main Menu setelah Game Over...\n");
-                            break;  // ✅ Kembali ke menu utama tanpa keluar dari game
+                        if (isInMainMenu) {  
+                            break;  // dengan break maka kembali ke manu utama
                         } else {
-                            printf("Restarting game...\n");
-                            InitGame();  // 🔥 Reset game setelah Try Again
+                            InitGame();  // reset game setelah try again
                             continue;
                         }
                     }
@@ -85,7 +83,7 @@ void start() {
                         if (IsKeyPressed(KEY_ENTER)) {
                             ShowOptions(&volume, &isFullscreen);
                         }
-                        if (IsKeyPressed(KEY_BACKSPACE)) {  // ✅ Kembali ke menu utama dengan BACKSPACE
+                        if (IsKeyPressed(KEY_BACKSPACE)) {
                             isInMainMenu = true;
                             StopMenuBacksound();
                             break;

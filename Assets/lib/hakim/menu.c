@@ -6,13 +6,13 @@ MenuOption ShowMenu() {
     const char *menuOptions[] = {"Start Game", "Options", "Exit"};
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
-    // Mainkan backsound menu jika belum diputar
+    
     if (!IsMusicStreamPlaying(menuBacksound) && isInMainMenu) {
         PlayMenuBacksound();
     }    
 
     while (!WindowShouldClose()) {
-        UpdateMusicStream(menuBacksound); // Update musik backsound setiap frame
+        UpdateMusicStream(menuBacksound); 
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -20,7 +20,7 @@ MenuOption ShowMenu() {
         DrawText("Crossing The Road", (screenWidth - titleWidth) / 2, screenHeight / 4, 40, DARKGRAY);
 
 
-        // Draw menu options
+        // untuk menggambar option
         for (int i = 0; i < totalOptions; i++) {
             int textWidth = MeasureText(menuOptions[i], 30);
             int posX = (GetScreenWidth() - textWidth) / 2;
@@ -37,18 +37,18 @@ MenuOption ShowMenu() {
 
         EndDrawing();
 
-        // Handle input
+        // input pemain
         if (IsKeyPressed(KEY_DOWN)) {
-            selectedOption = (selectedOption + 1) % totalOptions; // Move selection down
-            menusound(); // Mainkan suara navigasi menu
+            selectedOption = (selectedOption + 1) % totalOptions; 
+            menusound(); 
         }
         if (IsKeyPressed(KEY_UP)) {
-            selectedOption = (selectedOption - 1 + totalOptions) % totalOptions; // Move selection up
-            menusound(); // Mainkan suara navigasi menu
+            selectedOption = (selectedOption - 1 + totalOptions) % totalOptions; 
+            menusound(); 
         }
         if (IsKeyPressed(KEY_ENTER)) {
-            if (selectedOption == 1) { // Jika memilih Options
-                isInMainMenu = true; // Tetap di menu utama
+            if (selectedOption == 1) { // akan pergi ke option jika pemain memilih option
+                isInMainMenu = true; 
                 return MENU_OPTIONS;
             }
             return (MenuOption)selectedOption;
