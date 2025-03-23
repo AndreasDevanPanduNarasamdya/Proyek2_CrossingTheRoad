@@ -65,32 +65,11 @@ void start() {
                         }
                     }
     
-                    if (IsKeyPressed(KEY_SPACE)) {
-                        isPaused = !isPaused;
+                    HandlePause(&isPaused, &isInMainMenu, &volume, &isFullscreen);
+                    if (isInMainMenu) {  
+                        break;  // 
                     }
-    
-                    if (isPaused) {
-                        StopMenuBacksound();
-                        BeginDrawing();
-                        ClearBackground(GRAY);
-    
-                        DrawText("PAUSED", SCREEN_WIDTH / 2 - MeasureText("PAUSED", 40) / 2, SCREEN_HEIGHT / 2 - 50, 40, RED);
-                        DrawText("Press SPACE to Resume", SCREEN_WIDTH / 2 - MeasureText("Press SPACE to Resume", 20) / 2, SCREEN_HEIGHT / 2, 20, BLACK);
-                        DrawText("Press BACKSPACE to Exit to Main Menu", SCREEN_WIDTH / 2 - MeasureText("Press BACKSPACE to Exit to Main Menu", 20) / 2, SCREEN_HEIGHT / 2 + 60, 20, BLACK);
-    
-                        EndDrawing();
-    
-                        if (IsKeyPressed(KEY_ENTER)) {
-                            ShowOptions(&volume, &isFullscreen);
-                        }
-                        if (IsKeyPressed(KEY_BACKSPACE)) {
-                            isInMainMenu = true;
-                            StopMenuBacksound();
-                            break;
-                        }
-    
-                        continue;
-                    }
+
     
                     UpdateGame(&camera);
                     DrawGame(camera);

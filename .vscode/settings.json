@@ -16,7 +16,8 @@
     "time.h": "c",
     "menu.h": "c",
     "tryagain.h": "c",
-    "sfx.h": "c"
+    "sfx.h": "c",
+    "options.c": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled",
   "C_Cpp_Runner.cCompilerPath": "gcc",
