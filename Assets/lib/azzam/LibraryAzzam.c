@@ -53,3 +53,4 @@ void DrawParticles() {
             DrawCircle((int)particles[i].pos.x, (int)particles[i].pos.y, 3, particleColor);
         }
     }
+}
