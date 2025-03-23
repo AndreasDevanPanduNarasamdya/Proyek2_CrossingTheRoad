@@ -17,7 +17,6 @@ void RenderGrid() {
     }
 }
 
-
 void DrawGame(Camera2D camera) {
     BeginDrawing();
     ClearBackground(WHITE);
@@ -55,7 +54,6 @@ void DrawGame(Camera2D camera) {
     EndDrawing();
 }//101, 59
 
-
 void UpdateCarMovement() {
     frameCounter++;
     if (frameCounter >= CAR_MOVE_DELAY) {
@@ -77,12 +75,11 @@ void UpdateCarMovement() {
             float distance = CalculateDistance(playerPos, carPos);
 
             // Atur volume berdasarkan jarak (semakin dekat, semakin keras)
-            float maxDistance = 500.0f; // Jarak maksimum untuk volume penuh
+            float maxDistance = 500.0f; 
             float volume = 1.0f - (distance / maxDistance);
-            if (volume < 0.0f) volume = 0.0f; // Pastikan volume tidak negatif
+            if (volume < 0.0f) volume = 0.0f; 
             SetSoundVolume(carSound, volume);
 
-            // Mainkan suara mobil hanya jika belum diputar
             if (!IsSoundPlaying(carSound)) {
                 PlaySound(carSound);
             }
@@ -95,7 +92,7 @@ void UpdateCarMovement() {
 void InitGrid() {
     for (int i = 0; i < GRID_HEIGHT; i++) {
         for (int j = 0; j < GRID_WIDTH; j++) {
-            if ((i == 165 && j == 23) || (i == 39 && j == 53)) {
+            if ((i == 166 && j == 23) || (i == 38 && j == 53)) {
                 grid[i][j] = CHECKPOINT_LINE; // Garis biru setiap 50 baris
             } //else if (i % 8 == 0) {
                 //grid[i][j] = LANE_MARK; // Garis putih tiap 8 baris
@@ -148,32 +145,34 @@ void checkposition(Player *player) {
 
 
 void InitGame() {
-    printf("MEMULAI INITGAME! Reset semua variabel...\n");
+    printf("=== MEMULAI INITGAME! Reset semua variabel... ===\n");
 
     srand(time(NULL));
 
-    // **Reset semua kondisi permainan**
+    // **Reset kondisi permainan**
     kalah = false;
     PermainanBerakhir = false;
     player.score = 0;
-    player.lives = MAX_LIVES;
-    numCars = NUM_CARS_START;
-    carSpeed = CAR_SPEED_START;
+    player.lives = MAX_LIVES;  // ✅ Reset nyawa ke awal
+    numCars = NUM_CARS_START;  // ✅ Reset jumlah mobil
+    carSpeed = CAR_SPEED_START;  // ✅ Reset kecepatan mobil
+    level = 1;  // ✅ Pastikan level kembali ke awal
 
+    // **Reset posisi awal pemain**
     player.x = GRID_WIDTH / 2;
     player.y = GRID_HEIGHT - 2;
     checkpoint.x = player.x;
     checkpoint.y = player.y;
 
-    printf("Game di-reset: lives = %d, score = %d, posisi = (%d, %d)\n",
-           player.lives, player.score, player.x, player.y);
-
-    InitGrid();
-    printf("Grid berhasil di-reset\n");
-
+    // **Pastikan variabel dideklarasikan di awal sebelum ada kode lain**
     int array[24] = {9, 14, 27, 32, 49, 55, 61, 67, 95, 101, 115, 121, 127, 133, 139, 145, 151, 157, 175, 181, 187, 193, 205, 211};
     int directray[24] = {-1, -1, 1, 1, -1, -1, 1, 1, 1, -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1};
 
+    // **Reset grid ke kondisi awal**
+    InitGrid();
+    printf("Grid berhasil di-reset\n");
+
+    // **Reset mobil ke kondisi awal**
     for (int i = 0; i < numCars; i++) {
         int col = rand() % (GRID_WIDTH - GRID_START);
         int direction = directray[i];
@@ -181,8 +180,15 @@ void InitGame() {
         cars[i] = (Car){col, array[i], carSpeed, direction};
         cars[i].type = (rand() % 4), (rand() % 4), (rand() % 4);
     }
-
     printf("Mobil berhasil di-reset: jumlah = %d\n", numCars);
+
+    // **Reset kamera ke posisi awal**
+    camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
+    camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+    camera.rotation = 0.0f;
+    camera.zoom = 1.7f;
+
+    printf("=== INITGAME SELESAI! Semua variabel kembali ke awal ===\n");
 }
 
 
@@ -190,6 +196,41 @@ void ResetCombo() {
     comboMultiplier = 1;
     comboStreak = 0;
 }
+
+void CheckCollision() {
+    for (int i = 0; i < numCars; i++) {
+        if (cars[i].direction == 1) {
+            if (((player.x <= cars[i].x + 7) && (player.x >= cars[i].x - 2.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2))) {
+                // Play collision sound
+                PlaySound(nabrak);
+
+                // Reset player position and reduce lives
+                player.x = checkpoint.x;
+                player.y = checkpoint.y;
+                player.lives--;
+                if (player.lives <= 0) {
+                    kalah = true;
+                }
+                break;
+            }
+        } else {
+            if (((player.x <= cars[i].x - 3) && (player.x >= cars[i].x - 9.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2))) {
+                // Play collision sound
+                PlaySound(nabrak);
+
+                // Reset player position and reduce lives
+                player.x = checkpoint.x;
+                player.y = checkpoint.y;
+                player.lives--;
+                if (player.lives <= 0) {
+                    kalah = true;
+                }
+                break;
+            }
+        }
+    }
+}
+
 
 void UpdateGame(Camera2D *camera) {
     if (!PermainanBerakhir) {
