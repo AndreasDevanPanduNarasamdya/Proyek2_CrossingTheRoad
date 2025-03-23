@@ -52,26 +52,28 @@ void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera) {
     if (restartGame) {
         printf("Pemain memilih 'Try Again'. Reset game...\n");
 
-        // **Reset semua variabel sebelum InitGame**
+        
         *kalah = false;
         *PermainanBerakhir = false;
-          // Reset nyawa sebelum InitGame()
+        player.lives = MAX_LIVES; 
 
         printf("Sebelum InitGame(): kalah = %d, PermainanBerakhir = %d, lives = %d\n", 
                *kalah, *PermainanBerakhir, player.lives);
 
-        InitGame(); // **Reset game**
+        InitGame(); 
 
-        camera->target.y = player.y * CELL_SIZE; // reset kamera
+        // **Pastikan kamera kembali ke awal**
+        camera->target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
+        camera->offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+        camera->rotation = 0.0f;
+        camera->zoom = 1.7f;
 
         printf("Setelah InitGame(): kalah = %d, PermainanBerakhir = %d, lives = %d\n", 
                *kalah, *PermainanBerakhir, player.lives);
 
         return;
     } else {
-        printf("Pemain memilih 'Main Menu'. Keluar dari game.\n");
-        CloseAudioDevice();
-        CloseWindow();
-        exit(0);
+        printf("Pemain memilih 'Main Menu'. Kembali ke menu utama.\n");
+        isInMainMenu = true; 
     }
 }

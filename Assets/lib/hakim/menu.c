@@ -7,9 +7,9 @@ MenuOption ShowMenu() {
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
     // Mainkan backsound menu jika belum diputar
-    if (!IsMusicStreamPlaying(menuBacksound)) {
+    if (!IsMusicStreamPlaying(menuBacksound) && isInMainMenu) {
         PlayMenuBacksound();
-    }
+    }    
 
     while (!WindowShouldClose()) {
         UpdateMusicStream(menuBacksound); // Update musik backsound setiap frame
