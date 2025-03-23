@@ -210,6 +210,7 @@ void CheckCollision() {
                 player.lives--;
                 if (player.lives <= 0) {
                     kalah = true;
+                    PlaySound(lose);
                 }
                 break;
             }
