@@ -77,6 +77,22 @@ void UpdateCarMovement()
             grid[cars[i].y][cars[i].x] = ROAD;
             cars[i].x = newX;
             grid[cars[i].y][cars[i].x] = CAR;
+
+            // Hitung jarak antara mobil dan pemain
+            Vector2 playerPos = {player.x * CELL_SIZE, player.y * CELL_SIZE};
+            Vector2 carPos = {cars[i].x * CELL_SIZE, cars[i].y * CELL_SIZE};
+            float distance = CalculateDistance(playerPos, carPos);
+
+            // Atur volume berdasarkan jarak (semakin dekat, semakin keras)
+            float maxDistance = 500.0f; // Jarak maksimum untuk volume penuh
+            float volume = 1.0f - (distance / maxDistance);
+            if (volume < 0.0f) volume = 0.0f; // Pastikan volume tidak negatif
+            SetSoundVolume(carSound, volume);
+
+            // Mainkan suara mobil hanya jika belum diputar
+            if (!IsSoundPlaying(carSound)) {
+                PlaySound(carSound);
+            }
         }
         frameCounter = 0;
     }
@@ -156,14 +172,16 @@ void InitGame()
 {
     srand(time(NULL));
 
-    // **Reset semua kondisi permainan**
+    // **Reset kondisi permainan**
     kalah = false;
     PermainanBerakhir = false;
     player.score = 0;
-    player.lives = MAX_LIVES;
-    numCars = NUM_CARS_START;
-    carSpeed = CAR_SPEED_START;
+    player.lives = MAX_LIVES;  // ✅ Reset nyawa ke awal
+    numCars = NUM_CARS_START;  // ✅ Reset jumlah mobil
+    carSpeed = CAR_SPEED_START;  // ✅ Reset kecepatan mobil
+    level = 1;  // ✅ Pastikan level kembali ke awal
 
+    // **Reset posisi awal pemain**
     player.x = GRID_WIDTH / 2;
     player.y = GRID_HEIGHT - 2;
     checkpoint.x = player.x;
@@ -190,8 +208,15 @@ void InitGame()
         cars[i] = (Car){col, array[i], carSpeed, direction};
         cars[i].type = (rand() % 4), (rand() % 4), (rand() % 4); // Pilih jenis mobil secara acak
     }
-
     printf("Mobil berhasil di-reset: jumlah = %d\n", numCars);
+
+    // **Reset kamera ke posisi awal**
+    camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
+    camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+    camera.rotation = 0.0f;
+    camera.zoom = 1.7f;
+
+    printf("=== INITGAME SELESAI! Semua variabel kembali ke awal ===\n");
 }
 
 void ResetCombo()
@@ -295,3 +320,7 @@ void UpdateGame(Camera2D *camera)
         NextLevel(camera, &player);
     }
 }
+
+float CalculateDistance(Vector2 pos1, Vector2 pos2) {
+    return sqrtf((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.y - pos2.y) * (pos1.y - pos2.y));
+} 

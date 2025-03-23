@@ -1,5 +1,4 @@
-#include "raylib.h"
-#include <stdio.h>  // Untuk printf debugging
+#include "../header.h"
 
 // Fungsi untuk menampilkan menu Options
 void ShowOptions(float *volume, bool *isFullscreen)

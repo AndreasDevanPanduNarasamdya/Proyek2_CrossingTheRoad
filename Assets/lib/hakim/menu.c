@@ -4,27 +4,28 @@
 MenuOption ShowMenu()
 {
     int selectedOption = 0;
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
     const char *menuOptions[] = {"Start Game", "Options", "Exit"};
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
-    // **Dapatkan ukuran layar**
-    int screenWidth = GetScreenWidth();
-    int screenHeight = GetScreenHeight();
+    // Mainkan backsound menu jika belum diputar
+    if (!IsMusicStreamPlaying(menuBacksound) && isInMainMenu) {
+        PlayMenuBacksound();
+    }    
 
     while (!WindowShouldClose())
     {
         BeginDrawing();
         ClearBackground(RAYWHITE);
-
-        // **Judul Game di Tengah**
-        int titleWidth = MeasureText("Crossing The Road", 40);
+         int titleWidth = MeasureText("Crossing The Road", 40);
         DrawText("Crossing The Road", (screenWidth - titleWidth) / 2, screenHeight / 4, 40, DARKGRAY);
 
         for (int i = 0; i < totalOptions; i++)
         {
             int textWidth = MeasureText(menuOptions[i], 30);
-            int posX = (screenWidth - textWidth) / 2;
-            int posY = (screenHeight / 2) + i * 50;
+            int posX = (GetScreenWidth() - textWidth) / 2;
+            int posY = (GetScreenHeight() / 2) + i * 50;
 
             Color textColor = (i == selectedOption) ? WHITE : BLACK;
 

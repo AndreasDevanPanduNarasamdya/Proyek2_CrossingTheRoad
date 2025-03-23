@@ -1,7 +1,5 @@
 #ifndef LIBRARYFAIZ_H
 #define LIBRARYFAIZ_H
-#include "../GLOBALHEADER.h"
-#include "../raylib.h"
 
 Player player;
 vector checkpoint;
