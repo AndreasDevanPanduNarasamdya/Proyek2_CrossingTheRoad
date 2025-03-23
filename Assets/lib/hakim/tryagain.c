@@ -2,6 +2,7 @@
 #define TRYAGAIN_C
 
 void ShowTryAgain(bool *restartGame) {
+    UnloadAllSounds();
     int selectedOption = 0;
     const char *options[] = {"Try Again", "Main Menu"};
     int totalOptions = 2;
