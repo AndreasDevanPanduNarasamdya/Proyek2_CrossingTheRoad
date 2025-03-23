@@ -12,6 +12,7 @@ void LoadAllSounds() {
     nabrak = LoadSound("Assets/sound/nabrak.wav");
     lose = LoadSound("Assets/sound/gameover.wav");
 }
+
 void UnloadAllSounds() {
     UnloadSound(menuMoveSound); 
     UnloadMusicStream(menuBacksound); 
