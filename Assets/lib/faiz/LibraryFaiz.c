@@ -258,6 +258,16 @@ void CheckCollision() {
 }
 
 void UpdateGame(Camera2D *camera) {
+
+    if (!gameStarted) 
+    {
+        if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT)) 
+        {
+            gameStarted = true; // Mulai permainan saat tombol pertama ditekan
+        }
+        return; // Jangan update posisi player sebelum permainan dimulai
+    }
+    
     if (!PermainanBerakhir) {
         UpdateCarMovement();
 
