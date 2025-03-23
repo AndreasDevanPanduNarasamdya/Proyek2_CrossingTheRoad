@@ -1,188 +1,213 @@
 #include "header.h"
 
-void start() {
+void start(){
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
     InitAudioDevice();
-
     // Muat semua suara dan musik
     LoadAllSounds();
-
     // Mainkan backsound menu
     PlayMenuBacksound();
-
     SetTargetFPS(60);
-
     float volume = 1.0f;
     bool isFullscreen = false;
 
-    while (!WindowShouldClose()) {
-        UpdateMusicStream(menuBacksound); 
-    
+    while (!WindowShouldClose())
+    {
+        UpdateMusicStream(menuBacksound);
+
         MenuOption selectedMenu = ShowMenu();
-    
-        if (selectedMenu == MENU_EXIT) {
+
+        if (selectedMenu == MENU_EXIT)
+        {
             StopMenuBacksound();
             UnloadAllSounds();
             CloseAudioDevice();
             CloseWindow();
             return;
         }
-    
-        if (selectedMenu == MENU_OPTIONS) {
+
+        if (selectedMenu == MENU_OPTIONS)
+        {
             ShowOptions(&volume, &isFullscreen);
             continue;
         }
-    
-        if (selectedMenu == MENU_START) {
+
+        if (selectedMenu == MENU_START)
+        {
             // Hentikan suara menu saat game dimulai
             StopMenuBacksound();
             InitGame();
             LoadAllTextures();
-    
+
             Camera2D camera = {0};
             camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
             camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
             camera.rotation = 0.0f;
             camera.zoom = 1.7f;
-            while (!WindowShouldClose()) {
-                UpdateMusicStream(backgroundMusic1); 
-                if (!kalah && !PermainanBerakhir) {
+            while (!WindowShouldClose())
+            {
+                UpdateMusicStream(backgroundMusic1);
+                if (!kalah && !PermainanBerakhir)
+                {
                     camera.target.y -= CAMERA_SPEED;
-                    if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
+                    if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE)
+                    {
                         kalah = true;
                     }
                 }
-    
-                if (kalah || PermainanBerakhir) {
+
+                if (kalah || PermainanBerakhir)
+                {
                     HandleGameOver(&kalah, &PermainanBerakhir, &camera);
-    
+
                     // ✅ **Tambahkan pengecekan setelah Try Again**
-                    if (!isInMainMenu) {
+                    if (!isInMainMenu)
+                    {
                         printf("Restarting game...\n");
                         InitGame(); // 🔥 **Reset game setelah Try Again**
                         continue;   // **Lanjut ke loop game lagi**
                     }
                 }
-    
-                if (IsKeyPressed(KEY_SPACE)) {
+
+                if (IsKeyPressed(KEY_SPACE))
+                {
                     isPaused = !isPaused;
                 }
-    
-                if (isPaused) {
+
+                if (isPaused)
+                {
                     // Hentikan suara menu saat game di-pause
                     StopMenuBacksound();
                     BeginDrawing();
                     ClearBackground(GRAY);
-    
+
                     DrawText("PAUSED", SCREEN_WIDTH / 2 - MeasureText("PAUSED", 40) / 2, SCREEN_HEIGHT / 2 - 50, 40, RED);
                     DrawText("Press SPACE to Resume", SCREEN_WIDTH / 2 - MeasureText("Press SPACE to Resume", 20) / 2, SCREEN_HEIGHT / 2, 20, BLACK);
                     DrawText("Press ENTER for Options", SCREEN_WIDTH / 2 - MeasureText("Press ENTER for Options", 20) / 2, SCREEN_HEIGHT / 2 + 30, 20, BLACK);
                     DrawText("Press ESC to Exit to Main Menu", SCREEN_WIDTH / 2 - MeasureText("Press ESC to Exit to Main Menu", 20) / 2, SCREEN_HEIGHT / 2 + 60, 20, BLACK);
-    
+
                     EndDrawing();
-    
-                    if (IsKeyPressed(KEY_ENTER)) {
+
+                    if (IsKeyPressed(KEY_ENTER))
+                    {
                         ShowOptions(&volume, &isFullscreen);
                     }
-                    if (IsKeyPressed(KEY_ESCAPE)) {
+                    if (IsKeyPressed(KEY_ESCAPE))
+                    {
                         break;
                     }
-    
+
                     continue;
                 }
-    
+
                 UpdateGame(&camera);
                 DrawGame(camera);
-        if (isInMainMenu) {  // ✅ Tambahkan kondisi ini
-            MenuOption selectedMenu = ShowMenu();
-        
-            if (selectedMenu == MENU_EXIT) {
-                StopMenuBacksound();
-                UnloadAllSounds();
-                CloseAudioDevice();
-                CloseWindow();
-                return;
-            }
-    
-            if (selectedMenu == MENU_OPTIONS) {
-                ShowOptions(&volume, &isFullscreen);
-                continue;
-            }
-    
-            if (selectedMenu == MENU_START) {
-                isInMainMenu = false;  // ✅ Pastikan kita keluar dari menu
-                StopMenuBacksound();
-                InitGame();
-                LoadAllTextures();
-    
-                Camera2D camera = {0};
-                camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
-                camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
-                camera.rotation = 0.0f;
-                camera.zoom = 1.7f;
-    
-                while (!WindowShouldClose()) {
-                    UpdateMusicStream(backgroundMusic1); // ✅ Update musik
-                    
-                    if (!kalah && !PermainanBerakhir) {
-                        camera.target.y -= CAMERA_SPEED;
-                        if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
-                            kalah = true;
-                        }
-                    }
-    
-                    if (kalah || PermainanBerakhir) {
-                        HandleGameOver(&kalah, &PermainanBerakhir, &camera);
-    
-                        if (isInMainMenu) {  // ✅ Tambahkan ini agar kembali ke menu utama
-                            printf("Kembali ke Main Menu setelah Game Over...\n");
-                            break;  // ✅ Kembali ke menu utama tanpa keluar dari game
-                        } else {
-                            printf("Restarting game...\n");
-                            InitGame();  // 🔥 Reset game setelah Try Again
-                            continue;
-                        }
-                    }
-    
-                    if (IsKeyPressed(KEY_SPACE)) {
-                        isPaused = !isPaused;
-                    }
-    
-                    if (isPaused) {
+                if (isInMainMenu)
+                { // ✅ Tambahkan kondisi ini
+                    MenuOption selectedMenu = ShowMenu();
+
+                    if (selectedMenu == MENU_EXIT)
+                    {
                         StopMenuBacksound();
-                        BeginDrawing();
-                        ClearBackground(GRAY);
-    
-                        DrawText("PAUSED", SCREEN_WIDTH / 2 - MeasureText("PAUSED", 40) / 2, SCREEN_HEIGHT / 2 - 50, 40, RED);
-                        DrawText("Press SPACE to Resume", SCREEN_WIDTH / 2 - MeasureText("Press SPACE to Resume", 20) / 2, SCREEN_HEIGHT / 2, 20, BLACK);
-                        DrawText("Press BACKSPACE to Exit to Main Menu", SCREEN_WIDTH / 2 - MeasureText("Press BACKSPACE to Exit to Main Menu", 20) / 2, SCREEN_HEIGHT / 2 + 60, 20, BLACK);
-    
-                        EndDrawing();
-    
-                        if (IsKeyPressed(KEY_ENTER)) {
-                            ShowOptions(&volume, &isFullscreen);
-                        }
-                        if (IsKeyPressed(KEY_BACKSPACE)) {  // ✅ Kembali ke menu utama dengan BACKSPACE
-                            isInMainMenu = true;
-                            StopMenuBacksound();
-                            break;
-                        }
-    
+                        UnloadAllSounds();
+                        CloseAudioDevice();
+                        CloseWindow();
+                        return;
+                    }
+
+                    if (selectedMenu == MENU_OPTIONS)
+                    {
+                        ShowOptions(&volume, &isFullscreen);
                         continue;
                     }
-    
-                    UpdateGame(&camera);
-                    DrawGame(camera);
+
+                    if (selectedMenu == MENU_START)
+                    {
+                        isInMainMenu = false; // ✅ Pastikan kita keluar dari menu
+                        StopMenuBacksound();
+                        InitGame();
+                        LoadAllTextures();
+
+                        Camera2D camera = {0};
+                        camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
+                        camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
+                        camera.rotation = 0.0f;
+                        camera.zoom = 1.7f;
+
+                        while (!WindowShouldClose())
+                        {
+                            UpdateMusicStream(backgroundMusic1); // ✅ Update musik
+
+                            if (!kalah && !PermainanBerakhir)
+                            {
+                                camera.target.y -= CAMERA_SPEED;
+                                if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE)
+                                {
+                                    kalah = true;
+                                }
+                            }
+
+                            if (kalah || PermainanBerakhir)
+                            {
+                                HandleGameOver(&kalah, &PermainanBerakhir, &camera);
+
+                                if (isInMainMenu)
+                                { // ✅ Tambahkan ini agar kembali ke menu utama
+                                    printf("Kembali ke Main Menu setelah Game Over...\n");
+                                    break; // ✅ Kembali ke menu utama tanpa keluar dari game
+                                }
+                                else
+                                {
+                                    printf("Restarting game...\n");
+                                    InitGame(); // 🔥 Reset game setelah Try Again
+                                    continue;
+                                }
+                            }
+
+                            if (IsKeyPressed(KEY_SPACE))
+                            {
+                                isPaused = !isPaused;
+                            }
+
+                            if (isPaused)
+                            {
+                                StopMenuBacksound();
+                                BeginDrawing();
+                                ClearBackground(GRAY);
+
+                                DrawText("PAUSED", SCREEN_WIDTH / 2 - MeasureText("PAUSED", 40) / 2, SCREEN_HEIGHT / 2 - 50, 40, RED);
+                                DrawText("Press SPACE to Resume", SCREEN_WIDTH / 2 - MeasureText("Press SPACE to Resume", 20) / 2, SCREEN_HEIGHT / 2, 20, BLACK);
+                                DrawText("Press BACKSPACE to Exit to Main Menu", SCREEN_WIDTH / 2 - MeasureText("Press BACKSPACE to Exit to Main Menu", 20) / 2, SCREEN_HEIGHT / 2 + 60, 20, BLACK);
+
+                                EndDrawing();
+
+                                if (IsKeyPressed(KEY_ENTER))
+                                {
+                                    ShowOptions(&volume, &isFullscreen);
+                                }
+                                if (IsKeyPressed(KEY_BACKSPACE))
+                                { // ✅ Kembali ke menu utama dengan BACKSPACE
+                                    isInMainMenu = true;
+                                    StopMenuBacksound();
+                                    break;
+                                }
+
+                                continue;
+                            }
+
+                            UpdateGame(&camera);
+                            DrawGame(camera);
+                        }
+
+                        UnloadAllTextures();
+                    }
                 }
-    
-                UnloadAllTextures();
             }
+
+            StopMenuBacksound();
+            UnloadAllSounds();
+            CloseAudioDevice();
+            CloseWindow();
         }
     }
-    
-    
-    StopMenuBacksound();
-    UnloadAllSounds();
-    CloseAudioDevice();
-    CloseWindow();
 }
