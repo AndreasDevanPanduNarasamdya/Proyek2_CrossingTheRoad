@@ -56,7 +56,7 @@ void start() {
                 }
 
                 if (kalah || PermainanBerakhir) {
-                    HandleGameOver(&kalah, &PermainanBerakhir);
+                    HandleGameOver(&kalah, &PermainanBerakhir, &camera);
                 }
 
                 if (IsKeyPressed(KEY_SPACE)) {
