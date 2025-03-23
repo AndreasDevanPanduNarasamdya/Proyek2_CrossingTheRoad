@@ -194,28 +194,33 @@ void ResetCombo() {
 
 void CheckCollision() {
     for (int i = 0; i < numCars; i++) {
-        if (cars[i].direction == 1)
-        {
-            if (((player.x <= cars[i].x+7) && (player.x >= cars[i].x-2.3)) && ((player.y <= cars[i].y+2.7) && (player.y >= cars[i].y-2))) {
-            player.x = checkpoint.x;
-            player.y = checkpoint.y;
-            player.lives--;
-            if (player.lives <= 0) {
-                kalah = true;
+        if (cars[i].direction == 1) {
+            if (((player.x <= cars[i].x + 7) && (player.x >= cars[i].x - 2.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2))) {
+                // Play collision sound
+                PlaySound(nabrak);
+
+                // Reset player position and reduce lives
+                player.x = checkpoint.x;
+                player.y = checkpoint.y;
+                player.lives--;
+                if (player.lives <= 0) {
+                    kalah = true;
+                }
+                break;
             }
-            break;
-            }
-        }
-        else
-        {
-            if (((player.x <= cars[i].x-3) && (player.x >= cars[i].x-9.3)) && ((player.y <= cars[i].y+2.7) && (player.y >= cars[i].y-2))) {
-            player.x = checkpoint.x;
-            player.y = checkpoint.y;
-            player.lives--;
-            if (player.lives <= 0) {
-                kalah = true;
-            }
-            break;
+        } else {
+            if (((player.x <= cars[i].x - 3) && (player.x >= cars[i].x - 9.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2))) {
+                // Play collision sound
+                PlaySound(nabrak);
+
+                // Reset player position and reduce lives
+                player.x = checkpoint.x;
+                player.y = checkpoint.y;
+                player.lives--;
+                if (player.lives <= 0) {
+                    kalah = true;
+                }
+                break;
             }
         }
     }
