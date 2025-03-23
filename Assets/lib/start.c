@@ -1,27 +1,41 @@
-#include "../header.h"
+#include "header.h"
 
 void start() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
+    InitAudioDevice();
+
+    // Muat semua suara dan musik
+    LoadAllSounds();
+
+    // Mainkan backsound menu
+    PlayMenuBacksound();
+
     SetTargetFPS(60);
+
     float volume = 1.0f;
-    if (isFullscreen) {
-        ToggleFullscreen();
-    }
+    bool isFullscreen = false;
+
     while (!WindowShouldClose()) {
+        UpdateMusicStream(menuBacksound); // Update musik backsound setiap frame
+
         MenuOption selectedMenu = ShowMenu();
 
         if (selectedMenu == MENU_EXIT) {
-
+            StopMenuBacksound();
+            UnloadAllSounds();
+            CloseAudioDevice();
             CloseWindow();
-            return; // Exit the game
+            return;
         }
 
         if (selectedMenu == MENU_OPTIONS) {
             ShowOptions(&volume, &isFullscreen);
-            continue; // Return to main menu after options
+            continue;
         }
 
         if (selectedMenu == MENU_START) {
+            // Hentikan suara menu saat game dimulai
+            StopMenuBacksound();
             InitGame();
             LoadAllTextures();
 
@@ -32,6 +46,8 @@ void start() {
             camera.zoom = 1.7f;
 
             while (!WindowShouldClose()) {
+                UpdateMusicStream(backgroundMusic1); // Update musik backsound setiap frame
+
                 if (!kalah && !PermainanBerakhir) {
                     camera.target.y -= CAMERA_SPEED;
                     if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
@@ -44,10 +60,12 @@ void start() {
                 }
 
                 if (IsKeyPressed(KEY_SPACE)) {
-                    isPaused = !isPaused; // Toggle pause
+                    isPaused = !isPaused;
                 }
 
                 if (isPaused) {
+                    // Hentikan suara menu saat game di-pause
+                    StopMenuBacksound();
                     BeginDrawing();
                     ClearBackground(GRAY);
 
@@ -65,7 +83,7 @@ void start() {
                         break;
                     }
 
-                    continue; // Skip UpdateGame() when paused
+                    continue;
                 }
 
                 UpdateGame(&camera);
@@ -75,4 +93,9 @@ void start() {
             UnloadAllTextures();
         }
     }
-    CloseAudioDevice();    }
+
+    StopMenuBacksound();
+    UnloadAllSounds();
+    CloseAudioDevice();
+    CloseWindow();
+}

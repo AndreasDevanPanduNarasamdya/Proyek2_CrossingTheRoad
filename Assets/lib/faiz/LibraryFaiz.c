@@ -17,6 +17,7 @@ void RenderGrid() {
     }
 }
 
+
 void DrawGame(Camera2D camera) {
     BeginDrawing();
     ClearBackground(WHITE);
@@ -54,22 +55,37 @@ void DrawGame(Camera2D camera) {
     EndDrawing();
 }//101, 59
 
+
 void UpdateCarMovement() {
     frameCounter++;
     if (frameCounter >= CAR_MOVE_DELAY) {
         for (int i = 0; i < numCars; i++) {
             int newX = cars[i].x + cars[i].direction * cars[i].speed;
-            if (newX < 0) 
-            {
-               newX = GRID_WIDTH - 1;
+            if (newX < 0) {
+                newX = GRID_WIDTH - 1;
             }
-            if (newX >= GRID_WIDTH) 
-            {
+            if (newX >= GRID_WIDTH) {
                 newX = 0;
             }
             grid[cars[i].y][cars[i].x] = ROAD;
             cars[i].x = newX;
             grid[cars[i].y][cars[i].x] = CAR;
+
+            // Hitung jarak antara mobil dan pemain
+            Vector2 playerPos = {player.x * CELL_SIZE, player.y * CELL_SIZE};
+            Vector2 carPos = {cars[i].x * CELL_SIZE, cars[i].y * CELL_SIZE};
+            float distance = CalculateDistance(playerPos, carPos);
+
+            // Atur volume berdasarkan jarak (semakin dekat, semakin keras)
+            float maxDistance = 500.0f; // Jarak maksimum untuk volume penuh
+            float volume = 1.0f - (distance / maxDistance);
+            if (volume < 0.0f) volume = 0.0f; // Pastikan volume tidak negatif
+            SetSoundVolume(carSound, volume);
+
+            // Mainkan suara mobil hanya jika belum diputar
+            if (!IsSoundPlaying(carSound)) {
+                PlaySound(carSound);
+            }
         }
         frameCounter = 0;
     }
@@ -102,7 +118,6 @@ void InitGrid() {
 }
 
 
-
 void checkposition(Player *player) {
     if (grid[player->y][player->x] == CHECKPOINT_LINE) 
     {
@@ -130,7 +145,6 @@ void checkposition(Player *player) {
         grid[player->y][player->x] = ROAD;
     } 
 }
-
 
 
 void InitGame() {
@@ -172,9 +186,6 @@ void InitGame() {
 }
 
 
-
-
-
 void ResetCombo() {
     comboMultiplier = 1;
     comboStreak = 0;
@@ -213,21 +224,32 @@ void CheckCollision() {
 
 void UpdateGame(Camera2D *camera) {
     if (!PermainanBerakhir) {
-        
         UpdateCarMovement();
 
-        if (IsKeyPressed(KEY_UP)) movement[0] = true;
-        if (IsKeyPressed(KEY_DOWN)) movement[1] = true;
-        if (IsKeyPressed(KEY_LEFT)) movement[2] = true;
-        if (IsKeyPressed(KEY_RIGHT)) movement[3] = true;
+        if (IsKeyPressed(KEY_UP)) {
+            movement[0] = true;
+            PlaySound(moveCharSound); // Mainkan suara pergerakan karakter
+        }
+        if (IsKeyPressed(KEY_DOWN)) {
+            movement[1] = true;
+            PlaySound(moveCharSound); // Mainkan suara pergerakan karakter
+        }
+        if (IsKeyPressed(KEY_LEFT)) {
+            movement[2] = true;
+            PlaySound(moveCharSound); // Mainkan suara pergerakan karakter
+        }
+        if (IsKeyPressed(KEY_RIGHT)) {
+            movement[3] = true;
+            PlaySound(moveCharSound); // Mainkan suara pergerakan karakter
+        }
 
-        if (movement[0]) { player.y -= PLAYER_SPEED+1; movement[0] = false; }
-        if (movement[1]) { player.y += PLAYER_SPEED+1; movement[1] = false; }
-        if (movement[2]) { player.x -= PLAYER_SPEED+1; movement[2] = false; }
-        if (movement[3]) { player.x += PLAYER_SPEED+1; movement[3] = false; }
+        if (movement[0]) { player.y -= PLAYER_SPEED + 1; movement[0] = false; }
+        if (movement[1]) { player.y += PLAYER_SPEED + 1; movement[1] = false; }
+        if (movement[2]) { player.x -= PLAYER_SPEED + 1; movement[2] = false; }
+        if (movement[3]) { player.x += PLAYER_SPEED + 1; movement[3] = false; }
 
         if (player.x < 15) player.x = 15;
-        if (player.x >= GRID_WIDTH-17) player.x = GRID_WIDTH - 17;
+        if (player.x >= GRID_WIDTH - 17) player.x = GRID_WIDTH - 17;
         if (player.y < 0) player.y = 0;
         if (player.y >= GRID_HEIGHT) player.y = GRID_HEIGHT - 1;
 
@@ -235,8 +257,12 @@ void UpdateGame(Camera2D *camera) {
 
         CheckCollision();
     }
-   
+
     if (player.y == 0) {
-        NextLevel(camera,&player);
+        NextLevel(camera, &player);
     }
 }
+
+float CalculateDistance(Vector2 pos1, Vector2 pos2) {
+    return sqrtf((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.y - pos2.y) * (pos1.y - pos2.y));
+} 

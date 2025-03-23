@@ -1,8 +1,6 @@
 #ifndef LIBRARYFAIZ_H
 #define LIBRARYFAIZ_H
 
-#include "../raylib.h"
-
 Player player;
 vector checkpoint;
 Car cars[NUM_CARS_START * 2];
@@ -30,6 +28,6 @@ void InitGrid();
 void UpdateCarMovement();
 void CheckCollision();
 void ResetCombo();
-
+float CalculateDistance(Vector2 pos1, Vector2 pos2);
 
 #endif
