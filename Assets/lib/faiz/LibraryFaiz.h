@@ -6,7 +6,6 @@ vector checkpoint;
 Car cars[NUM_CARS_START * 2];
 Camera2D camera = {0};
 int frameCounter = 0;
-int ScorTerakhir = -1;
 bool PermainanBerakhir = false;
 bool kalah = false;
 int level = 1;
@@ -17,6 +16,8 @@ char coordText[50];
 int comboMultiplier = 1;
 int comboStreak = 0;
 int comboThreshold = 3;
+int lastScorePosition = 0;
+bool gameStarted = false;
 
 int grid[GRID_HEIGHT][GRID_WIDTH];
 
@@ -28,6 +29,7 @@ void InitGrid();
 void UpdateCarMovement();
 void CheckCollision();
 void ResetCombo();
+void DrawCenteredText(const char *text, int fontSize, Color color);
 float CalculateDistance(Vector2 pos1, Vector2 pos2);
 
 #endif
