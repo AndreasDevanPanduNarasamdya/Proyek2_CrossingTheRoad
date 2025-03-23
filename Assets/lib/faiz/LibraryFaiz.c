@@ -88,7 +88,7 @@ void InitGrid()
     {
         for (int j = 0; j < GRID_WIDTH; j++)
         {
-            if ((i == 165 && j == 23) || (i == 39 && j == 53))
+            if ((i == 166 && j == 23) || (i == 39 && j == 53))
             {
                 grid[i][j] = CHECKPOINT_LINE; // Garis biru setiap 50 baris
             } // else if (i % 8 == 0) {
@@ -116,32 +116,42 @@ void InitGrid()
 
 void checkposition(Player *player)
 {
+    
+    if (player->y % 50 == 0 && lastScorePosition != player->y && player->y < 200) 
+    {
+        player->score += 2 * comboMultiplier; 
+        lastScorePosition = player->y; 
+        comboStreak++; 
+        
+       
+        if (comboStreak % 3 == 0) 
+        {
+            comboMultiplier++;
+        }
+    }
+
     if (grid[player->y][player->x] == CHECKPOINT_LINE)
     {
         passed = true;
         checkpoint.x = player->x;
         checkpoint.y = player->y;
-        player->score += 10;
+        player->score += 10 * comboMultiplier; 
         ScorTerakhir = player->y;
 
-        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
         grid[player->y][player->x] = ROAD;
     }
     else if (grid[player->y][player->x] == HEALTH_UP)
     {
         ++player->lives;
-
-        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
         grid[player->y][player->x] = ROAD;
     }
     else if (grid[player->y][player->x] == POINTS)
     {
-        player->score += 10;
-
-        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
+        player->score += 10 * comboMultiplier; 
         grid[player->y][player->x] = ROAD;
     }
 }
+
 
 void InitGame()
 {
@@ -165,7 +175,7 @@ void InitGame()
 
     InitGrid();
     printf("Grid berhasil di-reset\n");
-
+    
     int array[24] = {9, 14, 27, 32, 49, 55, 61, 67, 95, 101, 115, 121, 127, 133, 139, 145, 151, 157, 175, 181, 187, 193, 205, 211};
     int directray[24] = {-1, -1, 1, 1, -1, -1, 1, 1, /**/ 1, /**/ -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1};
 
@@ -197,11 +207,14 @@ void CheckCollision()
     {
         if (cars[i].direction == 1)
         {
-            if (((player.x <= cars[i].x + 7) && (player.x >= cars[i].x - 2.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
+            if (((player.x <= cars[i].x + 7) && (player.x >= cars[i].x - 2.3)) && 
+                ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
             {
                 player.x = checkpoint.x;
                 player.y = checkpoint.y;
                 player.lives--;
+                ResetCombo(); // Reset combo jika tertabrak mobil
+                
                 if (player.lives <= 0)
                 {
                     kalah = true;
@@ -211,11 +224,14 @@ void CheckCollision()
         }
         else
         {
-            if (((player.x <= cars[i].x - 3) && (player.x >= cars[i].x - 9.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
+            if (((player.x <= cars[i].x - 3) && (player.x >= cars[i].x - 9.3)) && 
+                ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
             {
                 player.x = checkpoint.x;
                 player.y = checkpoint.y;
                 player.lives--;
+                ResetCombo(); // Reset combo jika tertabrak mobil
+                
                 if (player.lives <= 0)
                 {
                     kalah = true;
