@@ -14,10 +14,6 @@
 #include "Assets/lib/hakim/options.h"
 #include "Assets/lib/hakim/options.c"
 
-
-
-
-
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
     SetTargetFPS(60);
@@ -89,6 +85,14 @@ int main() {
                 }
             }
 
+            // --- Bagian rendering telah dipindahkan ke dalam DrawGame() ---
+            // Karena DrawGame(camera) di LibraryFaiz.c sudah melakukan BeginDrawing() dan EndDrawing(),
+            // kita hapus BeginDrawing()/EndDrawing() di main untuk menghindari double call.
+            // Namun, kita pastikan UpdateParticles() dan DrawParticles() terpanggil di dalam DrawGame(camera).
+            // Jika belum, kita bisa panggil UpdateParticles() dan DrawParticles() di sini,
+            // namun pastikan tidak ada double BeginDrawing()/EndDrawing().
+            UpdateParticles();
+            DrawParticles();
             DrawGame(camera);
         }
 
