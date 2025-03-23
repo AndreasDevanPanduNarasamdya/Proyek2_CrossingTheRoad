@@ -1,7 +1,6 @@
 #ifndef HEADERANDREW_H
 #define HEADERANDREW_H
 
-#include "../raylib.h"
 
 Texture2D TaxiTexture, TruckTexture, VanTexture, background, logs, checkpointflag, checkpointtxt, Mustang, healthup, points, Train, lvl1background, lvl2background, lvl3background, PlayerSprite;
 bool showCheckpointText = false;
