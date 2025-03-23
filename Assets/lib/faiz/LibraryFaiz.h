@@ -30,5 +30,6 @@ void UpdateCarMovement();
 void CheckCollision();
 void ResetCombo();
 void DrawCenteredText(const char *text, int fontSize, Color color);
+float CalculateDistance(Vector2 pos1, Vector2 pos2);
 
 #endif

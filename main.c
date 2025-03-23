@@ -1,4 +1,4 @@
-#include "start.h"
+#include "Assets/lib/header.h"
 
 int main (){
     start();
