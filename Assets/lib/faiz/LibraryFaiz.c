@@ -114,7 +114,6 @@ void InitGrid() {
     }
 }
 
-
 void checkposition(Player *player) {
     if (grid[player->y][player->x] == CHECKPOINT_LINE) 
     {
@@ -124,21 +123,30 @@ void checkposition(Player *player) {
         player->score += 10;
         ScorTerakhir = player->y;
 
-        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
+        // Play sound for reaching a checkpoint
+        PlaySound(checkpointSound);
+
+        // Mark the checkpoint as passed to prevent duplicate scoring
         grid[player->y][player->x] = ROAD;
     }
     else if (grid[player->y][player->x] == HEALTH_UP) 
     {
         ++player->lives;
-        
-        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
+
+        // Play sound for health power-up
+        PlaySound(healthUpSound);
+
+        // Mark the position as visited to prevent duplicate power-ups
         grid[player->y][player->x] = ROAD;
     }
     else if (grid[player->y][player->x] == POINTS) 
     {
         player->score += 10;
-        
-        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
+
+        // Play sound for collecting points
+        PlaySound(pointsSound);
+
+        // Mark the position as visited to prevent duplicate points
         grid[player->y][player->x] = ROAD;
     } 
 }
@@ -190,7 +198,6 @@ void InitGame() {
 
     printf("=== INITGAME SELESAI! Semua variabel kembali ke awal ===\n");
 }
-
 
 void ResetCombo() {
     comboMultiplier = 1;
