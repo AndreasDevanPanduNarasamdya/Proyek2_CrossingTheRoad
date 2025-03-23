@@ -3,11 +3,11 @@ Sound menuMoveSound, carSound, moveCharSound;
 Music backgroundMusic1, menuBacksound;
 
 void LoadAllSounds() {
-    menuMoveSound = LoadSound("Assets/lib/fahraj/sound/moveChar.wav");
-    menuBacksound = LoadMusicStream("Assets/lib/fahraj/sound/menusound.wav"); 
-    carSound = LoadSound("Assets/lib/fahraj/sound/car2.wav"); 
-    moveCharSound = LoadSound("Assets/lib/fahraj/sound/moveChar.wav"); 
-    backgroundMusic1 = LoadMusicStream("Assets/lib/fahraj/sound/backsound4.wav"); 
+    menuMoveSound = LoadSound("Assets/sound/moveChar.wav");
+    menuBacksound = LoadMusicStream("Assets/sound/menusound.wav"); 
+    carSound = LoadSound("Assets/sound/car2.wav"); 
+    moveCharSound = LoadSound("Assets/sound/moveChar.wav");
+    backgroundMusic1 = LoadMusicStream("Assets/sound/backsound4.wav"); 
 }
 
 void UnloadAllSounds() {
