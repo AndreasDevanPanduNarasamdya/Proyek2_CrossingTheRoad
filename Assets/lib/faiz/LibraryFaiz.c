@@ -40,6 +40,7 @@ void DrawGame(Camera2D camera)
     RenderInstructions(player, coordText, level);
 
     ResetTimer();
+
     if (PermainanBerakhir)
     {
         if (!kalah)
@@ -48,10 +49,9 @@ void DrawGame(Camera2D camera)
         }
     }
 
-    if (kalah)
+    if (!gameStarted)
     {
-        DrawCenteredText("GAME OVER", 40, RED);
-        PermainanBerakhir = true;
+    DrawCenteredText("Use arrow keys to move", 30, BLACK);
     }
 
     EndMode2D();
@@ -136,7 +136,6 @@ void checkposition(Player *player)
         checkpoint.x = player->x;
         checkpoint.y = player->y;
         player->score += 10 * comboMultiplier; 
-        ScorTerakhir = player->y;
 
         grid[player->y][player->x] = ROAD;
     }
@@ -244,9 +243,17 @@ void CheckCollision()
 
 void UpdateGame(Camera2D *camera)
 {
+    if (!gameStarted) 
+    {
+        if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT)) 
+        {
+            gameStarted = true; // Mulai permainan saat tombol pertama ditekan
+        }
+        return; // Jangan update posisi player sebelum permainan dimulai
+    }
+
     if (!PermainanBerakhir)
     {
-
         UpdateCarMovement();
 
         if (IsKeyPressed(KEY_UP))
@@ -279,17 +286,7 @@ void UpdateGame(Camera2D *camera)
             movement[3] = false;
         }
 
-        if (player.x < 15)
-            player.x = 15;
-        if (player.x >= GRID_WIDTH - 17)
-            player.x = GRID_WIDTH - 17;
-        if (player.y < 0)
-            player.y = 0;
-        if (player.y >= GRID_HEIGHT)
-            player.y = GRID_HEIGHT - 1;
-
         checkposition(&player);
-
         CheckCollision();
     }
 

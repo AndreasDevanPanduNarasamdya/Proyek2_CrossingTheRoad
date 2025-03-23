@@ -60,7 +60,7 @@ int main()
 
             while (!WindowShouldClose())
             {
-                if (!kalah && !PermainanBerakhir)
+                if (!kalah && !PermainanBerakhir && gameStarted)
                 {
                     camera.target.y -= CAMERA_SPEED;
                     if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE)

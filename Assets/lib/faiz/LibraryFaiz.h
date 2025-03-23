@@ -19,6 +19,7 @@ int comboMultiplier = 1;
 int comboStreak = 0;
 int comboThreshold = 3;
 int lastScorePosition = 0;
+bool gameStarted = false;
 
 int grid[GRID_HEIGHT][GRID_WIDTH];
 

@@ -171,6 +171,5 @@ void RenderInstructions(Player player, char *coordText, int level)
     DrawText(TextFormat("Lives: %d", player.lives), margin, margin + 30, 20, WHITE);
     DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, WHITE);
     DrawText(coordText, margin, margin + 90, 20, WHITE);
-    DrawText("Use Arrow Keys to Move", margin, margin + 120, 20, WHITE);
     DrawText(TextFormat("health: %d", health_upgrade), margin, margin + 150, 20, WHITE);
 }
