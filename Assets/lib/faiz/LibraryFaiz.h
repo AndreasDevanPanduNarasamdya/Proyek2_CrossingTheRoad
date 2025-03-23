@@ -26,7 +26,6 @@ void UpdateGame(Camera2D *camera);
 void checkposition(Player *player);
 void InitGrid();
 void UpdateCarMovement();
-void CheckCollision();
 void ResetCombo();
 float CalculateDistance(Vector2 pos1, Vector2 pos2);
 
