@@ -232,7 +232,6 @@ void CheckCollision() {
     }
 }
 
-
 void UpdateGame(Camera2D *camera) {
     if (!PermainanBerakhir) {
         UpdateCarMovement();
