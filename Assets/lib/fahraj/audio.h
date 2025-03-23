@@ -8,7 +8,4 @@ void PlayMenuBacksound();
 void StopMenuBacksound();
 void PlayBackgroundMusic1();
 
-extern Music backgroundMusic1, menuBacksound;
-extern Sound moveChar, getHealth, getCheckpoint, pausedSound, carSound;
-
 #endif // SFX_H

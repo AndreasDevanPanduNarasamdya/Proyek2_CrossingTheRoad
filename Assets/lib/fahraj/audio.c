@@ -1,5 +1,5 @@
 #include "../header.h"
-Sound menuMoveSound, carSound, moveCharSound, nabrak;
+Sound menuMoveSound, carSound, moveCharSound, nabrak, lose;
 Music backgroundMusic1, menuBacksound;
 
 // Fungsi untuk memuat semua suara dan musik
@@ -10,6 +10,7 @@ void LoadAllSounds() {
     moveCharSound = LoadSound("Assets/sound/moveChar.wav");
     backgroundMusic1 = LoadMusicStream("Assets/sound/backsound4.wav"); 
     nabrak = LoadSound("Assets/sound/nabrak.wav");
+    lose = LoadSound("Assets/sound/gameover.wav");
 }
 void UnloadAllSounds() {
     UnloadSound(menuMoveSound); 
@@ -46,4 +47,7 @@ void StopCarSound() {
     if (IsSoundPlaying(carSound)) {
         StopSound(carSound);
     }
+}
+void SoundGameover(){
+
 }
