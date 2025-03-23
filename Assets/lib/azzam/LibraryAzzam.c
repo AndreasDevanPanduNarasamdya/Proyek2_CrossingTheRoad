@@ -3,7 +3,7 @@
 
 void NextLevel(Camera2D *camera, Player *player) {
     // Tingkatkan level
-    level++;
+    ++level;
     
     // Reset posisi pemain ke tengah bawah grid
     player->x = GRID_WIDTH / 2;
