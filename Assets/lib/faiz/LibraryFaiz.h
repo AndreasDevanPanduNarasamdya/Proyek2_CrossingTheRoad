@@ -1,7 +1,5 @@
 #ifndef LIBRARYFAIZ_H
 #define LIBRARYFAIZ_H
-#include "../GLOBALHEADER.h"
-#include "../raylib.h"
 
 Player player;
 vector checkpoint;
@@ -30,6 +28,6 @@ void InitGrid();
 void UpdateCarMovement();
 void CheckCollision();
 void ResetCombo();
-
+float CalculateDistance(Vector2 pos1, Vector2 pos2);
 
 #endif

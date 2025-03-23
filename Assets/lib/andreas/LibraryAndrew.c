@@ -1,11 +1,4 @@
-#include "../raylib.h"
-#include "../GLOBALHEADER.h"
-#include "HeaderAndrew.h"
-#include "../faiz/LibraryFaiz.h"
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <time.h>
+#include "../header.h"
 
 int margin = 20;
 
