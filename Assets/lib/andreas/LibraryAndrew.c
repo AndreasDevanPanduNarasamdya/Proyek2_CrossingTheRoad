@@ -17,7 +17,18 @@ void DefineArrayCord()
 }
 void RenderRoads()
 {
-            DrawTextureEx(background, (Vector2){150,0}, 0.0f, 0.25, WHITE);
+    if (level == 1)
+    {
+        DrawTextureEx(background, (Vector2){150,0}, 0.0f, 0.25, WHITE);
+    }
+    else if (level == 2)
+    {
+        DrawTextureEx(lvl2background, (Vector2){150,0}, 0.0f, 0.25, WHITE);
+    }
+    else if (level == 3)
+    {
+        DrawTextureEx(lvl3background, (Vector2){150,0}, 0.0f, 0.25, WHITE);
+    }
 }
 
 void RenderCharacter(Texture2D *PlayerSprite, Player player)
@@ -79,6 +90,10 @@ void RenderCharacter(Texture2D *PlayerSprite, Player player)
             Character.countdown--;
             break;
     }
+
+    //DrawTextureEx(*PlayerSprite, (Vector2){player.x * CELL_SIZE, (player.y * CELL_SIZE)+2}, 0.0f, 0.1f, WHITE);
+    //DrawTextureEx(*PlayerSprite, (Vector2){player.x * CELL_SIZE, (player.y * CELL_SIZE)+1}, 0.0f, 0.1f, WHITE);
+    //DrawTextureEx(*PlayerSprite, (Vector2){player.x * CELL_SIZE, (player.y * CELL_SIZE)}, 0.0f, 0.1f, WHITE);
 }
 
 
@@ -104,11 +119,11 @@ void RenderFlags()
 
     if (GetTime() - lastFrameTime >= timePerFrame) {
         lastFrameTime = GetTime();
-        currentFrame = (currentFrame) % 4; 
+        currentFrame = (currentFrame + 1) % 4; 
     }
 
-    DrawTextureEx(FlagAsset[currentFrame], (Vector2){500, 375}, 0.0f, 0.1, BLANK);
-    DrawTextureEx(FlagAsset[currentFrame], (Vector2){200, 1650}, 0.0f, 0.1, BLANK);
+    DrawTextureEx(FlagAsset[currentFrame], (Vector2){500, 375}, 0.0f, 0.1, WHITE);
+    DrawTextureEx(FlagAsset[currentFrame], (Vector2){200, 1650}, 0.0f, 0.1, WHITE);
 }
 
 void ResetTimer()
@@ -130,30 +145,14 @@ void RenderHealths()
     static int currentFrame = 0;
     float timePerFrame = 0.1f; 
     static float lastFrameTime = 0.0f;
-    
+
     if (GetTime() - lastFrameTime >= timePerFrame) {
         lastFrameTime = GetTime();
         currentFrame = (currentFrame + 1) % 6; 
     }
 
-    if (level == 1)
-    {
-        DrawTextureEx(HealthAsset[currentFrame], (Vector2){345, 548}, 0.0f, 0.07, WHITE);
-        DrawTextureEx(HealthAsset[currentFrame], (Vector2){478, 1323}, 0.0f, 0.07, WHITE);
-    }
-    else if (level == 2)
-    {
-        DrawTextureEx(HealthAsset[currentFrame], (Vector2){256, 305}, 0.0f, 0.07, WHITE);
-        DrawTextureEx(HealthAsset[currentFrame], (Vector2){254, 879}, 0.0f, 0.07, WHITE);
-    }
-    else if (level == 3)
-    {
-        DrawTextureEx(HealthAsset[currentFrame], (Vector2){167, 365}, 0.0f, 0.07, WHITE);
-        DrawTextureEx(HealthAsset[currentFrame], (Vector2){567, 683}, 0.0f, 0.07, WHITE);
-        DrawTextureEx(HealthAsset[currentFrame], (Vector2){326, 1500}, 0.0f, 0.07, WHITE);
-    }
-
-
+    DrawTextureEx(HealthAsset[currentFrame], (Vector2){345, 548}, 0.0f, 0.07, WHITE);
+    DrawTextureEx(HealthAsset[currentFrame], (Vector2){478, 1323}, 0.0f, 0.07, WHITE);
 }
 
 void RenderPoints()
@@ -167,23 +166,8 @@ void RenderPoints()
         currentFrame = (currentFrame + 1) % 6; 
     }
 
-    if (level == 1)
-    {
-        DrawTextureEx(PointAsset[currentFrame], (Vector2){178, 548}, 0.0f, 0.07, WHITE);
-        DrawTextureEx(PointAsset[currentFrame], (Vector2){356, 1530}, 0.0f, 0.07, WHITE);
-    }
-    else if (level == 2)
-    {
-        DrawTextureEx(PointAsset[currentFrame], (Vector2){178, 548}, 0.0f, 0.07, WHITE);
-        DrawTextureEx(PointAsset[currentFrame], (Vector2){356, 1530}, 0.0f, 0.07, WHITE);
-    }
-    else if (level == 3)
-    {
-
-    }
-
-
-
+    DrawTextureEx(PointAsset[currentFrame], (Vector2){178, 548}, 0.0f, 0.07, WHITE);
+    DrawTextureEx(PointAsset[currentFrame], (Vector2){356, 1530}, 0.0f, 0.07, WHITE);
 }
 
  void RenderCars(int *numCars, Car cars[])
@@ -194,7 +178,7 @@ void RenderPoints()
         int y = cars[i].y * CELL_SIZE;
         Texture2D carTexture;
 
-        if (y != 95 * CELL_SIZE && y != 101 * CELL_SIZE) 
+        if ((y != 95 * CELL_SIZE && y != 101 * CELL_SIZE) && (y != 78 * CELL_SIZE)) 
         {
             if (cars[i].type == 0) 
             {
@@ -213,19 +197,29 @@ void RenderPoints()
                 carTexture = Mustang;
             }
         }
-        else
+        else if (y != 95 * CELL_SIZE && y != 101 * CELL_SIZE)
+        {
+            carTexture = Train;
+        }
+        else if (y != 78 * CELL_SIZE)
         {
             carTexture = logs;
         }
         if (cars[i].direction == 1)
         {
-            if (y != 95 * CELL_SIZE && y != 101 * CELL_SIZE)
+            if ((y != 95 * CELL_SIZE && y != 101 * CELL_SIZE) && (y != 78 * CELL_SIZE))
             {
                 DrawTextureEx(carTexture, (Vector2){x,y}, 0.0f, 0.03f, WHITE);
             }
-            else
+            else if (y != 78 * CELL_SIZE)
             {
                 DrawTextureEx(carTexture, (Vector2){x,y}, 0.0f, 0.1f, WHITE);
+            }
+            else
+            {
+                DrawTextureEx(carTexture, (Vector2){x,y}, 0.0f, 0.17f, WHITE);
+                DrawTextureEx(carTexture, (Vector2){x+5,y}, 0.0f, 0.17f, WHITE);
+                DrawTextureEx(carTexture, (Vector2){x+10,y}, 0.0f, 0.17f, WHITE);
             }
         }
         else 
@@ -239,7 +233,6 @@ void RenderPoints()
                 DrawTextureEx(carTexture, (Vector2){x,y+40}, 180.0f, 0.1f, WHITE);
             }
         }
-        
     }
 }
 
@@ -250,13 +243,13 @@ void UnloadAllTextures()
     UnloadTexture(VanTexture);
     UnloadTexture(Mustang);
     UnloadTexture(background);
-    UnloadTexture(PlayerSprite);
     UnloadTexture(checkpointtxt);
     UnloadTexture(healthup);
 }
 
 void LoadAllTextures()
 {
+    char filename[34];
     TaxiTexture = LoadTexture("Assets/sprite/taxi.png");
     TruckTexture = LoadTexture("Assets/sprite/gruppesechs_van.png");
     VanTexture = LoadTexture("Assets/sprite/vanbankk.png");
@@ -266,31 +259,28 @@ void LoadAllTextures()
     Character.PlayerSideLeftSprite = LoadTexture("Assets/sprite/chickenlittlesideleft.png");
     Character.PlayerSideRightSprite = LoadTexture("Assets/sprite/chickenlittlesideright.png");
     background = LoadTexture("Assets/sprite/mapproyek2.png");
-    lvl1background = LoadTexture("Assets/sprite/mapproyek2.png");
-    lvl2background = LoadTexture("Assets/sprite/map2proyek2.png");
-    lvl3background = LoadTexture("Assets/sprite/map2proyek3.png");
     logs = LoadTexture("Assets/sprite/logbridge.png");
+    Train = LoadTexture("Assets/sprite/KAI.png");
+    checkpointflag = LoadTexture("Assets/sprite/checkpointflag.png");
     checkpointtxt = LoadTexture("Assets/sprite/checkpointtxt.png");
     healthup = LoadTexture("Assets/sprite/healthpowerup.png");
     points = LoadTexture("Assets/sprite/pointsup.png");
-    FlagAsset[0] = LoadTexture("Assets/sprite/FlagAnim/checkpointflagassprite1.png");
-    FlagAsset[1] = LoadTexture("Assets/sprite/FlagAnim/checkpointflagassprite2.png");
-    FlagAsset[2] = LoadTexture("Assets/sprite/FlagAnim/checkpointflagassprite3.png");
-    FlagAsset[3] = LoadTexture("Assets/sprite/FlagAnim/checkpointflagassprite4.png");
-    PointAsset[0] = LoadTexture("Assets/sprite/PointsAnim/pointsup1.png");
-    PointAsset[1] = LoadTexture("Assets/sprite/PointsAnim/pointsup2.png");
-    PointAsset[2] = LoadTexture("Assets/sprite/PointsAnim/pointsup3.png");
-    PointAsset[3] = LoadTexture("Assets/sprite/PointsAnim/pointsup4.png");
-    PointAsset[4] = LoadTexture("Assets/sprite/PointsAnim/pointsup5.png");
-    PointAsset[5] = LoadTexture("Assets/sprite/PointsAnim/pointsup6.png");
-    HealthAsset[0] = LoadTexture("Assets/sprite/HealthAnim/health1.png");
-    HealthAsset[1] = LoadTexture("Assets/sprite/HealthAnim/health2.png");
-    HealthAsset[2] = LoadTexture("Assets/sprite/HealthAnim/health3.png");
-    HealthAsset[3] = LoadTexture("Assets/sprite/HealthAnim/health4.png");
-    HealthAsset[4] = LoadTexture("Assets/sprite/HealthAnim/health5.png");
-    HealthAsset[5] = LoadTexture("Assets/sprite/HealthAnim/health6.png");
-
-
+    lvl3background = LoadTexture("Assets/sprite/map2proyek3.png");
+    for (int i = 0; i<4; i++)
+    {
+        sprintf(filename, "Assets/sprite/FlagAnim/checkpointflagassprite%i.png", i+1);
+        FlagAsset[i] = LoadTexture(filename);
+    }
+    for (int i = 0; i<6; i++)
+    {
+        sprintf(filename, "Assets/sprite/PointsAnim/pointsup%i.png", i+1);
+        PointAsset[i] = LoadTexture(filename);
+    }
+    for (int i = 0; i<6; i++)
+    {
+        sprintf(filename, "Assets/sprite/HealthAnim/health%i.png", i+1);
+        HealthAsset[i] = LoadTexture(filename);
+    }
 }
 
 void RenderInstructions(Player player, char *coordText, int level)
@@ -302,6 +292,6 @@ void RenderInstructions(Player player, char *coordText, int level)
     DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, WHITE);
     DrawText(coordText, margin, margin + 90, 20, WHITE);
     DrawText("Use Arrow Keys to Move", margin, margin + 120, 20, WHITE);
-    DrawText(TextFormat("health: %d", health_upgrade), margin, margin + 150, 20, WHITE);
+    DrawText(TextFormat("point: %d", point), margin, margin + 150, 20, WHITE);
 }
 
