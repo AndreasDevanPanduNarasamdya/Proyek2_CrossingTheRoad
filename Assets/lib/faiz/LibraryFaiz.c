@@ -17,7 +17,6 @@ void RenderGrid() {
     }
 }
 
-
 void DrawGame(Camera2D camera) {
     BeginDrawing();
     ClearBackground(WHITE);
@@ -55,7 +54,6 @@ void DrawGame(Camera2D camera) {
     EndDrawing();
 }//101, 59
 
-
 void UpdateCarMovement() {
     frameCounter++;
     if (frameCounter >= CAR_MOVE_DELAY) {
@@ -77,12 +75,11 @@ void UpdateCarMovement() {
             float distance = CalculateDistance(playerPos, carPos);
 
             // Atur volume berdasarkan jarak (semakin dekat, semakin keras)
-            float maxDistance = 500.0f; // Jarak maksimum untuk volume penuh
+            float maxDistance = 500.0f; 
             float volume = 1.0f - (distance / maxDistance);
-            if (volume < 0.0f) volume = 0.0f; // Pastikan volume tidak negatif
+            if (volume < 0.0f) volume = 0.0f; 
             SetSoundVolume(carSound, volume);
 
-            // Mainkan suara mobil hanya jika belum diputar
             if (!IsSoundPlaying(carSound)) {
                 PlaySound(carSound);
             }
@@ -195,37 +192,40 @@ void InitGame() {
 }
 
 
-
 void ResetCombo() {
     comboMultiplier = 1;
     comboStreak = 0;
 }
 
-
 void CheckCollision() {
     for (int i = 0; i < numCars; i++) {
-        if (cars[i].direction == 1)
-        {
-            if (((player.x <= cars[i].x+7) && (player.x >= cars[i].x-2.3)) && ((player.y <= cars[i].y+2.7) && (player.y >= cars[i].y-2))) {
-            player.x = checkpoint.x;
-            player.y = checkpoint.y;
-            player.lives--;
-            if (player.lives <= 0) {
-                kalah = true;
+        if (cars[i].direction == 1) {
+            if (((player.x <= cars[i].x + 7) && (player.x >= cars[i].x - 2.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2))) {
+                // Play collision sound
+                PlaySound(nabrak);
+
+                // Reset player position and reduce lives
+                player.x = checkpoint.x;
+                player.y = checkpoint.y;
+                player.lives--;
+                if (player.lives <= 0) {
+                    kalah = true;
+                }
+                break;
             }
-            break;
-            }
-        }
-        else
-        {
-            if (((player.x <= cars[i].x-3) && (player.x >= cars[i].x-9.3)) && ((player.y <= cars[i].y+2.7) && (player.y >= cars[i].y-2))) {
-            player.x = checkpoint.x;
-            player.y = checkpoint.y;
-            player.lives--;
-            if (player.lives <= 0) {
-                kalah = true;
-            }
-            break;
+        } else {
+            if (((player.x <= cars[i].x - 3) && (player.x >= cars[i].x - 9.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2))) {
+                // Play collision sound
+                PlaySound(nabrak);
+
+                // Reset player position and reduce lives
+                player.x = checkpoint.x;
+                player.y = checkpoint.y;
+                player.lives--;
+                if (player.lives <= 0) {
+                    kalah = true;
+                }
+                break;
             }
         }
     }

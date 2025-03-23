@@ -16,7 +16,7 @@ void start() {
     bool isFullscreen = false;
 
     while (!WindowShouldClose()) {
-        UpdateMusicStream(menuBacksound); // Update musik backsound setiap frame
+        UpdateMusicStream(menuBacksound); 
     
         MenuOption selectedMenu = ShowMenu();
     
@@ -44,10 +44,8 @@ void start() {
             camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
             camera.rotation = 0.0f;
             camera.zoom = 1.7f;
-    
             while (!WindowShouldClose()) {
-                UpdateMusicStream(backgroundMusic1); // Update musik backsound setiap frame
-    
+                UpdateMusicStream(backgroundMusic1); 
                 if (!kalah && !PermainanBerakhir) {
                     camera.target.y -= CAMERA_SPEED;
                     if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
