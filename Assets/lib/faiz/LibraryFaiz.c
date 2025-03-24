@@ -174,7 +174,6 @@ void checkposition(Player *player)
 
 void InitGame()
 {
-    printf("=== MEMULAI INITGAME! Reset semua variabel... ===\n");
 
     srand(time(NULL));
 
@@ -195,7 +194,6 @@ void InitGame()
     int directray[24] = {-1, -1, 1, 1, -1, -1, 1, 1, 1, -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1};
 
     InitGrid();
-    printf("Grid berhasil di-reset\n");
 
     for (int i = 0; i < numCars; i++)
     {
@@ -205,14 +203,13 @@ void InitGame()
         cars[i] = (Car){col, array[i], carSpeed, direction};
         cars[i].type = (rand() % 4), (rand() % 4), (rand() % 4);
     }
-    printf("Mobil berhasil di-reset: jumlah = %d\n", numCars);
 
     camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
     camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
     camera.rotation = 0.0f;
     camera.zoom = 1.7f;
 
-    printf("=== INITGAME SELESAI! Semua variabel kembali ke awal ===\n");
+
 }
 
 void ResetCombo()
