@@ -10,7 +10,6 @@ typedef enum {
 
 bool isInMainMenu = true;
 
-// Fungsi untuk menampilkan menu utama
 MenuOption ShowMenu();
 
 #endif

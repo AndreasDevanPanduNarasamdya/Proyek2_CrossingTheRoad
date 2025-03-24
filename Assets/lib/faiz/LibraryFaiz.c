@@ -295,7 +295,7 @@ void UpdateGame(Camera2D *camera)
         if (IsKeyPressed(KEY_RIGHT))
         {
             movement[3] = true;
-            PlaySound(moveCharSound); // Mainkan suara pergerakan karakter
+            PlaySound(moveCharSound); // Mainkan suara pergerakan karakter---
         }
 
         if (movement[0])
@@ -318,7 +318,7 @@ void UpdateGame(Camera2D *camera)
             player.x += PLAYER_SPEED + 1;
             movement[3] = false;
         }
-
+     
         if (player.x < 15)
             player.x = 15;
         if (player.x >= GRID_WIDTH - 17)
