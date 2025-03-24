@@ -127,14 +127,13 @@ void checkposition(Player *player) {
         player->score += 10;
         ScorTerakhir = player->y;
 
-        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
+
         grid[player->y][player->x] = ROAD;
     }
     else if (grid[player->y][player->x] == HEALTH_UP) 
     {
         ++player->lives;
-        
-        // Tandai checkpoint sudah dilewati agar tidak terus menambah skor
+
         grid[player->y][player->x] = ROAD;
     }
     else if (grid[player->y][player->x] == POINTS) 
@@ -152,30 +151,30 @@ void InitGame() {
 
     srand(time(NULL));
 
-    // **Reset kondisi permainan**
+
     kalah = false;
     PermainanBerakhir = false;
     player.score = 0;
-    player.lives = MAX_LIVES;  // ✅ Reset nyawa ke awal
-    numCars = NUM_CARS_START;  // ✅ Reset jumlah mobil
-    carSpeed = CAR_SPEED_START;  // ✅ Reset kecepatan mobil
-    level = 1;  // ✅ Pastikan level kembali ke awal
+    player.lives = MAX_LIVES;  
+    numCars = NUM_CARS_START;  
+    carSpeed = CAR_SPEED_START;  
+    level = 1;
 
-    // **Reset posisi awal pemain**
+  
     player.x = GRID_WIDTH / 2;
     player.y = GRID_HEIGHT - 2;
     checkpoint.x = player.x;
     checkpoint.y = player.y;
 
-    // **Pastikan variabel dideklarasikan di awal sebelum ada kode lain**
+
     int array[24] = {9, 14, 27, 32, 49, 55, 61, 67, 95, 101, 115, 121, 127, 133, 139, 145, 151, 157, 175, 181, 187, 193, 205, 211};
     int directray[24] = {-1, -1, 1, 1, -1, -1, 1, 1, 1, -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1};
 
-    // **Reset grid ke kondisi awal**
+
     InitGrid();
     printf("Grid berhasil di-reset\n");
 
-    // **Reset mobil ke kondisi awal**
+
     for (int i = 0; i < numCars; i++) {
         int col = rand() % (GRID_WIDTH - GRID_START);
         int direction = directray[i];
@@ -185,7 +184,7 @@ void InitGame() {
     }
     printf("Mobil berhasil di-reset: jumlah = %d\n", numCars);
 
-    // **Reset kamera ke posisi awal**
+
     camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
     camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
     camera.rotation = 0.0f;
