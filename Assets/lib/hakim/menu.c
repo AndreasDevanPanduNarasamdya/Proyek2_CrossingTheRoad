@@ -1,9 +1,9 @@
 #include "../header.h"
 MenuOption ShowMenu() {
-    int selectedOption = 0;
+    int selectedOption = 0;                                     //variabel untuk menyimpan menu yang dipilih
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
-    const char *menuOptions[] = {"Start Game", "Options", "Exit"};
+    const char *menuOptions[] = {"Start Game", "Options", "Exit"};  //menyimoan texs pilihan menu
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
     
@@ -35,7 +35,7 @@ MenuOption ShowMenu() {
             DrawText(menuOptions[i], posX, posY, 30, textColor);
         }
 
-        EndDrawing();
+        EndDrawing();   
 
         // input pemain
         if (IsKeyPressed(KEY_DOWN)) {

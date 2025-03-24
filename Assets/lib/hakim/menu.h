@@ -2,7 +2,7 @@
 #define MENU_H
 
 
-typedef enum {
+typedef enum {              //enum untuk menyimpan nilai konstan
     MENU_START,
     MENU_OPTIONS,
     MENU_EXIT
@@ -10,6 +10,6 @@ typedef enum {
 
 bool isInMainMenu = true;
 
-MenuOption ShowMenu();
+    MenuOption ShowMenu();  //tipe datanya adalah menuoption yang nanti hanya akan memiliki 3 jenis output
 
 #endif
