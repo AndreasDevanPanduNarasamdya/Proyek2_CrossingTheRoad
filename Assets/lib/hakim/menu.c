@@ -1,13 +1,13 @@
 #include "../header.h"
 MenuOption ShowMenu() {
-    int selectedOption = 0;                                     //variabel untuk menyimpan menu yang dipilih
+    int selectedOption = 0;                                     
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
-    const char *menuOptions[] = {"Start Game", "Options", "Exit"};  //menyimoan texs pilihan menu
+    const char *menuOptions[] = {"Start Game", "Options", "Exit"};  
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
     
-    if (!IsMusicStreamPlaying(menuBacksound) && isInMainMenu) {
+    if (!IsMusicStreamPlaying(menuBacksound) && isInMainMenu) {     
         PlayMenuBacksound();
     }    
 
@@ -15,18 +15,18 @@ MenuOption ShowMenu() {
         UpdateMusicStream(menuBacksound); 
 
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(RAYWHITE);                                  
          int titleWidth = MeasureText("Crossing The Road", 40);
-        DrawText("Crossing The Road", (screenWidth - titleWidth) / 2, screenHeight / 4, 40, DARKGRAY);
+        DrawText("Crossing The Road", (screenWidth - titleWidth) / 2, screenHeight / 4, 40, DARKGRAY);  
 
 
-        // untuk menggambar option
+        
         for (int i = 0; i < totalOptions; i++) {
             int textWidth = MeasureText(menuOptions[i], 30);
             int posX = (GetScreenWidth() - textWidth) / 2;
             int posY = (GetScreenHeight() / 2) + i * 50;
 
-            Color textColor = (i == selectedOption) ? WHITE : BLACK;
+            Color textColor = (i == selectedOption) ? WHITE : BLACK;        
 
             if (i == selectedOption) {
                 DrawRectangle(posX - 10, posY - 5, textWidth + 20, 40, RED);
@@ -37,9 +37,9 @@ MenuOption ShowMenu() {
 
         EndDrawing();   
 
-        // input pemain
+        
         if (IsKeyPressed(KEY_DOWN)) {
-            selectedOption = (selectedOption + 1) % totalOptions; 
+            selectedOption = (selectedOption + 1) % totalOptions;               
             menusound(); 
         }
         if (IsKeyPressed(KEY_UP)) {
@@ -47,9 +47,9 @@ MenuOption ShowMenu() {
             menusound(); 
         }
         if (IsKeyPressed(KEY_ENTER)) {
-            if (selectedOption == 1) { // akan pergi ke option jika pemain memilih option
+            if (selectedOption == 1) { 
                 isInMainMenu = true; 
-                return MENU_OPTIONS;
+                return MENU_OPTIONS;    
             }
             return (MenuOption)selectedOption;
         }

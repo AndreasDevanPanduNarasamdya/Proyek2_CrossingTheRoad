@@ -1,6 +1,6 @@
 #include "../header.h"
 
-void ShowOptions(float *volume, bool *isFullscreen) {
+void ShowOptions(float *volume, bool *isFullscreen) {       
     int selectedOption = 0;
 
     while (!WindowShouldClose()) {
