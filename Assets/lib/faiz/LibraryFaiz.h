@@ -20,7 +20,9 @@ int lastScorePosition = 0;
 bool gameStarted = false;
 
 int grid[GRID_HEIGHT][GRID_WIDTH];
-
+address Alokasi(Car carData);
+void CreateEmpty(Carlist *L);
+void InsertFirst(Carlist *L, Car carData);
 void DrawGame(Camera2D camera);
 void InitGame();
 void UpdateGame(Camera2D *camera);

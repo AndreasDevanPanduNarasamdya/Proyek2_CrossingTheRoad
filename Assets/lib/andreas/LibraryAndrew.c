@@ -73,61 +73,51 @@ void RenderPoints()
     DrawTextureEx(points, (Vector2){267, 1523}, 0.0f, 0.07, WHITE);
 }
 
-void RenderCars(int *numCars, Car cars[])
+void RenderCars(Carlist *carList)
 {
-    for (int i = 0; i < *numCars; i++) // Use *numCars instead of numCars
+    address curr = carList->First;
+    while (curr != NULL)
     {
-        int x = cars[i].x * CELL_SIZE;
-        int y = cars[i].y * CELL_SIZE;
+        Car car = curr->info;
+        int x = car.x * CELL_SIZE;
+        int y = car.y * CELL_SIZE;
         Texture2D carTexture;
 
         if (y != 95 * CELL_SIZE && y != 101 * CELL_SIZE)
         {
-            if (cars[i].type == 0)
-            {
+            if (car.type == 0)
                 carTexture = TaxiTexture;
-            }
-            else if (cars[i].type == 1)
-            {
+            else if (car.type == 1)
                 carTexture = TruckTexture;
-            }
-            else if (cars[i].type == 2)
-            {
+            else if (car.type == 2)
                 carTexture = VanTexture;
-            }
-            else if (cars[i].type == 3)
-            {
+            else if (car.type == 3)
                 carTexture = Mustang;
-            }
         }
         else
         {
             carTexture = logs;
         }
-        if (cars[i].direction == 1)
+
+        if (car.direction == 1)
         {
             if (y != 95 * CELL_SIZE && y != 101 * CELL_SIZE)
-            {
                 DrawTextureEx(carTexture, (Vector2){x, y}, 0.0f, 0.03f, WHITE);
-            }
             else
-            {
                 DrawTextureEx(carTexture, (Vector2){x, y}, 0.0f, 0.1f, WHITE);
-            }
         }
         else
         {
             if (y != 95 * CELL_SIZE && y != 101 * CELL_SIZE)
-            {
                 DrawTextureEx(carTexture, (Vector2){x, y + 40}, 180.0f, 0.03f, WHITE);
-            }
             else
-            {
                 DrawTextureEx(carTexture, (Vector2){x, y + 40}, 180.0f, 0.1f, WHITE);
-            }
         }
+
+        curr = curr->next;
     }
 }
+
 
 void UnloadAllTextures()
 {
@@ -160,9 +150,9 @@ void RenderInstructions(Player player, char *coordText, int level)
 {
 
     // Menampilkan teks di sudut kiri atas layar
-    DrawText(TextFormat("Score: %d", player.score), margin, margin, 20, WHITE);
-    DrawText(TextFormat("Lives: %d", player.lives), margin, margin + 30, 20, WHITE);
-    DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, WHITE);
-    DrawText(coordText, margin, margin + 90, 20, WHITE);
-    DrawText(TextFormat("health: %d", health_upgrade), margin, margin + 150, 20, WHITE);
+    DrawText(TextFormat("Score: %d", player.score), margin, margin, 20, BLACK);
+    DrawText(TextFormat("Lives: %d", player.lives), margin, margin + 30, 20, BLACK);
+    DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, BLACK);
+    DrawText(coordText, margin, margin + 90, 20, BLACK);
+    DrawText(TextFormat("health: %d", health_upgrade), margin, margin + 150, 20, BLACK);
 }

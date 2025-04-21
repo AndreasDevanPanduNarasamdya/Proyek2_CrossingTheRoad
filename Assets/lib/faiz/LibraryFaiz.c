@@ -6,6 +6,27 @@
 #include "../GLOBALHEADER.h"
 #include "../azzam/LibraryAzzam.h"
 
+void CreateEmpty(Carlist *L) {
+    L->First = NULL;
+}
+
+address Alokasi(Car carData) {
+    address P = (address)malloc(sizeof(ElmtList));
+    if (P != NULL) {
+        P->info = carData;
+        P->next = NULL;
+    }
+    return P;
+}
+
+void InsertFirst(Carlist *L, Car carData) {
+    address P = Alokasi(carData);
+    if (P != NULL) {
+        P->next = L->First;
+        L->First = P;
+    }
+}
+
 void DrawCenteredText(const char *text, int fontSize, Color color)
 {
     int textWidth = MeasureText(text, fontSize); // Mengukur lebar teks
@@ -25,7 +46,7 @@ void DrawGame(Camera2D camera)
     // Menggambar elemen game dalam dunia (terpengaruh oleh kamera)
     RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    RenderCars(&numCars, cars);
+    RenderCars(&carList);
 
     RenderFlags();
 
@@ -58,45 +79,40 @@ void DrawGame(Camera2D camera)
     EndDrawing();
 } // 101, 59
 
-void UpdateCarMovement()
-{
+void UpdateCarMovement() {
     frameCounter++;
-    if (frameCounter >= CAR_MOVE_DELAY)
-    {
-        for (int i = 0; i < numCars; i++)
-        {
-            int newX = cars[i].x + cars[i].direction * cars[i].speed;
-            if (newX < 0)
-            {
-                newX = GRID_WIDTH - 1;
-            }
-            if (newX >= GRID_WIDTH)
-            {
-                newX = 0;
-            }
-            grid[cars[i].y][cars[i].x] = ROAD;
-            cars[i].x = newX;
-            grid[cars[i].y][cars[i].x] = CAR;
+    if (frameCounter >= CAR_MOVE_DELAY) {
+        address curr = carList.First;
+        while (curr != NULL) {
+            Car *c = &curr->info;
 
-            // Hitung jarak antara mobil dan pemain
+            int newX = c->x + c->direction * c->speed;
+            if (newX < 0) newX = GRID_WIDTH - 1;
+            if (newX >= GRID_WIDTH) newX = 0;
+
+            grid[c->y][c->x] = ROAD;
+            c->x = newX;
+            grid[c->y][c->x] = CAR;
+
             Vector2 playerPos = {player.x * CELL_SIZE, player.y * CELL_SIZE};
-            Vector2 carPos = {cars[i].x * CELL_SIZE, cars[i].y * CELL_SIZE};
+            Vector2 carPos = {c->x * CELL_SIZE, c->y * CELL_SIZE};
             float distance = CalculateDistance(playerPos, carPos);
 
-            // Atur volume berdasarkan jarak (semakin dekat, semakin keras)
-            float maxDistance = 500.0f; // Jarak maksimum untuk volume penuh
-            float volume = 1.0f - (distance / maxDistance);
-            if (volume < 0.0f) volume = 0.0f; // Pastikan volume tidak negatif
+            float volume = 1.0f - (distance / 500.0f);
+            if (volume < 0.0f) volume = 0.0f;
             SetSoundVolume(carSound, volume);
 
-            // Mainkan suara mobil hanya jika belum diputar
             if (!IsSoundPlaying(carSound)) {
                 PlaySound(carSound);
             }
+
+            curr = curr->next;
         }
+
         frameCounter = 0;
     }
 }
+
 
 void InitGrid()
 {
@@ -176,10 +192,11 @@ void InitGame()
     kalah = false;
     PermainanBerakhir = false;
     player.score = 0;
-    player.lives = MAX_LIVES;  // ✅ Reset nyawa ke awal
-    numCars = NUM_CARS_START;  // ✅ Reset jumlah mobil
-    carSpeed = CAR_SPEED_START;  // ✅ Reset kecepatan mobil
-    level = 1;  // ✅ Pastikan level kembali ke awal
+    player.lives = MAX_LIVES;  
+    numCars = NUM_CARS_START; 
+    carSpeed = CAR_SPEED_START;  
+    level = 1;  
+    
 
     // **Reset posisi awal pemain**
     player.x = GRID_WIDTH / 2;
@@ -198,17 +215,17 @@ void InitGame()
 
     InitGrid(); // Pastikan grid diinisialisasi sebelum menempatkan mobil
 
-    for (int i = 0; i < numCars; i++)
-    {
-        int col;
+    CreateEmpty(&carList); // Inisialisasi list mobil
 
-        col = rand() % (GRID_WIDTH - GRID_START);
+    for (int i = 0; i < NUM_CARS_START; i++) {
+        int col = rand() % (GRID_WIDTH - GRID_START);
+        int row = array[i];
         int direction = directray[i];
+        Car newCar = {col, row, carSpeed, direction};
+        newCar.type = rand() % 4;
 
-        cars[i] = (Car){col, array[i], carSpeed, direction};
-        cars[i].type = (rand() % 4), (rand() % 4), (rand() % 4); // Pilih jenis mobil secara acak
+        InsertFirst(&carList, newCar);
     }
-    printf("Mobil berhasil di-reset: jumlah = %d\n", numCars);
 
     // **Reset kamera ke posisi awal**
     camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
@@ -225,44 +242,30 @@ void ResetCombo()
     comboStreak = 0;
 }
 
-void CheckCollision()
-{
-    for (int i = 0; i < numCars; i++)
-    {
-        if (cars[i].direction == 1)
-        {
-            if (((player.x <= cars[i].x + 7) && (player.x >= cars[i].x - 2.3)) && 
-                ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
-            {
-                player.x = checkpoint.x;
-                player.y = checkpoint.y;
-                player.lives--;
-                ResetCombo(); // Reset combo jika tertabrak mobil
-                
-                if (player.lives <= 0)
-                {
-                    kalah = true;
-                }
-                break;
-            }
+void CheckCollision() {
+    address curr = carList.First;
+    while (curr != NULL) {
+        Car *c = &curr->info;
+
+        bool collision = false;
+        if (c->direction == 1){
+            collision = ((player.x <= c->x + 7) && (player.x >= c->x - 2.3)) &&
+                        ((player.y <= c->y + 2.7) && (player.y >= c->y - 2));
+        } else {
+            collision = ((player.x <= c->x - 3) && (player.x >= c->x - 9.3)) &&
+                        ((player.y <= c->y + 2.7) && (player.y >= c->y - 2));
         }
-        else
-        {
-            if (((player.x <= cars[i].x - 3) && (player.x >= cars[i].x - 9.3)) && 
-                ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
-            {
-                player.x = checkpoint.x;
-                player.y = checkpoint.y;
-                player.lives--;
-                ResetCombo(); // Reset combo jika tertabrak mobil
-                
-                if (player.lives <= 0)
-                {
-                    kalah = true;
-                }
-                break;
-            }
+
+        if (collision) {
+            player.x = checkpoint.x;
+            player.y = checkpoint.y;
+            player.lives--;
+            ResetCombo();
+            if (player.lives <= 0) kalah = true;
+            break;
         }
+
+        curr = curr->next;
     }
 }
 

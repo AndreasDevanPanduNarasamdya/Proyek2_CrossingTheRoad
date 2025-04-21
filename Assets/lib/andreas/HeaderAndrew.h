@@ -11,7 +11,7 @@ int lastscore;
 
 void DefineArrayCord();
 void RenderRoads();
-void RenderCars(int *numCars, Car cars[]);
+void RenderCars(Carlist *carList);
 void RenderCharacter(Texture2D *PlayerSprite, Player player);
 void LoadAllTextures();
 void UnloadAllTextures();
