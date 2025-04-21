@@ -9,7 +9,6 @@ MenuOption ShowMenu()
     const char *menuOptions[] = {"Start Game", "Options", "Exit"};
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
-    // Mainkan backsound menu jika belum diputar
     if (!IsMusicStreamPlaying(menuBacksound) && isInMainMenu) {
         PlayMenuBacksound();
     }    

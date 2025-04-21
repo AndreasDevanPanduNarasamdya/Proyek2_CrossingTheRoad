@@ -15,13 +15,13 @@ void DrawCenteredText(const char *text, int fontSize, Color color)
     DrawText(text, x, y, fontSize, color);
 }
 
-void DrawGame(Camera2D camera) {
+void DrawGame(Camera2D camera)
+{
     BeginDrawing();
     ClearBackground(WHITE);
     BeginMode2D(camera);
 
     sprintf(coordText, "Coordinate: %2d,%2d", player.x, player.y);
-    // Menggambar elemen game dalam dunia (terpengaruh oleh kamera)
     RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
 
     RenderCars(&numCars, cars);
@@ -57,7 +57,8 @@ void DrawGame(Camera2D camera) {
     EndDrawing();
 } // 101, 59
 
-void UpdateCarMovement() {
+void UpdateCarMovement()
+{
     frameCounter++;
     if (frameCounter >= CAR_MOVE_DELAY)
     {
@@ -82,12 +83,14 @@ void UpdateCarMovement() {
             float distance = CalculateDistance(playerPos, carPos);
 
             // Atur volume berdasarkan jarak (semakin dekat, semakin keras)
-            float maxDistance = 500.0f; 
+            float maxDistance = 500.0f;
             float volume = 1.0f - (distance / maxDistance);
-            if (volume < 0.0f) volume = 0.0f; 
+            if (volume < 0.0f)
+                volume = 0.0f;
             SetSoundVolume(carSound, volume);
 
-            if (!IsSoundPlaying(carSound)) {
+            if (!IsSoundPlaying(carSound))
+            {
                 PlaySound(carSound);
             }
         }
@@ -169,16 +172,14 @@ void InitGame()
 {
     srand(time(NULL));
 
-    // **Reset kondisi permainan**
     kalah = false;
     PermainanBerakhir = false;
     player.score = 0;
-    player.lives = MAX_LIVES;  // ✅ Reset nyawa ke awal
-    numCars = NUM_CARS_START;  // ✅ Reset jumlah mobil
-    carSpeed = CAR_SPEED_START;  // ✅ Reset kecepatan mobil
-    level = 1;  // ✅ Pastikan level kembali ke awal
+    player.lives = MAX_LIVES;  
+    numCars = NUM_CARS_START; 
+    carSpeed = CAR_SPEED_START;
+    level = 1;             
 
-    // **Reset posisi awal pemain**
     player.x = GRID_WIDTH / 2;
     player.y = GRID_HEIGHT - 2;
     checkpoint.x = player.x;
@@ -205,49 +206,52 @@ void InitGame()
         cars[i] = (Car){col, array[i], carSpeed, direction};
         cars[i].type = (rand() % 4), (rand() % 4), (rand() % 4); // Pilih jenis mobil secara acak
     }
-    printf("Mobil berhasil di-reset: jumlah = %d\n", numCars);
 
-    // **Reset kamera ke posisi awal**
     camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
     camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
     camera.rotation = 0.0f;
     camera.zoom = 1.7f;
 
-    printf("=== INITGAME SELESAI! Semua variabel kembali ke awal ===\n");
+
 }
 
-
-void ResetCombo() {
+void ResetCombo()
+{
     comboMultiplier = 1;
     comboStreak = 0;
 }
 
-void CheckCollision() {
-    for (int i = 0; i < numCars; i++) {
-        if (cars[i].direction == 1) {
-            if (((player.x <= cars[i].x + 7) && (player.x >= cars[i].x - 2.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2))) {
-                // Play collision sound
+void CheckCollision()
+{
+    for (int i = 0; i < numCars; i++)
+    {
+        if (cars[i].direction == 1)
+        {
+            if (((player.x <= cars[i].x + 7) && (player.x >= cars[i].x - 2.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
+            {
                 PlaySound(nabrak);
 
-                // Reset player position and reduce lives
                 player.x = checkpoint.x;
                 player.y = checkpoint.y;
                 player.lives--;
-                if (player.lives <= 0) {
+                if (player.lives <= 0)
+                {
                     kalah = true;
                 }
                 break;
             }
-        } else {
-            if (((player.x <= cars[i].x - 3) && (player.x >= cars[i].x - 9.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2))) {
-                // Play collision sound
+        }
+        else
+        {
+            if (((player.x <= cars[i].x - 3) && (player.x >= cars[i].x - 9.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
+            {
                 PlaySound(nabrak);
 
-                // Reset player position and reduce lives
                 player.x = checkpoint.x;
                 player.y = checkpoint.y;
                 player.lives--;
-                if (player.lives <= 0) {
+                if (player.lives <= 0)
+                {
                     kalah = true;
                 }
                 break;
@@ -311,6 +315,7 @@ void UpdateGame(Camera2D *camera) {
     }
 }
 
-float CalculateDistance(Vector2 pos1, Vector2 pos2) {
+float CalculateDistance(Vector2 pos1, Vector2 pos2)
+{
     return sqrtf((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.y - pos2.y) * (pos1.y - pos2.y));
-} 
+}
