@@ -13,11 +13,10 @@ void start() {
     SetTargetFPS(60);
 
     float volume = 1.0f;
-    bool isPaused = false;
     bool isFullscreen = false;
 
     while (!WindowShouldClose()) {
-        UpdateMusicStream(menuBacksound); 
+        UpdateMusicStream(menuBacksound); // Update musik backsound setiap frame
 
         MenuOption selectedMenu = ShowMenu();
 
@@ -49,7 +48,7 @@ void start() {
             while (!WindowShouldClose()) {
                 UpdateMusicStream(backgroundMusic1); // Update musik backsound setiap frame
 
-                if (!kalah && !PermainanBerakhir && !isPaused) {
+                if (!kalah && !PermainanBerakhir && !isPaused && gameStarted) {
                     camera.target.y -= CAMERA_SPEED;
                     if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
                         kalah = true;
@@ -57,7 +56,7 @@ void start() {
                 }
 
                 if (kalah || PermainanBerakhir) {
-                    HandleGameOver(&kalah, &PermainanBerakhir);
+                    HandleGameOver(&kalah, &PermainanBerakhir, &camera);
                 }
 
                 if (IsKeyPressed(KEY_SPACE)) {

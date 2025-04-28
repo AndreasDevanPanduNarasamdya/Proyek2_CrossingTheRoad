@@ -1,6 +1,15 @@
 #include "../header.h"
-Sound menuMoveSound, carSound, moveCharSound, nabrak, lose, checkpointSound, healthUpSound, pointsSound;
-Music backgroundMusic1, menuBacksound;
+Sound menuMoveSound, 
+      carSound, 
+      moveCharSound, 
+      nabrak, 
+      lose, 
+      checkpointSound, 
+      healthUpSound, 
+      pointsSound;
+      
+Music backgroundMusic1, 
+      menuBacksound;
 
 // Fungsi untuk memuat semua suara dan musik
 void LoadAllSounds() {
@@ -14,8 +23,8 @@ void LoadAllSounds() {
     checkpointSound = LoadSound("Assets/sound/result.wav");
     healthUpSound = LoadSound("Assets/sound/health.wav");
     pointsSound = LoadSound("Assets/sound/point+.wav");
-
 }
+
 void UnloadAllSounds() {
     UnloadSound(menuMoveSound); 
     UnloadMusicStream(menuBacksound); 
