@@ -1,11 +1,11 @@
 #include "../header.h"
 
-void ShowOptions(float *volume, bool *isFullscreen) {
+// Fungsi untuk menampilkan menu Options
+void ShowOptions(float *volume, bool *isFullscreen)
+{
     int selectedOption = 0;
-
-    while (!WindowShouldClose()) {
-        UpdateMusicStream(menuBacksound); 
-
+    while (!WindowShouldClose())
+    {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
@@ -16,26 +16,22 @@ void ShowOptions(float *volume, bool *isFullscreen) {
 
         EndDrawing();
 
-        if (IsKeyPressed(KEY_DOWN)) selectedOption = (selectedOption + 1) % 3;
-        if (IsKeyPressed(KEY_UP)) selectedOption = (selectedOption - 1 + 3) % 3;
-
-        if (selectedOption == 0) {
-            if (IsKeyDown(KEY_LEFT) && *volume > 0.0f) {
-                *volume -= 0.01f;
-                if (*volume < 0.0f) *volume = 0.0f;
+        if (IsKeyPressed(KEY_DOWN))
+            selectedOption = (selectedOption + 1) % 3;
+        if (IsKeyPressed(KEY_UP))
+            selectedOption = (selectedOption - 1 + 3) % 3;
+        if (IsKeyPressed(KEY_ENTER))
+        {
+            if (selectedOption == 0)
+            { // Volume (belum diimplementasikan)
             }
-            if (IsKeyDown(KEY_RIGHT) && *volume < 1.0f) {
-                *volume += 0.01f; 
-                if (*volume > 1.0f) *volume = 1.0f;
-            }
-            SetMasterVolume(*volume);
-        }
-
-        if (IsKeyPressed(KEY_ENTER)) {
-            if (selectedOption == 1) { 
+            else if (selectedOption == 1)
+            { // Fullscreen Toggle
                 *isFullscreen = !(*isFullscreen);
                 ToggleFullscreen();
-            } else if (selectedOption == 2) { 
+            }
+            else if (selectedOption == 2)
+            { // Back
                 return;
             }
         }
