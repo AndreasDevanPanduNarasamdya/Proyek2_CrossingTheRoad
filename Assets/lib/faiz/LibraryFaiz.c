@@ -35,7 +35,11 @@ void DrawGame(Camera2D camera) {
     RenderPoints();
     
     RenderCharacter(&PlayerSprite, player);
-     // Selesai menggambar elemen dalam dunia
+    
+    // Gambar partikel di sini
+    DrawParticles();
+
+    // Selesai menggambar elemen dalam dunia
     EndMode2D();
 
     RenderInstructions(player, coordText, level);
@@ -204,6 +208,9 @@ void CheckCollision() {
                 // Play collision sound
                 PlaySound(nabrak);
 
+                // Inisialisasi partikel efek saat terjadi collision
+                InitParticles((Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE});
+
                 // Reset player position and reduce lives
                 player.x = checkpoint.x;
                 player.y = checkpoint.y;
@@ -217,6 +224,9 @@ void CheckCollision() {
             if (((player.x <= cars[i].x - 3) && (player.x >= cars[i].x - 9.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2))) {
                 // Play collision sound
                 PlaySound(nabrak);
+
+                // Inisialisasi partikel efek saat terjadi collision
+                InitParticles((Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE});
 
                 // Reset player position and reduce lives
                 player.x = checkpoint.x;
@@ -232,9 +242,13 @@ void CheckCollision() {
 }
 
 
+
 void UpdateGame(Camera2D *camera) {
     if (!PermainanBerakhir) {
         UpdateCarMovement();
+
+        // Update Partikel setiap frame
+        UpdateParticles();
 
         if (IsKeyPressed(KEY_UP)) {
             movement[0] = true;
@@ -272,6 +286,7 @@ void UpdateGame(Camera2D *camera) {
         NextLevel(camera, &player);
     }
 }
+
 
 float CalculateDistance(Vector2 pos1, Vector2 pos2) {
     return sqrtf((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.y - pos2.y) * (pos1.y - pos2.y));
