@@ -1,25 +1,18 @@
-#include "../header.h"
+#include "LibraryFaiz.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <time.h>
+#include "../GLOBALHEADER.h"
+#include "../azzam/LibraryAzzam.h"
 
-void RenderGrid()
+void DrawCenteredText(const char *text, int fontSize, Color color)
 {
-    for (int i = 0; i < GRID_HEIGHT; i++)
-    {
-        for (int j = 0; j < GRID_WIDTH; j++)
-        {
-            Color cellColor = DARKGRAY; // Default warna jalan biasa
+    int textWidth = MeasureText(text, fontSize); // Mengukur lebar teks
+    int x = (SCREEN_WIDTH - textWidth) / 2;      // Posisi X agar teks di tengah
+    int y = SCREEN_HEIGHT / 2 - fontSize / 2;    // Posisi Y agar teks di tengah
 
-            if (grid[i][j] == LANE_MARK)
-            {
-                cellColor = LANE_COLOR; // Warna garis jalur
-            }
-            else if (grid[i][j] == CHECKPOINT_LINE)
-            {
-                cellColor = BLUE; // Warna garis checkpoint
-            }
-
-            DrawRectangle(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE, cellColor);
-        }
-    }
+    DrawText(text, x, y, fontSize, color);
 }
 
 void DrawGame(Camera2D camera)
@@ -40,26 +33,29 @@ void DrawGame(Camera2D camera)
     RenderPoints();
 
     RenderCharacter(&PlayerSprite, player);
-
+    // Selesai menggambar elemen dalam dunia
     EndMode2D();
 
     RenderInstructions(player, coordText, level);
 
     ResetTimer();
+
     if (PermainanBerakhir)
     {
-        DrawText("MENANG", player.x * CELL_SIZE, player.y * CELL_SIZE, 40, RED);
+        if (!kalah)
+        {
+            DrawCenteredText("MENANG", 40, RED);
+        }
     }
 
-    if (kalah)
+    if (!gameStarted)
     {
-        DrawText("GAME OVER", player.x * CELL_SIZE, player.y * CELL_SIZE, 40, RED);
-        PermainanBerakhir = true;
+    DrawCenteredText("Use arrow keys to move", 30, BLACK);
     }
 
     EndMode2D();
     EndDrawing();
-}
+} // 101, 59
 
 void UpdateCarMovement()
 {
@@ -108,7 +104,7 @@ void InitGrid()
     {
         for (int j = 0; j < GRID_WIDTH; j++)
         {
-            if ((i == 166 && j == 23) || (i == 38 && j == 53))
+            if ((i == 166 && j == 23) || (i == 39 && j == 53))
             {
                 grid[i][j] = CHECKPOINT_LINE; // Garis biru setiap 50 baris
             } // else if (i % 8 == 0) {
@@ -136,89 +132,87 @@ void InitGrid()
 
 void checkposition(Player *player)
 {
+    
+    if (player->y % 50 == 0 && lastScorePosition != player->y && player->y < 200) 
+    {
+        player->score += 2 * comboMultiplier; 
+        lastScorePosition = player->y; 
+        comboStreak++; 
+        
+       
+        if (comboStreak % 3 == 0) 
+        {
+            comboMultiplier++;
+        }
+    }
+
     if (grid[player->y][player->x] == CHECKPOINT_LINE)
     {
         passed = true;
         checkpoint.x = player->x;
         checkpoint.y = player->y;
-        player->score += 10;
-        ScorTerakhir = player->y;
+        player->score += 10 * comboMultiplier; 
 
-        // Play sound for reaching a checkpoint
-        PlaySound(checkpointSound);
-
-        // Mark the checkpoint as passed to prevent duplicate scoring
         grid[player->y][player->x] = ROAD;
     }
     else if (grid[player->y][player->x] == HEALTH_UP)
     {
         ++player->lives;
-
-        // Play sound for health power-up
-        PlaySound(healthUpSound);
-
-        // Mark the position as visited to prevent duplicate power-ups
         grid[player->y][player->x] = ROAD;
     }
     else if (grid[player->y][player->x] == POINTS)
     {
-        player->score += 10;
-
-        // Play sound for collecting points
-        PlaySound(pointsSound);
-
-        // Mark the position as visited to prevent duplicate points
+        player->score += 10 * comboMultiplier; 
         grid[player->y][player->x] = ROAD;
     }
 }
 
+
 void InitGame()
 {
-    printf("=== MEMULAI INITGAME! Reset semua variabel... ===\n");
-
     srand(time(NULL));
 
-    // **Reset kondisi permainan**
     kalah = false;
     PermainanBerakhir = false;
     player.score = 0;
-    player.lives = MAX_LIVES;   // ✅ Reset nyawa ke awal
-    numCars = NUM_CARS_START;   // ✅ Reset jumlah mobil
-    carSpeed = CAR_SPEED_START; // ✅ Reset kecepatan mobil
-    level = 1;                  // ✅ Pastikan level kembali ke awal
+    player.lives = MAX_LIVES;  
+    numCars = NUM_CARS_START; 
+    carSpeed = CAR_SPEED_START;
+    level = 1;             
 
-    // **Reset posisi awal pemain**
     player.x = GRID_WIDTH / 2;
     player.y = GRID_HEIGHT - 2;
     checkpoint.x = player.x;
     checkpoint.y = player.y;
 
-    // **Pastikan variabel dideklarasikan di awal sebelum ada kode lain**
-    int array[24] = {9, 14, 27, 32, 49, 55, 61, 67, 95, 101, 115, 121, 127, 133, 139, 145, 151, 157, 175, 181, 187, 193, 205, 211};
-    int directray[24] = {-1, -1, 1, 1, -1, -1, 1, 1, 1, -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1};
+    printf("Game di-reset: lives = %d, score = %d, posisi = (%d, %d)\n",
+           player.lives, player.score, player.x, player.y);
 
-    // **Reset grid ke kondisi awal**
     InitGrid();
     printf("Grid berhasil di-reset\n");
+    
+    int array[24] = {9, 14, 27, 32, 49, 55, 61, 67, 95, 101, 115, 121, 127, 133, 139, 145, 151, 157, 175, 181, 187, 193, 205, 211};
+    int directray[24] = {-1, -1, 1, 1, -1, -1, 1, 1, /**/ 1, /**/ -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1};
 
-    // **Reset mobil ke kondisi awal**
+    InitGrid(); // Pastikan grid diinisialisasi sebelum menempatkan mobil
+
     for (int i = 0; i < numCars; i++)
     {
-        int col = rand() % (GRID_WIDTH - GRID_START);
+        int col;
+
+        col = rand() % (GRID_WIDTH - GRID_START);
         int direction = directray[i];
 
         cars[i] = (Car){col, array[i], carSpeed, direction};
-        cars[i].type = (rand() % 4), (rand() % 4), (rand() % 4);
+        cars[i].type = (rand() % 4), (rand() % 4), (rand() % 4); // Pilih jenis mobil secara acak
     }
-    printf("Mobil berhasil di-reset: jumlah = %d\n", numCars);
 
-    // **Reset kamera ke posisi awal**
     camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
     camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
     camera.rotation = 0.0f;
     camera.zoom = 1.7f;
 
-    printf("=== INITGAME SELESAI! Semua variabel kembali ke awal ===\n");
+
 }
 
 void ResetCombo()
@@ -235,17 +229,14 @@ void CheckCollision()
         {
             if (((player.x <= cars[i].x + 7) && (player.x >= cars[i].x - 2.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
             {
-                // Play collision sound
                 PlaySound(nabrak);
 
-                // Reset player position and reduce lives
                 player.x = checkpoint.x;
                 player.y = checkpoint.y;
                 player.lives--;
                 if (player.lives <= 0)
                 {
                     kalah = true;
-                    PlaySound(lose);
                 }
                 break;
             }
@@ -254,10 +245,8 @@ void CheckCollision()
         {
             if (((player.x <= cars[i].x - 3) && (player.x >= cars[i].x - 9.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
             {
-                // Play collision sound
                 PlaySound(nabrak);
 
-                // Reset player position and reduce lives
                 player.x = checkpoint.x;
                 player.y = checkpoint.y;
                 player.lives--;
@@ -271,32 +260,29 @@ void CheckCollision()
     }
 }
 
-void UpdateGame(Camera2D *camera)
-{
-    if (!PermainanBerakhir)
+
+void UpdateGame(Camera2D *camera) {
+
+    if (!gameStarted) 
     {
+        if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT)) 
+        {
+            gameStarted = true; // Mulai permainan saat tombol pertama ditekan
+        }
+        return; // Jangan update posisi player sebelum permainan dimulai
+    }
+    
+    if (!PermainanBerakhir) {
         UpdateCarMovement();
 
         if (IsKeyPressed(KEY_UP))
-        {
             movement[0] = true;
-            PlaySound(moveCharSound); // Mainkan suara pergerakan karakter
-        }
         if (IsKeyPressed(KEY_DOWN))
-        {
             movement[1] = true;
-            PlaySound(moveCharSound); // Mainkan suara pergerakan karakter
-        }
         if (IsKeyPressed(KEY_LEFT))
-        {
             movement[2] = true;
-            PlaySound(moveCharSound); // Mainkan suara pergerakan karakter
-        }
         if (IsKeyPressed(KEY_RIGHT))
-        {
             movement[3] = true;
-            PlaySound(moveCharSound); // Mainkan suara pergerakan karakter
-        }
 
         if (movement[0])
         {
@@ -319,17 +305,7 @@ void UpdateGame(Camera2D *camera)
             movement[3] = false;
         }
 
-        if (player.x < 15)
-            player.x = 15;
-        if (player.x >= GRID_WIDTH - 17)
-            player.x = GRID_WIDTH - 17;
-        if (player.y < 0)
-            player.y = 0;
-        if (player.y >= GRID_HEIGHT)
-            player.y = GRID_HEIGHT - 1;
-
         checkposition(&player);
-
         CheckCollision();
     }
 

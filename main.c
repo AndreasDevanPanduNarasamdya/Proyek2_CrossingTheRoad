@@ -1,5 +1,6 @@
 #include "Assets/lib/header.h"
-int main(){
+
+int main (){
     start();
     return 0;
 }

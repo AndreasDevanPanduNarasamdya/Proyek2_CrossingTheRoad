@@ -24,6 +24,7 @@ void LoadAllSounds() {
     healthUpSound = LoadSound("Assets/sound/health.wav");
     pointsSound = LoadSound("Assets/sound/point+.wav");
 }
+
 void UnloadAllSounds() {
     UnloadSound(menuMoveSound); 
     UnloadMusicStream(menuBacksound); 

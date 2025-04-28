@@ -1,12 +1,11 @@
 #include "../header.h"
 
 // Fungsi untuk menampilkan menu Options
-void ShowOptions(float *volume, bool *isFullscreen) {
+void ShowOptions(float *volume, bool *isFullscreen)
+{
     int selectedOption = 0;
-
-    while (!WindowShouldClose()) {
-        UpdateMusicStream(menuBacksound); 
-
+    while (!WindowShouldClose())
+    {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
@@ -17,29 +16,22 @@ void ShowOptions(float *volume, bool *isFullscreen) {
 
         EndDrawing();
 
-        // Navigasi menu
-        if (IsKeyPressed(KEY_DOWN)) selectedOption = (selectedOption + 1) % 3;
-        if (IsKeyPressed(KEY_UP)) selectedOption = (selectedOption - 1 + 3) % 3;
-
-        // Perubahan volume langsung bekerja
-        if (selectedOption == 0) {
-            if (IsKeyDown(KEY_LEFT) && *volume > 0.0f) {
-                *volume -= 0.01f; // Kurangi volume lebih halus
-                if (*volume < 0.0f) *volume = 0.0f;
+        if (IsKeyPressed(KEY_DOWN))
+            selectedOption = (selectedOption + 1) % 3;
+        if (IsKeyPressed(KEY_UP))
+            selectedOption = (selectedOption - 1 + 3) % 3;
+        if (IsKeyPressed(KEY_ENTER))
+        {
+            if (selectedOption == 0)
+            { // Volume (belum diimplementasikan)
             }
-            if (IsKeyDown(KEY_RIGHT) && *volume < 1.0f) {
-                *volume += 0.01f; // Tambah volume lebih halus
-                if (*volume > 1.0f) *volume = 1.0f;
-            }
-            SetMasterVolume(*volume); // Terapkan perubahan volume
-        }
-
-        // Enter digunakan untuk memilih opsi
-        if (IsKeyPressed(KEY_ENTER)) {
-            if (selectedOption == 1) { // Toggle fullscreen
+            else if (selectedOption == 1)
+            { // Fullscreen Toggle
                 *isFullscreen = !(*isFullscreen);
                 ToggleFullscreen();
-            } else if (selectedOption == 2) { // Kembali ke menu utama
+            }
+            else if (selectedOption == 2)
+            { // Back
                 return;
             }
         }
