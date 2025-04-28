@@ -12,7 +12,7 @@ MenuOption ShowMenu() {
     }    
 
     while (!WindowShouldClose()) {
-        UpdateMusicStream(menuBacksound); // Update musik backsound setiap frame
+        UpdateMusicStream(menuBacksound);
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
