@@ -17,7 +17,7 @@ void start() {
     bool isFullscreen = false;
 
     while (!WindowShouldClose()) {
-        UpdateMusicStream(menuBacksound); // Update musik backsound setiap frame
+        UpdateMusicStream(menuBacksound); 
 
         MenuOption selectedMenu = ShowMenu();
 
