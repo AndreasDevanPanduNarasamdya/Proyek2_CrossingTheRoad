@@ -40,6 +40,9 @@ Vector2 CoordArr[SCREEN_WIDTH][SCREEN_HEIGHT];
 bool passed;
 int health_upgrade = 0;
 
+float carSoundCooldown = 0.0f; // Timer cooldown
+const float CAR_SOUND_INTERVAL = 1.0f; // Jeda 1 detik antara playSound
+
 typedef struct
 {
     int x, y;

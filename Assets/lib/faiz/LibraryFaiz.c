@@ -94,18 +94,21 @@ void UpdateCarMovement() {
             c->x = newX;
             grid[c->y][c->x] = CAR;
 
-            Vector2 playerPos = {player.x * CELL_SIZE, player.y * CELL_SIZE};
-            Vector2 carPos = {c->x * CELL_SIZE, c->y * CELL_SIZE};
-            float distance = CalculateDistance(playerPos, carPos);
+            // Kurangi timer cooldown setiap frame
+            carSoundCooldown -= GetFrameTime(); // GetFrameTime() = waktu antar frame (dari raylib)
 
-            float volume = 1.0f - (distance / 500.0f);
-            if (volume < 0.0f) volume = 0.0f;
-            SetSoundVolume(carSound, volume);
+            if (carSoundCooldown <= 0.0f) {
+             Vector2 playerPos = {player.x * CELL_SIZE, player.y * CELL_SIZE};
+             Vector2 carPos = {c->x * CELL_SIZE, c->y * CELL_SIZE};
+             float distance = CalculateDistance(playerPos, carPos);
 
-            if (!IsSoundPlaying(carSound)) {
-                PlaySound(carSound);
+             float volume = 1.0f - (distance / 500.0f);
+             if (volume < 0.0f) volume = 0.0f;
+             SetSoundVolume(carSound, volume);
+
+             PlaySound(carSound); // Mainkan suara
+              carSoundCooldown = CAR_SOUND_INTERVAL; // Reset timer setelah main suara
             }
-
             curr = curr->next;
         }
 
@@ -313,6 +316,8 @@ void UpdateGame(Camera2D *camera)
             player.x += PLAYER_SPEED + 1;
             movement[3] = false;
         }
+
+        if (player.y>=GRID_HEIGHT)player.y = GRID_HEIGHT-1;
 
         checkposition(&player);
         CheckCollision();

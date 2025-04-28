@@ -47,7 +47,7 @@ void start() {
                 while (!WindowShouldClose()) {
                     UpdateMusicStream(backgroundMusic1); // ✅ Update musik
                     
-                    if (!kalah && !PermainanBerakhir && gameStarted) {
+                    if (!kalah && !PermainanBerakhir && gameStarted && !isPaused) {
                         camera.target.y -= CAMERA_SPEED;
                         if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
                             kalah = true;
