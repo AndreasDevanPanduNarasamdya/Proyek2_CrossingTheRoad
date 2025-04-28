@@ -151,8 +151,7 @@ void checkposition(Player *player)
         passed = true;
         checkpoint.x = player->x;
         checkpoint.y = player->y;
-        player->score += 10 * comboMultiplier; 
-
+        player->score += 10 * comboMultiplier;
         grid[player->y][player->x] = ROAD;
     }
     else if (grid[player->y][player->x] == HEALTH_UP)
@@ -221,7 +220,15 @@ void ResetCombo()
     comboStreak = 0;
 }
 
-void CheckCollision()
+void ResetPlayerToCheckpoint(Camera2D *camera)
+{
+    player.x = checkpoint.x;
+    player.y = checkpoint.y;
+    camera->target.y = checkpoint.y * CELL_SIZE;
+}
+
+
+void CheckCollision(Camera2D *camera)
 {
     for (int i = 0; i < numCars; i++)
     {
@@ -234,6 +241,7 @@ void CheckCollision()
                 player.x = checkpoint.x;
                 player.y = checkpoint.y;
                 player.lives--;
+                ResetPlayerToCheckpoint(camera);
                 if (player.lives <= 0)
                 {
                     kalah = true;
@@ -250,6 +258,7 @@ void CheckCollision()
                 player.x = checkpoint.x;
                 player.y = checkpoint.y;
                 player.lives--;
+                ResetPlayerToCheckpoint(camera);
                 if (player.lives <= 0)
                 {
                     kalah = true;
@@ -306,7 +315,7 @@ void UpdateGame(Camera2D *camera) {
         }
 
         checkposition(&player);
-        CheckCollision();
+        CheckCollision(camera);
     }
 
     if (player.y == 0)
