@@ -1,57 +1,55 @@
-#include "menu.h"
-#include <stdio.h>
-
-MenuOption ShowMenu()
-{
-    int selectedOption = 0;
+#include "../header.h"
+MenuOption ShowMenu() {
+    int selectedOption = 0;                                     
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
-    const char *menuOptions[] = {"Start Game", "Options", "Exit"};
+    const char *menuOptions[] = {"Start Game", "Options", "Exit"};  
     int totalOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
-    if (!IsMusicStreamPlaying(menuBacksound) && isInMainMenu) {
+    
+    if (!IsMusicStreamPlaying(menuBacksound) && isInMainMenu) {     
         PlayMenuBacksound();
     }    
 
-    while (!WindowShouldClose())
-    {
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-         int titleWidth = MeasureText("Crossing The Road", 40);
-        DrawText("Crossing The Road", (screenWidth - titleWidth) / 2, screenHeight / 4, 40, DARKGRAY);
+    while (!WindowShouldClose()) {
+        UpdateMusicStream(menuBacksound); 
 
-        for (int i = 0; i < totalOptions; i++)
-        {
+        BeginDrawing();
+        ClearBackground(RAYWHITE);                                  
+         int titleWidth = MeasureText("Crossing The Road", 40);
+        DrawText("Crossing The Road", (screenWidth - titleWidth) / 2, screenHeight / 4, 40, DARKGRAY);  
+
+
+        
+        for (int i = 0; i < totalOptions; i++) {
             int textWidth = MeasureText(menuOptions[i], 30);
             int posX = (GetScreenWidth() - textWidth) / 2;
             int posY = (GetScreenHeight() / 2) + i * 50;
 
-            Color textColor = (i == selectedOption) ? WHITE : BLACK;
+            Color textColor = (i == selectedOption) ? WHITE : BLACK;        
 
-            // **Kotak highlight di belakang opsi yang dipilih**
-            if (i == selectedOption)
-            {
+            if (i == selectedOption) {
                 DrawRectangle(posX - 10, posY - 5, textWidth + 20, 40, RED);
             }
 
             DrawText(menuOptions[i], posX, posY, 30, textColor);
         }
 
-        EndDrawing();
+        EndDrawing();   
 
-        if (IsKeyPressed(KEY_DOWN))
-        {
-            selectedOption = (selectedOption + 1) % totalOptions;
+        
+        if (IsKeyPressed(KEY_DOWN)) {
+            selectedOption = (selectedOption + 1) % totalOptions;               
+            menusound(); 
         }
-        if (IsKeyPressed(KEY_UP))
-        {
-            selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
+        if (IsKeyPressed(KEY_UP)) {
+            selectedOption = (selectedOption - 1 + totalOptions) % totalOptions; 
+            menusound(); 
         }
-        if (IsKeyPressed(KEY_ENTER))
-        {
-            if (selectedOption == MENU_EXIT)
-            {
-                CloseWindow();
+        if (IsKeyPressed(KEY_ENTER)) {
+            if (selectedOption == 1) { 
+                isInMainMenu = true; 
+                return MENU_OPTIONS;    
             }
             return (MenuOption)selectedOption;
         }
