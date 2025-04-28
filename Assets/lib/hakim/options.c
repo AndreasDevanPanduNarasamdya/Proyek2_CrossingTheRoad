@@ -1,11 +1,11 @@
 #include "../header.h"
 
-// Fungsi untuk menampilkan menu Options
-void ShowOptions(float *volume, bool *isFullscreen)
-{
+void ShowOptions(float *volume, bool *isFullscreen) {       
     int selectedOption = 0;
-    while (!WindowShouldClose())
-    {
+
+    while (!WindowShouldClose()) {
+        UpdateMusicStream(menuBacksound); 
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
@@ -16,22 +16,29 @@ void ShowOptions(float *volume, bool *isFullscreen)
 
         EndDrawing();
 
-        if (IsKeyPressed(KEY_DOWN))
-            selectedOption = (selectedOption + 1) % 3;
-        if (IsKeyPressed(KEY_UP))
-            selectedOption = (selectedOption - 1 + 3) % 3;
-        if (IsKeyPressed(KEY_ENTER))
-        {
-            if (selectedOption == 0)
-            { // Volume (belum diimplementasikan)
+        // Navigasi
+        if (IsKeyPressed(KEY_DOWN)) selectedOption = (selectedOption + 1) % 3;
+        if (IsKeyPressed(KEY_UP)) selectedOption = (selectedOption - 1 + 3) % 3;
+
+        // Perubahan volume
+        if (selectedOption == 0) {
+            if (IsKeyDown(KEY_LEFT) && *volume > 0.0f) {
+                *volume -= 0.01f; // mwngurangi volume
+                if (*volume < 0.0f) *volume = 0.0f;
             }
-            else if (selectedOption == 1)
-            { // Fullscreen Toggle
+            if (IsKeyDown(KEY_RIGHT) && *volume < 1.0f) {
+                *volume += 0.01f; // menambah volume
+                if (*volume > 1.0f) *volume = 1.0f;
+            }
+            SetMasterVolume(*volume); // menyimpan perubahan volume
+        }
+
+        
+        if (IsKeyPressed(KEY_ENTER)) {
+            if (selectedOption == 1) { // untuk fullscreen
                 *isFullscreen = !(*isFullscreen);
                 ToggleFullscreen();
-            }
-            else if (selectedOption == 2)
-            { // Back
+            } else if (selectedOption == 2) { // opsi 2 untuk kembali ke menu utama
                 return;
             }
         }

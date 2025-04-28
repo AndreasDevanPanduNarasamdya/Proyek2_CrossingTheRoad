@@ -2,7 +2,7 @@
 #define MENU_H
 
 
-typedef enum {
+typedef enum {              
     MENU_START,
     MENU_OPTIONS,
     MENU_EXIT
@@ -10,6 +10,6 @@ typedef enum {
 
 bool isInMainMenu = true;
 
-MenuOption ShowMenu();
+    MenuOption ShowMenu();  
 
 #endif

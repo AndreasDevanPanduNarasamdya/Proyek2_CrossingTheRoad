@@ -2,7 +2,6 @@
 #define TRYAGAIN_C
 
 void ShowTryAgain(bool *restartGame) {
-    UnloadAllSounds();
     int selectedOption = 0;
     const char *options[] = {"Try Again", "Main Menu"};
     int totalOptions = 2;
@@ -32,10 +31,10 @@ void ShowTryAgain(bool *restartGame) {
         if (IsKeyPressed(KEY_DOWN)) selectedOption = (selectedOption + 1) % totalOptions;
         if (IsKeyPressed(KEY_UP)) selectedOption = (selectedOption - 1 + totalOptions) % totalOptions;
         if (IsKeyPressed(KEY_ENTER)) {
-            if (selectedOption == 0) {  
+            if (selectedOption == 0) {  // Try Again
                 *restartGame = true;
                 return;
-            } else if (selectedOption == 1) {  
+            } else if (selectedOption == 1) {  // Main Menu
                 *restartGame = false;
                 return;
             }
@@ -43,30 +42,39 @@ void ShowTryAgain(bool *restartGame) {
     }
 }
 
+// modul yang menangani gameover untuk try again
 void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera) {
-    
+    printf("HandleGameOver() DIPANGGIL! Game Over terjadi!\n");
 
     bool restartGame = false;
     ShowTryAgain(&restartGame);
     
     if (restartGame) {
-        
+
+        // reset semua variabel sebelum initgame
         *kalah = false;
         *PermainanBerakhir = false;
-        player.lives = MAX_LIVES; 
+        player.lives = MAX_LIVES;
 
+        printf("Sebelum InitGame(): kalah = %d, PermainanBerakhir = %d, lives = %d\n", 
+               *kalah, *PermainanBerakhir, player.lives);
 
-        InitGame(); 
+        InitGame(); // ke initgame
 
+        // mengembalikan kamera ke posisi semula
         camera->target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
         camera->offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
         camera->rotation = 0.0f;
         camera->zoom = 1.7f;
 
-
+        printf("Setelah InitGame(): kalah = %d, PermainanBerakhir = %d, lives = %d\n", 
+               *kalah, *PermainanBerakhir, player.lives);
 
         return;
     } else {
-        isInMainMenu = true; 
+        printf("Pemain memilih 'Main Menu'. Kembali ke menu utama.\n");
+        isInMainMenu = true; // kembali ke menu utama
+        *kalah = false;
+        *PermainanBerakhir = false;
     }
 }
