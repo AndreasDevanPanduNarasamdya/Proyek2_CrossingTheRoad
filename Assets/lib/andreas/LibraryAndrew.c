@@ -4,10 +4,10 @@ int margin = 20;
 
 void DefineArrayCord()
 {
-    //int x;
-    //int y;
+    // int x;
+    // int y;
     Vector2 ScreenVector;
-    for (ScreenVector.x = 0; ScreenVector.x <= SCREEN_WIDTH; ++ScreenVector.x )
+    for (ScreenVector.x = 0; ScreenVector.x <= SCREEN_WIDTH; ++ScreenVector.x)
     {
         for (ScreenVector.y = 0; ScreenVector.y <= SCREEN_HEIGHT; ++ScreenVector.y)
         {
@@ -17,7 +17,7 @@ void DefineArrayCord()
 }
 void RenderRoads()
 {
-            DrawTextureEx(background, (Vector2){150,0}, 0.0f, 0.25, WHITE);
+    DrawTextureEx(background, (Vector2){150, 0}, 0.0f, 0.25, WHITE);
 }
 
 void RenderCharacter(Texture2D *PlayerSprite, Player player)
@@ -25,18 +25,19 @@ void RenderCharacter(Texture2D *PlayerSprite, Player player)
     DrawTextureEx(*PlayerSprite, (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE}, 0.0f, 0.1f, WHITE);
 }
 
-
-void Renderchkpointtxt() 
+void Renderchkpointtxt()
 {
-        DrawTextureEx(checkpointtxt, (Vector2){margin + 240, margin}, 0, 0.2, WHITE);
+    DrawTextureEx(checkpointtxt, (Vector2){margin + 240, margin}, 0, 0.2, WHITE);
 }
 
 // Call this function **every frame** in the game loop
-void CheckpointLogic() {
-    if (player.score > lastscore) {
-        lastscore = player.score;  // Update last score
+void CheckpointLogic()
+{
+    if (player.score > lastscore)
+    {
+        lastscore = player.score; // Update last score
         showCheckpointText = true;
-        checkpointTimer = 300;  // Show for 300 frames (~5 seconds at 60 FPS)
+        checkpointTimer = 300; // Show for 300 frames (~5 seconds at 60 FPS)
     }
 }
 
@@ -72,24 +73,24 @@ void RenderPoints()
     DrawTextureEx(points, (Vector2){267, 1523}, 0.0f, 0.07, WHITE);
 }
 
- void RenderCars(int *numCars, Car cars[])
+void RenderCars(int *numCars, Car cars[])
 {
-    for (int i = 0; i < *numCars; i++)  // Use *numCars instead of numCars
+    for (int i = 0; i < *numCars; i++) // Use *numCars instead of numCars
     {
         int x = cars[i].x * CELL_SIZE;
         int y = cars[i].y * CELL_SIZE;
         Texture2D carTexture;
 
-        if (y != 95 * CELL_SIZE && y != 101 * CELL_SIZE) 
+        if (y != 95 * CELL_SIZE && y != 101 * CELL_SIZE)
         {
-            if (cars[i].type == 0) 
+            if (cars[i].type == 0)
             {
                 carTexture = TaxiTexture;
             }
-            else if (cars[i].type == 1) 
+            else if (cars[i].type == 1)
             {
                 carTexture = TruckTexture;
-            }  
+            }
             else if (cars[i].type == 2)
             {
                 carTexture = VanTexture;
@@ -107,25 +108,24 @@ void RenderPoints()
         {
             if (y != 95 * CELL_SIZE && y != 101 * CELL_SIZE)
             {
-                DrawTextureEx(carTexture, (Vector2){x,y}, 0.0f, 0.03f, WHITE);
+                DrawTextureEx(carTexture, (Vector2){x, y}, 0.0f, 0.03f, WHITE);
             }
             else
             {
-                DrawTextureEx(carTexture, (Vector2){x,y}, 0.0f, 0.1f, WHITE);
+                DrawTextureEx(carTexture, (Vector2){x, y}, 0.0f, 0.1f, WHITE);
             }
         }
-        else 
+        else
         {
             if (y != 95 * CELL_SIZE && y != 101 * CELL_SIZE)
             {
-                DrawTextureEx(carTexture, (Vector2){x,y+40}, 180.0f, 0.03f, WHITE);
+                DrawTextureEx(carTexture, (Vector2){x, y + 40}, 180.0f, 0.03f, WHITE);
             }
             else
             {
-                DrawTextureEx(carTexture, (Vector2){x,y+40}, 180.0f, 0.1f, WHITE);
+                DrawTextureEx(carTexture, (Vector2){x, y + 40}, 180.0f, 0.1f, WHITE);
             }
         }
-        
     }
 }
 
@@ -164,7 +164,5 @@ void RenderInstructions(Player player, char *coordText, int level)
     DrawText(TextFormat("Lives: %d", player.lives), margin, margin + 30, 20, WHITE);
     DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, WHITE);
     DrawText(coordText, margin, margin + 90, 20, WHITE);
-    DrawText("Use Arrow Keys to Move", margin, margin + 120, 20, WHITE);
     DrawText(TextFormat("health: %d", health_upgrade), margin, margin + 150, 20, WHITE);
 }
-

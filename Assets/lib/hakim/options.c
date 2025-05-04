@@ -1,7 +1,6 @@
 #include "../header.h"
 
-// Fungsi untuk menampilkan menu Options
-void ShowOptions(float *volume, bool *isFullscreen) {
+void ShowOptions(float *volume, bool *isFullscreen) {       
     int selectedOption = 0;
 
     while (!WindowShouldClose()) {
@@ -17,29 +16,29 @@ void ShowOptions(float *volume, bool *isFullscreen) {
 
         EndDrawing();
 
-        // Navigasi menu
+        // Navigasi
         if (IsKeyPressed(KEY_DOWN)) selectedOption = (selectedOption + 1) % 3;
         if (IsKeyPressed(KEY_UP)) selectedOption = (selectedOption - 1 + 3) % 3;
 
-        // Perubahan volume langsung bekerja
+        // Perubahan volume
         if (selectedOption == 0) {
             if (IsKeyDown(KEY_LEFT) && *volume > 0.0f) {
-                *volume -= 0.01f; // Kurangi volume lebih halus
+                *volume -= 0.01f; // mwngurangi volume
                 if (*volume < 0.0f) *volume = 0.0f;
             }
             if (IsKeyDown(KEY_RIGHT) && *volume < 1.0f) {
-                *volume += 0.01f; // Tambah volume lebih halus
+                *volume += 0.01f; // menambah volume
                 if (*volume > 1.0f) *volume = 1.0f;
             }
-            SetMasterVolume(*volume); // Terapkan perubahan volume
+            SetMasterVolume(*volume); // menyimpan perubahan volume
         }
 
-        // Enter digunakan untuk memilih opsi
+        
         if (IsKeyPressed(KEY_ENTER)) {
-            if (selectedOption == 1) { // Toggle fullscreen
+            if (selectedOption == 1) { // untuk fullscreen
                 *isFullscreen = !(*isFullscreen);
                 ToggleFullscreen();
-            } else if (selectedOption == 2) { // Kembali ke menu utama
+            } else if (selectedOption == 2) { // opsi 2 untuk kembali ke menu utama
                 return;
             }
         }

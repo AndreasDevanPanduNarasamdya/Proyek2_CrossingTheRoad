@@ -16,6 +16,7 @@ void LoadAllSounds() {
     pointsSound = LoadSound("Assets/sound/point+.wav");
 
 }
+
 void UnloadAllSounds() {
     UnloadSound(menuMoveSound); 
     UnloadMusicStream(menuBacksound); 

@@ -2,7 +2,7 @@
 #define MENU_H
 
 
-typedef enum {
+typedef enum {              
     MENU_START,
     MENU_OPTIONS,
     MENU_EXIT
@@ -10,7 +10,6 @@ typedef enum {
 
 bool isInMainMenu = true;
 
-// Fungsi untuk menampilkan menu utama
-MenuOption ShowMenu();
+    MenuOption ShowMenu();  
 
 #endif
