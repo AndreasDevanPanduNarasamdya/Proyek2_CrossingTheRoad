@@ -2,7 +2,7 @@
 #define LIBRARY_HAKIM_H
 
 #include <stdbool.h>
-#include "raylib.h"
+#include "../header.h"
 
 /// ====== menu.h ======
 typedef enum {              
@@ -11,15 +11,16 @@ typedef enum {
     MENU_EXIT
 } MenuOption;
 
-extern bool isInMainMenu;
-MenuOption ShowMenu();
+bool isInMainMenu = true;
+
+    MenuOption ShowMenu(); 
+
 
 /// ====== options.h ======
 void ShowOptions(float *volume, bool *isFullscreen);
 
 /// ====== pause.h ======
-void PauseGame();
-void ResumeGame();
+void HandlePause(bool *isPaused, bool *isInMainMenu, float *volume, bool *isFullscreen);
 
 /// ====== tryagain.h ======
 void ShowTryAgain(bool *restartGame);
