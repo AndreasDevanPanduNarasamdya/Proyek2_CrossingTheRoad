@@ -1,4 +1,4 @@
-#include "pause.h"
+#include "../header.h"
 
 void HandlePause(bool *isPaused, bool *isInMainMenu, float *volume, bool *isFullscreen) {
 

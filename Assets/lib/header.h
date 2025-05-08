@@ -14,10 +14,7 @@
 
 #include "fahraj/audio.h"
 #include "start.h"
-#include "hakim/menu.h"
-#include "hakim/options.h"
-#include "hakim/tryagain.h"
-#include "hakim/pause.h" 
+#include "hakim/libraryHakim.h"
 #include "andreas/HeaderAndrew.h"
 #include "azzam/LibraryAzzam.h"
 #include "faiz/LibraryFaiz.h"
