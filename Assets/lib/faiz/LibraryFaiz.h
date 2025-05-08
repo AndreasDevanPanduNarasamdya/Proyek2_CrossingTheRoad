@@ -21,16 +21,19 @@ bool gameStarted = false;
 
 int grid[GRID_HEIGHT][GRID_WIDTH];
 
-void DrawGame(Camera2D camera);
-void InitGame();
-void UpdateGame(Camera2D *camera);
-void checkposition(Player *player);
-void InitGrid();
+void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points);
+void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points);
+void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points);
+void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points);
+void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points);
 void UpdateCarMovement();
 void ResetPlayerToCheckpoint(Camera2D *camera);
 void CheckCollision(Camera2D *camera);
 void ResetCombo();
 void DrawCenteredText(const char *text, int fontSize, Color color);
 float CalculateDistance(Vector2 pos1, Vector2 pos2);
+void InitiateCheckpointlist(Checkpoint *First);
+void InitiateHealthList(HealthHP *Health);
+void InitiatePointsList(PointsXP *Points);
 
 #endif

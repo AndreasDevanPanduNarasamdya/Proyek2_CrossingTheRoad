@@ -41,6 +41,8 @@ typedef struct LinkedListCheckPoint
 {
     int chckpointgrid[GRID_HEIGHT][GRID_WIDTH];
     int x, y;
+    int rangeX, rangeY;
+    int middleX, middleY;
     bool enabled;
     struct LinkedListCheckPoint *Next;
     struct LinkedListCheckPoint *Before;

@@ -1,6 +1,6 @@
 #include "header.h"
 
-void start() {
+void start(Checkpoint *Home, HealthHP *Health, PointsXP *Points) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Crossing Highway Grid");
     InitAudioDevice();
 
@@ -33,7 +33,7 @@ void start() {
             if (selectedMenu == MENU_START) {
                 isInMainMenu = false;
                 StopMenuBacksound();
-                InitGame();
+                InitGame(Home, Health, Points);
                 LoadAllTextures();
             }
         }
@@ -55,14 +55,14 @@ void start() {
             }
     
             if (kalah || PermainanBerakhir) {
-                HandleGameOver(&kalah, &PermainanBerakhir, &camera);
+                HandleGameOver(&kalah, &PermainanBerakhir, &camera, Home, Health, Points);
     
                 if (isInMainMenu) {
                     UnloadAllTextures();
                     StopMusicStream(backgroundMusic1);
                     break;  
                 } else {
-                    InitGame(); 
+                    InitGame(Home, Health, Points); 
                     continue;
                 }
             }
@@ -82,8 +82,8 @@ void start() {
                 continue;
             }
     
-            UpdateGame(&camera);
-            DrawGame(camera);
+            UpdateGame(&camera, Home, Health, Points);
+            DrawGame(camera, Home, Health, Points);
         }
 
         UnloadAllTextures();

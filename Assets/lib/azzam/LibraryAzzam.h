@@ -2,11 +2,11 @@
 #define LIBRARYAZZAM_H
 
 
-void NextLevel(Camera2D *camera, Player *player); // Deklarasi fungsi NextLevel()
+void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points); // Deklarasi fungsi NextLevel()
 
 #define MAX_PARTICLES 50  // Jumlah maksimal partikel efek
 
-void NextLevel(); // Deklarasi fungsi NextLevel()
+//void NextLevel(); // Deklarasi fungsi NextLevel()
 
 // Struct untuk partikel
 typedef struct {

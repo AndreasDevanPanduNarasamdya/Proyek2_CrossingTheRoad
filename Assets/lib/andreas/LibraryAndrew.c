@@ -2,27 +2,9 @@
 
 int margin = 20;
 
-void DefineArrayCord()
-{
-    // int x;
-    // int y;
-    Vector2 ScreenVector;
-    for (ScreenVector.x = 0; ScreenVector.x <= SCREEN_WIDTH; ++ScreenVector.x)
-    {
-        for (ScreenVector.y = 0; ScreenVector.y <= SCREEN_HEIGHT; ++ScreenVector.y)
-        {
-            CoordArr[(int)ScreenVector.x][(int)ScreenVector.y] = ScreenVector;
-        }
-    }
-}
 void RenderRoads()
 {
     DrawTextureEx(background, (Vector2){150, 0}, 0.0f, 0.25, WHITE);
-}
-
-void RenderCharacter(Texture2D *PlayerSprite, Player player)
-{
-    DrawTextureEx(*PlayerSprite, (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE}, 0.0f, 0.1f, WHITE);
 }
 
 void Renderchkpointtxt()
@@ -41,10 +23,27 @@ void CheckpointLogic()
     }
 }
 
-void RenderFlags()
+void RenderFlags(Checkpoint *First)
 {
-    DrawTextureEx(checkpointflag, (Vector2){500, 375}, 0.0f, 0.1, WHITE);
-    DrawTextureEx(checkpointflag, (Vector2){200, 1650}, 0.0f, 0.1, WHITE);
+    Checkpoint TempFlag = *First;
+    static int currentFrame = 0;
+    float timePerFrame = 0.1f; 
+    static float lastFrameTime = 0.0f;
+
+   // Ini harus di luar loop TempFlag
+    if (GetTime() - lastFrameTime >= timePerFrame) {
+    lastFrameTime = GetTime();
+    currentFrame = (currentFrame + 1) % 4; // Update frame animasi (0 - 3)
+    }
+
+    // Ini tetap jalan terus, untuk render semua flag
+
+    while (TempFlag != NULL)
+    {
+    DrawTextureEx(FlagAsset[currentFrame], (Vector2){TempFlag->x, TempFlag->y}, 0.0f, 0.1, WHITE);
+    TempFlag = TempFlag->Next;
+    }
+
 }
 
 void ResetTimer()
@@ -61,16 +60,112 @@ void ResetTimer()
     }
 }
 
-void RenderHealths()
+void RenderCharacter(Texture2D *PlayerSprite, Player player)
 {
-    DrawTextureEx(healthup, (Vector2){345, 548}, 0.0f, 0.07, WHITE);
-    DrawTextureEx(healthup, (Vector2){478, 1323}, 0.0f, 0.07, WHITE);
+    static float lastFrameTime = 0.0f;
+    float timePerFrame = 0.1f;  // 0.1s between each frame
+    static int drawStep = 0;
+    static Vector2 LastMovement = (Vector2){0, 0};
+
+    if (player.x > LastMovement.x)
+    {
+        Character.countdown = 6;
+        *PlayerSprite = Character.PlayerSideRightSprite;
+    }
+    else if (player.x < LastMovement.x)
+    {
+        Character.countdown = 6;
+        *PlayerSprite = Character.PlayerSideLeftSprite;
+    }
+    else if (player.y > LastMovement.y)
+    {
+        Character.countdown = 6;
+        *PlayerSprite = Character.PlayerFrontSprite;
+    }
+    else if (player.y < LastMovement.y)
+    {
+        Character.countdown = 6;
+        *PlayerSprite = Character.PlayerBackSprite;
+    }
+
+    LastMovement = (Vector2){player.x, player.y};
+
+    if (GetTime() - lastFrameTime >= timePerFrame)
+    {
+        lastFrameTime = GetTime();
+        if (Character.countdown > 0)
+        {
+            drawStep = (drawStep + 1) % 3;
+        }
+        else
+        {
+            drawStep = 0;
+        }
+        
+    }
+
+    switch (drawStep)
+    {
+        case 0:
+            DrawTextureEx(*PlayerSprite, (Vector2){player.x * CELL_SIZE, (player.y+2) * CELL_SIZE}, 0.0f, 0.1f, WHITE);
+            Character.countdown--;
+            break;
+        case 1:
+            DrawTextureEx(*PlayerSprite, (Vector2){player.x * CELL_SIZE, (player.y+1) * CELL_SIZE}, 0.0f, 0.1f, WHITE);
+            Character.countdown--;
+            break;
+        case 2:
+            DrawTextureEx(*PlayerSprite, (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE}, 0.0f, 0.1f, WHITE);
+            Character.countdown--;
+            break;
+    }
 }
 
-void RenderPoints()
+
+void RenderHealths(HealthHP *Health)
 {
-    DrawTextureEx(points, (Vector2){178, 548}, 0.0f, 0.07, WHITE);
-    DrawTextureEx(points, (Vector2){267, 1523}, 0.0f, 0.07, WHITE);
+    HealthHP TempHealth = *Health;
+    static int currentFrame = 0;
+    float timePerFrame = 0.1f; 
+    static float lastFrameTime = 0.0f;
+
+    if (GetTime() - lastFrameTime >= timePerFrame) {
+        lastFrameTime = GetTime();
+        currentFrame = (currentFrame + 1) % 6; 
+    }
+
+    while (TempHealth != NULL)
+    {
+        if (TempHealth->enabled == true)
+        {
+            DrawTextureEx(HealthAsset[currentFrame], (Vector2){TempHealth->x, TempHealth->y}, 0.0f, 0.1, WHITE);
+        }
+        TempHealth = TempHealth->Next;
+    }
+    //DrawTextureEx(healthup, (Vector2){345, 548}, 0.0f, 0.07, WHITE);
+    //DrawTextureEx(healthup, (Vector2){478, 1323}, 0.0f, 0.07, WHITE);
+}
+
+void RenderPoints(PointsXP *Points)
+{
+    PointsXP TempPoints = *Points;
+    static int currentFrame = 0;
+    float timePerFrame = 0.1f;
+    static float lastFrameTime = 0.0f;
+
+    if (GetTime() - lastFrameTime >= timePerFrame) {
+        lastFrameTime = GetTime();
+        currentFrame = (currentFrame + 1) % 6; 
+    }
+
+    while (TempPoints != NULL)
+    {
+        if (TempPoints->enabled == true)
+        {
+            DrawTextureEx(PointAsset[currentFrame], (Vector2){TempPoints->x, TempPoints->y}, 0.0f, 0.07, WHITE);
+        }
+        TempPoints = TempPoints->Next;
+    }
 }
 
 void RenderCars(int *numCars, Car cars[])
@@ -154,6 +249,26 @@ void LoadAllTextures()
     checkpointtxt = LoadTexture("Assets/sprite/checkpointtxt.png");
     healthup = LoadTexture("Assets/sprite/healthpowerup.png");
     points = LoadTexture("Assets/sprite/pointsup.png");
+    Character.PlayerFrontSprite = LoadTexture("Assets/sprite/chickenlittlefront.png");
+    Character.PlayerBackSprite = LoadTexture("Assets/sprite/chickenlittleback.png");
+    Character.PlayerSideLeftSprite = LoadTexture("Assets/sprite/chickenlittlesideleft.png");
+    Character.PlayerSideRightSprite = LoadTexture("Assets/sprite/chickenlittlesideright.png");
+    FlagAsset[0] = LoadTexture("Assets/sprite/FlagAnim/checkpointflagassprite1.png");
+    FlagAsset[1] = LoadTexture("Assets/sprite/FlagAnim/checkpointflagassprite2.png");
+    FlagAsset[2] = LoadTexture("Assets/sprite/FlagAnim/checkpointflagassprite3.png");
+    FlagAsset[3] = LoadTexture("Assets/sprite/FlagAnim/checkpointflagassprite4.png");
+    HealthAsset[0] = LoadTexture("Assets/sprite/HealthAnim/health1.png");
+    HealthAsset[1] = LoadTexture("Assets/sprite/HealthAnim/health2.png");
+    HealthAsset[2] = LoadTexture("Assets/sprite/HealthAnim/health3.png");
+    HealthAsset[3] = LoadTexture("Assets/sprite/HealthAnim/health4.png");
+    HealthAsset[4] = LoadTexture("Assets/sprite/HealthAnim/health5.png");
+    HealthAsset[5] = LoadTexture("Assets/sprite/HealthAnim/health6.png");
+    PointAsset[0] = LoadTexture("Assets/sprite/PointsAnim/pointsup1.png");
+    PointAsset[1] = LoadTexture("Assets/sprite/PointsAnim/pointsup2.png");
+    PointAsset[2] = LoadTexture("Assets/sprite/PointsAnim/pointsup3.png");
+    PointAsset[3] = LoadTexture("Assets/sprite/PointsAnim/pointsup4.png");
+    PointAsset[4] = LoadTexture("Assets/sprite/PointsAnim/pointsup5.png");
+    PointAsset[5] = LoadTexture("Assets/sprite/PointsAnim/pointsup6.png");
 }
 
 void RenderInstructions(Player player, char *coordText, int level)

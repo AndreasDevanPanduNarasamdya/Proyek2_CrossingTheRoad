@@ -116,29 +116,29 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
         TempPoints->pointgrid[151][29] = POINTS;
         TempPoints->pointgrid[21][55] = POINTS;
     }
-    while (TempCheck != NULL)
-    {
-        for (int i = 0; i < GRID_WIDTH; i++)
-        {
-            for (int j = 0; j < GRID_HEIGHT; j++)
-            {
-                if (TempCheck->chckpointgrid[j][i] == CHECKPOINT_LINE)
-                {
-                    for (int p = i - 5; p < i + 5; p++) 
-                    {
-                        for (int o = j - 5; o < j + 5; o++) 
-                        {
-                            if (p >= 0 && p < GRID_WIDTH && o >= 0 && o < GRID_HEIGHT) 
-                            {
-                                grid[o][p] = CHECKPOINT_LINE;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        TempCheck = TempCheck->Next;
-    }
+    // while (TempCheck != NULL)
+    // {
+    //     for (int i = 0; i < GRID_WIDTH; i++)
+    //     {
+    //         for (int j = 0; j < GRID_HEIGHT; j++)
+    //         {
+    //             if (TempCheck->chckpointgrid[j][i] == CHECKPOINT_LINE)
+    //             {
+    //                 for (int p = i - 5; p < i + 5; p++) 
+    //                 {
+    //                     for (int o = j - 5; o < j + 5; o++) 
+    //                     {
+    //                         if (p >= 0 && p < GRID_WIDTH && o >= 0 && o < GRID_HEIGHT) 
+    //                         {
+    //                             grid[o][p] = CHECKPOINT_LINE;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     TempCheck = TempCheck->Next;
+    // }
     while (TempHealth != NULL)
     {
         for (int i = 0; i < GRID_WIDTH; i++)
@@ -217,6 +217,9 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 
 void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 {
+    Checkpoint TempCheck = *Home;
+    HealthHP TempHealth = *Health;
+    PointsXP TempPoints = *Points;
 
     if (player->y % 50 == 0 && lastScorePosition != player->y && player->y < 200) 
     {
@@ -231,204 +234,45 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
         }
     }
 
-    if (grid[player->y][player->x] == CHECKPOINT_LINE)
+    while (TempCheck != NULL)
     {
-        passed = true;
-        checkpoint.x = player->x;
-        checkpoint.y = player->y;
-        player->score += 10 * comboMultiplier;
-
-        Checkpoint prev = NULL;
-        while (TempCheck != NULL)
+        if ((player->y > (TempCheck->middleY - TempCheck->rangeY) && player->y < (TempCheck->middleY + TempCheck->rangeY)) &&  (player->x > (TempCheck->middleX - TempCheck->rangeX) && player->x < (TempCheck->middleX + TempCheck->rangeX)))
         {
-            // Look for the checkpoint that "owns" this hitbox
-            for (int j = 0; j < GRID_HEIGHT; j++)
-            {
-                for (int i = 0; i < GRID_WIDTH; i++)
-                {
-                    if (TempCheck->chckpointgrid[j][i] == CHECKPOINT_LINE)
-                    {
-                        // Check if player is inside the 10x10 area of this checkpoint
-                        if (player->x >= i - 5 && player->x <= i + 5 &&
-                            player->y >= j - 5 && player->y <= j + 5)
-                        {
-                            // Convert entire hitbox area to ROAD
-                            for (int dx = -5; dx <= 5; dx++)
-                            {
-                                for (int dy = -5; dy <= 5; dy++)
-                                {
-                                    int nx = i + dx;
-                                    int ny = j + dy;
-                                    if (nx >= 0 && nx < GRID_WIDTH && ny >= 0 && ny < GRID_HEIGHT)
-                                    {
-                                        grid[ny][nx] = ROAD;
-                                    }
-                                }
-                            }                            
-                            // Delete the checkpoint node
-                            if (TempCheck->Next != NULL)
-                            {
-                                if (TempCheck->Before != NULL)
-                                {
-                                    TempCheck->Before->Next = TempCheck->Next;
-                                    TempCheck->Next->Before = TempCheck->Before;
-                                }
-                                else
-                                {
-                                    TempCheck->Next->Before = NULL;
-                                }
-                            }
-                            else
-                            {
-                                if (TempCheck->Before != NULL)
-                                {
-                                    TempCheck->Before->Next = NULL;
-                                }
-                            }
-                            // if (prev == NULL)
-                            //     *Home = TempCheck->Next;
-                            // else
-                            //     prev->Next = TempCheck->Next;
-
-                            // free(TempCheck);
-                            return; // Done, exit early
-                        }
-                    }
-                }
-            }
-
+            passed = true;
+            checkpoint.x = player->x;
+            checkpoint.y = player->y;
+            player->score += 10 * comboMultiplier;
+            grid[player->y][player->x] = ROAD;
+            Checkpoint prev = NULL;
+            // while (TempCheck != NULL)
+            // {
+            //     if (TempCheck->chckpointgrid[player->y][player->x] != grid[player->y][player->x])
+            //     {
+            //         if (prev == NULL)
+            //         {
+            //             // Deleting the head node
+            //             *Home = TempCheck->Next;
+            //         }
+            //         else
+            //         {
+            //             prev->Next = TempCheck->Next;
+            //         }
+            //         free(TempCheck);
+            //         break;
+            //     }
             prev = TempCheck;
+            free(prev);
             TempCheck = TempCheck->Next;
         }
     }
-
-    else if (grid[player->y][player->x] == HEALTH_UP)
+    if (grid[player->y][player->x] == HEALTH_UP)
     {
-        HealthHP prev = NULL;
-
-        while (TempHealth != NULL)
-        {
-            for (int j = 0; j < GRID_HEIGHT; j++)
-            {
-                for (int i = 0; i < GRID_WIDTH; i++)
-                {
-                    if (TempHealth->healthgrid[j][i] == HEALTH_UP)
-                    {
-                        // Check if player is inside the 10x10 hitbox
-                        if (player->x >= i - 5 && player->x <= i + 5 &&
-                            player->y >= j - 5 && player->y <= j + 5)
-                        {
-                            TempHealth->enabled = false;
-                            player->lives++;
-
-                            // Convert entire hitbox area to ROAD
-                            for (int dx = -5; dx <= 5; dx++)
-                            {
-                                for (int dy = -5; dy <= 5; dy++)
-                                {
-                                    int nx = i + dx;
-                                    int ny = j + dy;
-                                    if (nx >= 0 && nx < GRID_WIDTH && ny >= 0 && ny < GRID_HEIGHT)
-                                    {
-                                        grid[ny][nx] = ROAD;
-                                    }
-                                }
-                            }
-
-                            // Unlink the node properly
-                            // if (TempHealth->Next != NULL)
-                            // {
-                            //     if (TempHealth->Before != NULL)
-                            //     {
-                            //         TempHealth->Before->Next = TempHealth->Next;
-                            //         TempHealth->Next->Before = TempHealth->Before;
-                            //     }
-                            //     else
-                            //     {
-                            //         TempHealth->Next->Before = NULL;
-                            //     }
-                            // }
-                            // else
-                            // {
-                            //     if (TempHealth->Before != NULL)
-                            //     {
-                            //         TempHealth->Before->Next = NULL;
-                            //     }
-                            // }
-                            // free(TempHealth);
-                        }
-                    }
-                }
-            }
-
-            prev = TempHealth;
-            TempHealth = TempHealth->Next;
-        }
+        ++player->lives;
         grid[player->y][player->x] = ROAD;
     }
-
     else if (grid[player->y][player->x] == POINTS)
     {
-        PointsXP prev = NULL;
-        while (TempPoints != NULL)
-        {
-            for (int j = 0; j < GRID_HEIGHT; j++)
-            {
-                for (int i = 0; i < GRID_WIDTH; i++)
-                {
-                    if (TempPoints->pointgrid[j][i] == POINTS)
-                    {
-                        // Check if player is inside the 10x10 hitbox
-                        if (player->x >= i - 5 && player->x <= i + 5 &&
-                            player->y >= j - 5 && player->y <= j + 5)
-                        {
-                            TempPoints->enabled = false;
-                            player->score += 10 * comboMultiplier; 
-
-                            // Convert entire hitbox area to ROAD
-                            for (int dx = -5; dx <= 5; dx++)
-                            {
-                                for (int dy = -5; dy <= 5; dy++)
-                                {
-                                    int nx = i + dx;
-                                    int ny = j + dy;
-                                    if (nx >= 0 && nx < GRID_WIDTH && ny >= 0 && ny < GRID_HEIGHT)
-                                    {
-                                        grid[ny][nx] = ROAD;
-                                    }
-                                }
-                            }
-
-                            // Unlink the node properly
-                            if (TempPoints->Next != NULL)
-                            {
-                                if (TempPoints->Before != NULL)
-                                {
-                                    TempPoints->Before->Next = TempPoints->Next;
-                                    TempPoints->Next->Before = TempPoints->Before;
-                                }
-                                else
-                                {
-                                    TempPoints->Next->Before = NULL;
-                                }
-                            }
-                            else
-                            {
-                                if (TempPoints->Before != NULL)
-                                {
-                                    TempPoints->Before->Next = NULL;
-                                }
-                            }
-                            free(TempPoints);
-                            return; // Exit after deletion
-                        }
-                    }
-                }
-            }
-
-            prev = TempPoints;
-            TempPoints = TempPoints->Next;
-        }
+        player->score += 10 * comboMultiplier; 
         grid[player->y][player->x] = ROAD;
     }
 }
@@ -443,12 +287,20 @@ void InitiateCheckpointlist(Checkpoint *First)
         (*First)->enabled = true;
         (*First)->x = 500;
         (*First)->y = 375;
+        (*First)->rangeX = 5;
+        (*First)->rangeY = 5;
+        (*First)->middleX = 23;
+        (*First)->middleY = 166;
         (*First)->Before = NULL;
 
         (*First)->Next = (Checkpoint)malloc(sizeof(struct LinkedListCheckPoint));
         (*First)->Next->enabled = true;
         (*First)->Next->x = 200;
         (*First)->Next->y = 1650;
+        (*First)->Next->rangeX = 5;
+        (*First)->Next->rangeY = 5;
+        (*First)->Next->middleX = 53;
+        (*First)->Next->middleY = 39;
         (*First)->Next->Next = NULL;
         (*First)->Next->Before = (*First);
     }
