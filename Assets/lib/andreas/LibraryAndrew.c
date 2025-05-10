@@ -23,6 +23,15 @@ void CheckpointLogic()
     }
 }
 
+// void HealthLogic(HealthHP *Health)
+// {
+//     if (player.lives > lastlives)
+//     {
+//         HealthHP TempHealth = *Health;
+//         while (TempHealth != NULL && TempHealth->healthgrid)
+//     }
+// }
+
 void RenderFlags(Checkpoint *First)
 {
     Checkpoint TempFlag = *First;
@@ -134,13 +143,17 @@ void RenderHealths(HealthHP *Health)
         currentFrame = (currentFrame + 1) % 6; 
     }
 
-    while (TempHealth != NULL)
+    HealthHP drawPtr = *Health;
+    while (drawPtr != NULL)
     {
-        if (TempHealth->enabled == true)
+        if (drawPtr->enabled == true)
         {
-            DrawTextureEx(HealthAsset[currentFrame], (Vector2){TempHealth->x, TempHealth->y}, 0.0f, 0.1, WHITE);
+            DrawTextureEx(HealthAsset[currentFrame],
+                (Vector2){drawPtr->x, drawPtr->y},
+                0.0f, 0.1f, WHITE);
         }
-        TempHealth = TempHealth->Next;
+
+        drawPtr = drawPtr->Next;
     }
     //DrawTextureEx(healthup, (Vector2){345, 548}, 0.0f, 0.07, WHITE);
     //DrawTextureEx(healthup, (Vector2){478, 1323}, 0.0f, 0.07, WHITE);
@@ -158,13 +171,14 @@ void RenderPoints(PointsXP *Points)
         currentFrame = (currentFrame + 1) % 6; 
     }
 
-    while (TempPoints != NULL)
+    PointsXP draw = *Points;
+    while (draw != NULL)
     {
-        if (TempPoints->enabled == true)
+        if (draw->enabled == true)
         {
-            DrawTextureEx(PointAsset[currentFrame], (Vector2){TempPoints->x, TempPoints->y}, 0.0f, 0.07, WHITE);
+            DrawTextureEx(PointAsset[currentFrame], (Vector2){draw->x, draw->y}, 0.0f, 0.07, WHITE);
         }
-        TempPoints = TempPoints->Next;
+        draw = draw->Next;
     }
 }
 

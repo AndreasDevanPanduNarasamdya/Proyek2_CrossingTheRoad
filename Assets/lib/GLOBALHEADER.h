@@ -21,11 +21,11 @@
 #define CAMERA_DEATH_DISTANCE 500
 #define putihs 4
 #define check 4
-#define POINTS 5
 
+#define POINTS 6
 #define ROAD 0
 #define LANE_MARK 1
-#define CHECKPOINT_LINE 2
+#define CHECKPOINT_LINE 5
 #define HEALTH_UP 4
 #define PLAYER 2
 #define CAR 3

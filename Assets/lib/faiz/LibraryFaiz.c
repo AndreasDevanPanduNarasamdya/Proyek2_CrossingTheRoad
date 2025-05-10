@@ -111,10 +111,10 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
         TempCheck->Next->chckpointgrid[39][53] = CHECKPOINT_LINE;
 
         TempHealth->healthgrid[131][51] = HEALTH_UP;
-        TempHealth->healthgrid[53][37] = HEALTH_UP;
+        TempHealth->Next->healthgrid[53][37] = HEALTH_UP;
 
         TempPoints->pointgrid[151][29] = POINTS;
-        TempPoints->pointgrid[21][55] = POINTS;
+        TempPoints->Next->pointgrid[21][76] = POINTS;
     }
     while (TempCheck != NULL)
     {
@@ -160,6 +160,7 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
                 }
             }
         }
+        TempHealth->enabled = true;
         TempHealth = TempHealth->Next;
     }
     while (TempPoints != NULL)
@@ -217,6 +218,9 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 
 void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 {
+    Checkpoint TempCheck = *Home;
+    HealthHP TempHealth = *Health;
+    PointsXP TempPoints = *Points;
 
     if (player->y % 50 == 0 && lastScorePosition != player->y && player->y < 200) 
     {
@@ -304,131 +308,92 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
 
     else if (grid[player->y][player->x] == HEALTH_UP)
     {
-        HealthHP prev = NULL;
+        HealthHP current = *Health;
 
-        while (TempHealth != NULL)
+        while (current != NULL)
         {
-            for (int j = 0; j < GRID_HEIGHT; j++)
+            if (current->enabled == true) // Only check active healths
             {
-                for (int i = 0; i < GRID_WIDTH; i++)
+                // Check if player is inside the 10x10 hitbox of THIS health pickup
+                int centerX = current->x / CELL_SIZE; // Convert pixel pos to grid pos
+                int centerY = current->y / CELL_SIZE;
+
+                if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
+                    player->y >= centerY - 5 && player->y <= centerY + 5)
                 {
-                    if (TempHealth->healthgrid[j][i] == HEALTH_UP)
+                    current->enabled = false;
+                    player->lives++;
+
+                    // Set entire 10x10 area around this pickup to ROAD
+                    for (int dx = -5; dx <= 5; dx++)
                     {
-                        // Check if player is inside the 10x10 hitbox
-                        if (player->x >= i - 5 && player->x <= i + 5 &&
-                            player->y >= j - 5 && player->y <= j + 5)
+                        for (int dy = -5; dy <= 5; dy++)
                         {
-                            TempHealth->enabled = false;
-                            player->lives++;
+                            int gx = centerX + dx;
+                            int gy = centerY + dy;
 
-                            // Convert entire hitbox area to ROAD
-                            for (int dx = -5; dx <= 5; dx++)
+                            if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
                             {
-                                for (int dy = -5; dy <= 5; dy++)
-                                {
-                                    int nx = i + dx;
-                                    int ny = j + dy;
-                                    if (nx >= 0 && nx < GRID_WIDTH && ny >= 0 && ny < GRID_HEIGHT)
-                                    {
-                                        grid[ny][nx] = ROAD;
-                                    }
-                                }
+                                grid[gy][gx] = ROAD;
                             }
-
-                            // Unlink the node properly
-                            // if (TempHealth->Next != NULL)
-                            // {
-                            //     if (TempHealth->Before != NULL)
-                            //     {
-                            //         TempHealth->Before->Next = TempHealth->Next;
-                            //         TempHealth->Next->Before = TempHealth->Before;
-                            //     }
-                            //     else
-                            //     {
-                            //         TempHealth->Next->Before = NULL;
-                            //     }
-                            // }
-                            // else
-                            // {
-                            //     if (TempHealth->Before != NULL)
-                            //     {
-                            //         TempHealth->Before->Next = NULL;
-                            //     }
-                            // }
-                            // free(TempHealth);
                         }
                     }
+
+                    // Optional: break early, only one health per step
+                    break;
                 }
             }
 
-            prev = TempHealth;
-            TempHealth = TempHealth->Next;
+            current = current->Next;
         }
+
+        // Clean up the player’s current grid tile
         grid[player->y][player->x] = ROAD;
     }
 
+
     else if (grid[player->y][player->x] == POINTS)
     {
-        PointsXP prev = NULL;
-        while (TempPoints != NULL)
+        PointsXP current = *Points;
+
+        while (current != NULL)
         {
-            for (int j = 0; j < GRID_HEIGHT; j++)
+            if (current->enabled == true) // Only check active healths
             {
-                for (int i = 0; i < GRID_WIDTH; i++)
+                // Check if player is inside the 10x10 hitbox of THIS health pickup
+                int centerX = current->x / CELL_SIZE; // Convert pixel pos to grid pos
+                int centerY = current->y / CELL_SIZE;
+
+                if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
+                    player->y >= centerY - 5 && player->y <= centerY + 5)
                 {
-                    if (TempPoints->pointgrid[j][i] == POINTS)
+                    current->enabled = false;
+                    player->score += 10 * comboMultiplier;
+
+                    // Set entire 10x10 area around this pickup to ROAD
+                    for (int dx = -5; dx <= 5; dx++)
                     {
-                        // Check if player is inside the 10x10 hitbox
-                        if (player->x >= i - 5 && player->x <= i + 5 &&
-                            player->y >= j - 5 && player->y <= j + 5)
+                        for (int dy = -5; dy <= 5; dy++)
                         {
-                            TempPoints->enabled = false;
-                            player->score += 10 * comboMultiplier; 
+                            int gx = centerX + dx;
+                            int gy = centerY + dy;
 
-                            // Convert entire hitbox area to ROAD
-                            for (int dx = -5; dx <= 5; dx++)
+                            if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
                             {
-                                for (int dy = -5; dy <= 5; dy++)
-                                {
-                                    int nx = i + dx;
-                                    int ny = j + dy;
-                                    if (nx >= 0 && nx < GRID_WIDTH && ny >= 0 && ny < GRID_HEIGHT)
-                                    {
-                                        grid[ny][nx] = ROAD;
-                                    }
-                                }
+                                grid[gy][gx] = ROAD;
                             }
-
-                            // Unlink the node properly
-                            if (TempPoints->Next != NULL)
-                            {
-                                if (TempPoints->Before != NULL)
-                                {
-                                    TempPoints->Before->Next = TempPoints->Next;
-                                    TempPoints->Next->Before = TempPoints->Before;
-                                }
-                                else
-                                {
-                                    TempPoints->Next->Before = NULL;
-                                }
-                            }
-                            else
-                            {
-                                if (TempPoints->Before != NULL)
-                                {
-                                    TempPoints->Before->Next = NULL;
-                                }
-                            }
-                            free(TempPoints);
-                            return; // Exit after deletion
                         }
                     }
+
+                    // Optional: break early, only one health per step
+                    break;
                 }
             }
 
-            prev = TempPoints;
-            TempPoints = TempPoints->Next;
+            current = current->Next;
         }
+
+        // Clean up the player’s current grid tile
         grid[player->y][player->x] = ROAD;
     }
 }
@@ -490,7 +455,7 @@ void InitiatePointsList(PointsXP *Points)
 
 //             else if ((i == 131 && j == 51) || (i == 53 && j == 37))
 //             {
-//                 grid[i][j] = HEALTH_UP; // Garis biru setiap 50 baris
+//                 grid[POINTS; // Garis biru setiap 50 baris
 //             }
 //             else if ((i == 151 && j == 29) || (i == 21 && j == 55))
 //             {
@@ -516,6 +481,7 @@ void InitiatePointsList(PointsXP *Points)
         (*Points)->x = 178;
         (*Points)->y = 548;
         (*Points)->Before = NULL;
+
         (*Points)->Next = (PointsXP)malloc(sizeof(struct CoinPoin));
         (*Points)->Next->enabled = true;
         (*Points)->Next->x = 267;

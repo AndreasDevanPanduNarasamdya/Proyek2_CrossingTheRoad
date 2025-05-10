@@ -8,6 +8,7 @@ bool showCheckpointText = false;
 int checkpointTimer = 0;
 int timer = 2000;
 int lastscore;
+int lastlives;
 
 Texture2D FlagAsset[4], HealthAsset[6], PointAsset[6];
 
