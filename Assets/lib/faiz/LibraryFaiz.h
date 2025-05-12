@@ -21,6 +21,9 @@ bool gameStarted = false;
 
 int grid[GRID_HEIGHT][GRID_WIDTH];
 
+address Alokasi(Car carData);
+void CreateEmpty(Carlist *L);
+void InsertFirst(Carlist *L, Car carData);
 void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points);
 void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points);
 void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points);

@@ -79,4 +79,19 @@ typedef struct vector {
     int x, y;
 } vector;
 
+typedef Car infotype; 
+typedef struct tElmtList *address;
+typedef struct tElmtList {
+    infotype info;     
+    address next;
+} ElmtList;
+
+typedef struct {
+    address First;
+} List;
+
+typedef List Carlist;
+
+Carlist carList;
+
 #endif

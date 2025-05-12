@@ -7,6 +7,27 @@
 #include "../GLOBALHEADER.h"
 #include "../azzam/LibraryAzzam.h"
 
+void CreateEmpty(Carlist *L) {
+    L->First = NULL;
+}
+
+address Alokasi(Car carData) {
+    address P = (address)malloc(sizeof(ElmtList));
+    if (P != NULL) {
+        P->info = carData;
+        P->next = NULL;
+    }
+    return P;
+}
+
+void InsertFirst(Carlist *L, Car carData) {
+    address P = Alokasi(carData);
+    if (P != NULL) {
+        P->next = L->First;
+        L->First = P;
+    }
+}
+
 void DrawCenteredText(const char *text, int fontSize, Color color)
 {
     int textWidth = MeasureText(text, fontSize); // Mengukur lebar teks
@@ -25,7 +46,7 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     sprintf(coordText, "Coordinate: %2d,%2d", player.x, player.y);
     RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    RenderCars(&numCars, cars);
+    RenderCars(&carList);
 
     RenderFlags(Home);
 
@@ -58,30 +79,16 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     EndDrawing();
 } // 101, 59
 
-void UpdateCarMovement()
-{
+void UpdateCarMovement() {
     frameCounter++;
-    if (frameCounter >= CAR_MOVE_DELAY)
-    {
-        for (int i = 0; i < numCars; i++)
-        {
-            int newX = cars[i].x + cars[i].direction * cars[i].speed;
-            if (newX < 0)
-            {
-                newX = GRID_WIDTH - 1;
-            }
-            if (newX >= GRID_WIDTH)
-            {
-                newX = 0;
-            }
-            grid[cars[i].y][cars[i].x] = ROAD;
-            cars[i].x = newX;
-            grid[cars[i].y][cars[i].x] = CAR;
+    if (frameCounter >= CAR_MOVE_DELAY) {
+        address curr = carList.First;
+        while (curr != NULL) {
+            Car *c = &curr->info;
 
-            // Hitung jarak antara mobil dan pemain
-            Vector2 playerPos = {player.x * CELL_SIZE, player.y * CELL_SIZE};
-            Vector2 carPos = {cars[i].x * CELL_SIZE, cars[i].y * CELL_SIZE};
-            float distance = CalculateDistance(playerPos, carPos);
+            int newX = c->x + c->direction * c->speed;
+            if (newX < 0) newX = GRID_WIDTH - 1;
+            if (newX >= GRID_WIDTH) newX = 0;
 
             // Atur volume berdasarkan jarak (semakin dekat, semakin keras)
             float maxDistance = 500.0f;
@@ -94,7 +101,9 @@ void UpdateCarMovement()
             {
                 PlaySound(carSound);
             }
+            curr = curr->next;
         }
+
         frameCounter = 0;
     }
 }
@@ -523,15 +532,16 @@ void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 
     InitGrid(Home, Health, Points); // Pastikan grid diinisialisasi sebelum menempatkan mobil
 
-    for (int i = 0; i < numCars; i++)
-    {
-        int col;
+    CreateEmpty(&carList); // Inisialisasi list mobil
 
-        col = rand() % (GRID_WIDTH - GRID_START);
+    for (int i = 0; i < NUM_CARS_START; i++) {
+        int col = rand() % (GRID_WIDTH - GRID_START);
+        int row = array[i];
         int direction = directray[i];
+        Car newCar = {col, row, carSpeed, direction};
+        newCar.type = rand() % 4;
 
-        cars[i] = (Car){col, array[i], carSpeed, direction};
-        cars[i].type = (rand() % 4), (rand() % 4), (rand() % 4); // Pilih jenis mobil secara acak
+        InsertFirst(&carList, newCar);
     }
 
     camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
@@ -548,52 +558,30 @@ void ResetCombo()
     comboStreak = 0;
 }
 
-void ResetPlayerToCheckpoint(Camera2D *camera)
-{
-    player.x = checkpoint.x;
-    player.y = checkpoint.y;
-    camera->target.y = checkpoint.y * CELL_SIZE;
-}
+void CheckCollision() {
+    address curr = carList.First;
+    while (curr != NULL) {
+        Car *c = &curr->info;
 
-
-void CheckCollision(Camera2D *camera)
-{
-    for (int i = 0; i < numCars; i++)
-    {
-        if (cars[i].direction == 1)
-        {
-            if (((player.x <= cars[i].x + 7) && (player.x >= cars[i].x - 2.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
-            {
-                PlaySound(nabrak);
-
-                player.x = checkpoint.x;
-                player.y = checkpoint.y;
-                player.lives--;
-                ResetPlayerToCheckpoint(camera);
-                if (player.lives <= 0)
-                {
-                    kalah = true;
-                }
-                break;
-            }
+        bool collision = false;
+        if (c->direction == 1){
+            collision = ((player.x <= c->x + 7) && (player.x >= c->x - 2.3)) &&
+                        ((player.y <= c->y + 2.7) && (player.y >= c->y - 2));
+        } else {
+            collision = ((player.x <= c->x - 3) && (player.x >= c->x - 9.3)) &&
+                        ((player.y <= c->y + 2.7) && (player.y >= c->y - 2));
         }
-        else
-        {
-            if (((player.x <= cars[i].x - 3) && (player.x >= cars[i].x - 9.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
-            {
-                PlaySound(nabrak);
 
-                player.x = checkpoint.x;
-                player.y = checkpoint.y;
-                player.lives--;
-                ResetPlayerToCheckpoint(camera);
-                if (player.lives <= 0)
-                {
-                    kalah = true;
-                }
-                break;
-            }
+        if (collision) {
+            player.x = checkpoint.x;
+            player.y = checkpoint.y;
+            player.lives--;
+            ResetCombo();
+            if (player.lives <= 0) kalah = true;
+            break;
         }
+
+        curr = curr->next;
     }
 }
 
@@ -642,6 +630,7 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
             movement[3] = false;
         }
 
+        if (player.y>=GRID_HEIGHT)player.y = GRID_HEIGHT-1;
         checkposition(&player, Home, Health, Points);
         CheckCollision(camera);
     }
