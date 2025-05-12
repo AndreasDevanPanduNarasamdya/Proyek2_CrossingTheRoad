@@ -198,7 +198,7 @@ void InitGame()
     player.lives = MAX_LIVES;  
     numCars = NUM_CARS_START; 
     carSpeed = CAR_SPEED_START;  
-    level = 1;  
+    
     
 
     // **Reset posisi awal pemain**
