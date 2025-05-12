@@ -90,6 +90,10 @@ void UpdateCarMovement() {
             if (newX < 0) newX = GRID_WIDTH - 1;
             if (newX >= GRID_WIDTH) newX = 0;
 
+            grid[c->y][c->x] = ROAD;
+            c->x = newX;
+            grid[c->y][c->x] = CAR;
+
             Vector2 playerPos = {player.x * CELL_SIZE, player.y * CELL_SIZE};
             Vector2 carPos = {c->x * CELL_SIZE, c->y * CELL_SIZE};
             float distance = CalculateDistance(playerPos, carPos);
