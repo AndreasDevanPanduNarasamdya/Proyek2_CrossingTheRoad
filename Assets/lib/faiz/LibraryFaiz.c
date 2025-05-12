@@ -79,7 +79,7 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     EndDrawing();
 } // 101, 59
 
-void UpdateCarMovement() {
+void UpdateCarMovement(Vector2 playerPosition) {
     frameCounter++;
     if (frameCounter >= CAR_MOVE_DELAY) {
         address curr = carList.First;
@@ -90,17 +90,19 @@ void UpdateCarMovement() {
             if (newX < 0) newX = GRID_WIDTH - 1;
             if (newX >= GRID_WIDTH) newX = 0;
 
-            // Atur volume berdasarkan jarak (semakin dekat, semakin keras)
+            Vector2 carPosition = { c->x, c->y };
+            float distance = CalculateDistance(playerPosition, carPosition);
+
             float maxDistance = 500.0f;
             float volume = 1.0f - (distance / maxDistance);
             if (volume < 0.0f)
                 volume = 0.0f;
             SetSoundVolume(carSound, volume);
 
-            if (!IsSoundPlaying(carSound))
-            {
+            if (!IsSoundPlaying(carSound)) {
                 PlaySound(carSound);
             }
+
             curr = curr->next;
         }
 
@@ -228,8 +230,7 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 {
     Checkpoint TempCheck = *Home;
-    HealthHP TempHealth = *Health;
-    PointsXP TempPoints = *Points;
+  
 
     if (player->y % 50 == 0 && lastScorePosition != player->y && player->y < 200) 
     {
@@ -251,7 +252,6 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
         checkpoint.y = player->y;
         player->score += 10 * comboMultiplier;
 
-        Checkpoint prev = NULL;
         while (TempCheck != NULL)
         {
             // Look for the checkpoint that "owns" this hitbox
@@ -558,7 +558,7 @@ void ResetCombo()
     comboStreak = 0;
 }
 
-void CheckCollision() {
+void CheckCollision(Camera2D *camera) {
     address curr = carList.First;
     while (curr != NULL) {
         Car *c = &curr->info;
@@ -598,7 +598,7 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
     }
     
     if (!PermainanBerakhir) {
-        UpdateCarMovement();
+        UpdateCarMovement(Vector2 playerPosition);
 
         if (IsKeyPressed(KEY_UP))
             movement[0] = true;

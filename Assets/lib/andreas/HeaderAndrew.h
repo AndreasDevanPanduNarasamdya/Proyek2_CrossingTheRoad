@@ -32,7 +32,7 @@ void RenderFlags(Checkpoint *First);
 void ResetTimer();
 void RenderHealths(HealthHP *Health);
 void RenderPoints(PointsXP *Points);
-void RenderCars(int *numCars, Car cars[]);
+void RenderCars(Carlist *carList);
 void UnloadAllTextures();
 void LoadAllTextures();
 void RenderInstructions(Player player, char *coordText, int level);

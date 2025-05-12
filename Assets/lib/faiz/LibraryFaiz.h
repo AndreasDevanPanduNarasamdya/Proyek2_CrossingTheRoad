@@ -29,7 +29,7 @@ void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points);
 void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points);
 void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points);
 void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points);
-void UpdateCarMovement();
+void UpdateCarMovement(Vector2 playerPosition);
 void ResetPlayerToCheckpoint(Camera2D *camera);
 void CheckCollision(Camera2D *camera);
 void ResetCombo();
