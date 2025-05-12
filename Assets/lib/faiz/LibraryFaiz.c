@@ -522,6 +522,7 @@ void CheckCollision(Camera2D *camera) {
             player.x = checkpoint.x;
             player.y = checkpoint.y;
             player.lives--;
+            PlaySound(nabrak);
             ResetCombo();
             if (player.lives <= 0) kalah = true;
             break;
