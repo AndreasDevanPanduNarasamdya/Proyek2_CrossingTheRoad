@@ -79,7 +79,7 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     EndDrawing();
 } // 101, 59
 
-void UpdateCarMovement(Vector2 playerPosition) {
+void UpdateCarMovement() {
     frameCounter++;
     if (frameCounter >= CAR_MOVE_DELAY) {
         address curr = carList.First;
@@ -90,8 +90,9 @@ void UpdateCarMovement(Vector2 playerPosition) {
             if (newX < 0) newX = GRID_WIDTH - 1;
             if (newX >= GRID_WIDTH) newX = 0;
 
-            Vector2 carPosition = { c->x, c->y };
-            float distance = CalculateDistance(playerPosition, carPosition);
+            Vector2 playerPos = {player.x * CELL_SIZE, player.y * CELL_SIZE};
+            Vector2 carPos = {c->x * CELL_SIZE, c->y * CELL_SIZE};
+            float distance = CalculateDistance(playerPos, carPos);
 
             float maxDistance = 500.0f;
             float volume = 1.0f - (distance / maxDistance);
@@ -197,40 +198,12 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
         }
         TempPoints = TempPoints->Next;
     }
-    // for (int i = 0; i < GRID_HEIGHT; i++)
-    // {
-    //     for (int j = 0; j < GRID_WIDTH; j++)
-    //     {
-    //         if ((i == 166 && j == 23) || (i == 39 && j == 53))
-    //         {
-    //             grid[i][j] = CHECKPOINT_LINE; // Garis biru setiap 50 baris
-    //         } // else if (i % 8 == 0) {
-    //           // grid[i][j] = LANE_MARK; // Garis putih tiap 8 baris
-
-    //         else if ((i == 131 && j == 51) || (i == 53 && j == 37))
-    //         {
-    //             grid[i][j] = HEALTH_UP; // Garis biru setiap 50 baris
-    //         }
-    //         else if ((i == 151 && j == 29) || (i == 21 && j == 55))
-    //         {
-    //             grid[i][j] = POINTS;
-    //         }
-    //         else
-    //         {
-    //             grid[i][j] = ROAD; // Jalan normal
-    //         }
-    //         // grid [209][j] = LANE_MARK;
-    //         // grid [203][j] = LANE_MARK;
-    //         // grid [199][j] = LANE_MARK;
-    //         // grid [187][j] = LANE_MARK;
-    //     }
-    // }
 }
 
 void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 {
     Checkpoint TempCheck = *Home;
-  
+    Checkpoint prev = NULL;
 
     if (player->y % 50 == 0 && lastScorePosition != player->y && player->y < 200) 
     {
@@ -450,37 +423,6 @@ void InitiateHealthList(HealthHP *Health)
 
 void InitiatePointsList(PointsXP *Points)
 {
-//     void InitGrid()
-// {
-//     for (int i = 0; i < GRID_HEIGHT; i++)
-//     {
-//         for (int j = 0; j < GRID_WIDTH; j++)
-//         {
-//             if ((i == 166 && j == 23) || (i == 39 && j == 53))
-//             {
-//                 grid[i][j] = CHECKPOINT_LINE; // Garis biru setiap 50 baris
-//             } // else if (i % 8 == 0) {
-//               // grid[i][j] = LANE_MARK; // Garis putih tiap 8 baris
-
-//             else if ((i == 131 && j == 51) || (i == 53 && j == 37))
-//             {
-//                 grid[POINTS; // Garis biru setiap 50 baris
-//             }
-//             else if ((i == 151 && j == 29) || (i == 21 && j == 55))
-//             {
-//                 grid[i][j] = POINTS;
-//             }
-//             else
-//             {
-//                 grid[i][j] = ROAD; // Jalan normal
-//             }
-//             // grid [209][j] = LANE_MARK;
-//             // grid [203][j] = LANE_MARK;
-//             // grid [199][j] = LANE_MARK;
-//             // grid [187][j] = LANE_MARK;
-//         }
-//     }
-// }
     *Points = NULL;
 
     if (level == 1)
@@ -598,7 +540,7 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
     }
     
     if (!PermainanBerakhir) {
-        UpdateCarMovement(Vector2 playerPosition);
+        UpdateCarMovement();
 
         if (IsKeyPressed(KEY_UP))
             movement[0] = true;
