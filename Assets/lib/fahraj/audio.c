@@ -7,7 +7,6 @@ void LoadAllSounds() {
     menuMoveSound = LoadSound("Assets/sound/moveChar.wav");
     menuBacksound = LoadMusicStream("Assets/sound/menusound.wav"); 
     carSound = LoadSound("Assets/sound/car2.wav"); 
-    moveCharSound = LoadSound("Assets/sound/moveChar.wav");
     backgroundMusic1 = LoadMusicStream("Assets/sound/backsound3.wav"); 
     nabrak = LoadSound("Assets/sound/nabrak.wav");
     lose = LoadSound("Assets/sound/gameover.wav");

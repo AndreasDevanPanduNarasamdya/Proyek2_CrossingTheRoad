@@ -69,6 +69,7 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
 
     if (PermainanBerakhir)
     {
+        StopBacksound1();
         if (!kalah)
         {
             DrawCenteredText("MENANG", 40, RED);
@@ -234,6 +235,7 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
     if (grid[player->y][player->x] == CHECKPOINT_LINE)
     {
         passed = true;
+        PlayCheckpointSound();
         checkpoint.x = player->x;
         checkpoint.y = player->y;
         player->score += 10 * comboMultiplier;
@@ -304,7 +306,7 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
     else if (grid[player->y][player->x] == HEALTH_UP)
     {
         HealthHP current = *Health;
-
+        PlayHealthUpSound();
         while (current != NULL)
         {
             if (current->enabled == true) // Only check active healths
@@ -349,7 +351,7 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
     else if (grid[player->y][player->x] == POINTS)
     {
         PointsXP current = *Points;
-
+        PlayPointsSound();
         while (current != NULL)
         {
             if (current->enabled == true) // Only check active healths
@@ -456,6 +458,7 @@ void InitiatePointsList(PointsXP *Points)
 void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 {
     srand(time(NULL));
+    PlayBackgroundMusic1();
 
     kalah = false;
     PermainanBerakhir = false;
@@ -536,6 +539,7 @@ void CheckCollision(Camera2D *camera)
             ResetCombo();
             if (player.lives <= 0)
                 kalah = true;
+                SoundGameover();
             break;
         }
 
