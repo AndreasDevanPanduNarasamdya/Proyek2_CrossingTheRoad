@@ -4,7 +4,7 @@ int margin = 20;
 
 void RenderRoads()
 {
-    DrawTextureEx(background, (Vector2){150, 0}, 0.0f, 0.25, WHITE);
+    DrawTextureEx(newmap, (Vector2){150, 0}, 0.0f, 0.25, WHITE);
 }
 
 void Renderchkpointtxt()
@@ -243,7 +243,8 @@ void LoadAllTextures()
     TruckTexture = LoadTexture("Assets/sprite/gruppesechs_van.png");
     VanTexture = LoadTexture("Assets/sprite/vanbankk.png");
     Mustang = LoadTexture("Assets/sprite/mustang.png");
-    PlayerSprite = LoadTexture("Assets/sprite/npcmoment.png");
+    PlayerSprite = LoadTexture("Assets/sprite/chickenlittlesideright.png");
+    newmap = LoadTexture("Assets/sprite/newmaplite.png");
     background = LoadTexture("Assets/sprite/mapproyek2.png");
     logs = LoadTexture("Assets/sprite/logbridge.png");
     checkpointflag = LoadTexture("Assets/sprite/checkpointflag.png");

@@ -3,7 +3,7 @@
 
 #include "../raylib.h"
 
-Texture2D TaxiTexture, TruckTexture, VanTexture, PlayerSprite, background, logs, checkpointflag, checkpointtxt, Mustang, healthup, points;
+Texture2D TaxiTexture, TruckTexture, VanTexture, PlayerSprite, background, logs, checkpointflag, checkpointtxt, Mustang, healthup, points, newmap;
 bool showCheckpointText = false;
 int checkpointTimer = 0;
 int timer = 2000;
