@@ -279,9 +279,9 @@ void RenderInstructions(Player player, char *coordText, int level)
 {
 
     // Menampilkan teks di sudut kiri atas layar
-    DrawText(TextFormat("Score: %d", player.score), margin, margin, 20, BLACK);
-    DrawText(TextFormat("Lives: %d", player.lives), margin, margin + 30, 20, BLACK);
-    DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, BLACK);
-    DrawText(coordText, margin, margin + 90, 20, BLACK);
-    DrawText(TextFormat("health: %d", health_upgrade), margin, margin + 150, 20, BLACK);
+    DrawText(TextFormat("Score: %d", player.score), margin, margin, 20, WHITE);
+    DrawText(TextFormat("Lives: %d", player.lives), margin, margin + 30, 20, WHITE);
+    DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, WHITE);
+    DrawText(coordText, margin, margin + 90, 20, WHITE);
+    DrawText(TextFormat("health: %d", health_upgrade), margin, margin + 150, 20, WHITE);
 }
