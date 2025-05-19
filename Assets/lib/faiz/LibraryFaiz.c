@@ -578,7 +578,7 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
         if (movement[0])
         {
             player.y -= PLAYER_SPEED + 1;
-            PlayPlayerMoveSound(); // Play sound after moving
+            PlayPlayerMoveSound();
             movement[0] = false;
         }
         if (movement[1])
