@@ -6,15 +6,12 @@ Music backgroundMusic1, menuBacksound;
 void LoadAllSounds() {
     menuMoveSound = LoadSound("Assets/sound/moveChar.wav");
     menuBacksound = LoadMusicStream("Assets/sound/menusound.wav"); 
-    carSound = LoadSound("Assets/sound/car2.wav"); 
-    moveCharSound = LoadSound("Assets/sound/moveChar.wav");
-    backgroundMusic1 = LoadMusicStream("Assets/sound/backsound4.wav"); 
+    backgroundMusic1 = LoadMusicStream("Assets/sound/backsound5.wav"); 
     nabrak = LoadSound("Assets/sound/nabrak.wav");
     lose = LoadSound("Assets/sound/gameover.wav");
     checkpointSound = LoadSound("Assets/sound/result.wav");
     healthUpSound = LoadSound("Assets/sound/health.wav");
-    pointsSound = LoadSound("Assets/sound/point+.wav");
-
+    pointsSound = LoadSound("Assets/sound/point.wav");
 }
 
 void UnloadAllSounds() {
@@ -24,35 +21,68 @@ void UnloadAllSounds() {
     UnloadSound(carSound); 
     UnloadSound(moveCharSound); 
     UnloadSound(nabrak);
+    UnloadSound(lose);
+    UnloadSound(checkpointSound);
+    UnloadSound(healthUpSound);
+    UnloadSound(pointsSound);
 }
 
 // MENU
 void menusound() {
     PlaySound(menuMoveSound);
 }
+
 void PlayMenuBacksound() {
     PlayMusicStream(menuBacksound); // Memainkan musik backsound menu
-    SetMusicVolume(menuBacksound, 0.5f); // Atur volume (opsional)
+    SetMusicVolume(menuBacksound, 1.0f); // Atur volume (opsional)
 }
+
 void StopMenuBacksound() {
     StopMusicStream(menuBacksound); // Menghentikan musik backsound menu
 }
 
 // BACKSOUND GAME
-void PlayBackgroundMusic1(){
-    PlayMusicStream(backgroundMusic1); // Memainkan musik backsound menu
-    SetMusicVolume(backgroundMusic1, 0.5f); // Atur volume (opsional)
+void PlayBackgroundMusic1() {
+    PlayMusicStream(backgroundMusic1); // Memainkan musik backsound level 1
+    SetMusicVolume(backgroundMusic1, 1.0f); // Atur volume (opsional)
 }
+
+void UpdateBackgroundMusic() {
+    UpdateMusicStream(backgroundMusic1); // Memperbarui stream musik
+}
+
 void StopBacksound1() {
-    StopMusicStream(backgroundMusic1); // Menghentikan musik backsound menu
+    StopMusicStream(backgroundMusic1); // Menghentikan musik backsound level 1
 }
 
 // GAME SOUND
-void StopCarSound() {
-    if (IsSoundPlaying(carSound)) {
-        StopSound(carSound);
-    }
+void SoundGameover() {
+    PlaySound(lose);
 }
-void SoundGameover(){
 
+// Fungsi untuk memanggil suara ketika pemain bergerak
+void PlayPlayerMoveSound() {
+    PlaySound(moveCharSound);
+}
+
+// Fungsi untuk memanggil suara ketika mendapatkan checkpoint
+void PlayCheckpointSound() {
+    PlaySound(checkpointSound);
+}
+
+// Fungsi untuk memanggil suara ketika mendapatkan health
+void PlayHealthUpSound() {
+    PlaySound(healthUpSound);
+}
+
+// Fungsi untuk memanggil suara ketika mendapatkan point
+void PlayPointsSound() {
+    PlaySound(pointsSound);
+}
+
+// Fungsi helper untuk mengatur volume suara berdasarkan jarak
+float CalculateVolumeByDistance(Vector2 source, Vector2 listener, float maxDistance) {
+    float distance = CalculateDistance(source, listener);
+    float volume = 1.0f - (distance / maxDistance);
+    return (volume < 0.0f) ? 0.0f : volume;
 }
