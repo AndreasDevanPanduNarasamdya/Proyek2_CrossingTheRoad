@@ -61,6 +61,8 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
 
     RenderCharacter(&PlayerSprite, player);
     // Selesai menggambar elemen dalam dunia
+
+    DrawParticles();
     EndMode2D();
 
     RenderInstructions(player, coordText, level);
@@ -530,12 +532,12 @@ void CheckCollision(Camera2D *camera)
                         ((player.y <= c->y + 2.7) && (player.y >= c->y - 2));
         }
 
-        if (collision)
-        {
+        if (collision) {
+            InitParticles((Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE});
+            PlaySound(nabrak);
             player.x = checkpoint.x;
             player.y = checkpoint.y;
             player.lives--;
-            PlaySound(nabrak);
             ResetCombo();
             if (player.lives <= 0)
                 kalah = true;
@@ -558,9 +560,10 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
         }
         return; // Jangan update posisi player sebelum permainan dimulai
     }
+    
+    UpdateParticles();
 
-    if (!PermainanBerakhir)
-    {
+    if (!PermainanBerakhir) {
         UpdateCarMovement();
 
         if (IsKeyPressed(KEY_UP))
