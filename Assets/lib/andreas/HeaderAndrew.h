@@ -8,13 +8,33 @@ bool showCheckpointText = false;
 int checkpointTimer = 0;
 int timer = 2000;
 int lastscore;
+int lastlives;
+
+Texture2D FlagAsset[4], HealthAsset[6], PointAsset[6];
+
+typedef struct
+{
+    Texture2D PlayerFrontSprite;
+    Texture2D PlayerBackSprite;
+    Texture2D PlayerSideLeftSprite;
+    Texture2D PlayerSideRightSprite;
+    int countdown;
+}CharaAnim;
+
+CharaAnim Character;
 
 void DefineArrayCord();
 void RenderRoads();
-void RenderCars(int *numCars, Car cars[]);
 void RenderCharacter(Texture2D *PlayerSprite, Player player);
-void LoadAllTextures();
+void Renderchkpointtxt();
+void CheckpointLogic();
+void RenderFlags(Checkpoint *First);
+void ResetTimer();
+void RenderHealths(HealthHP *Health);
+void RenderPoints(PointsXP *Points);
+void RenderCars(Carlist *carList);
 void UnloadAllTextures();
-void RenderInstructions(Player player, char *coordText, int level);                                        
+void LoadAllTextures();
+void RenderInstructions(Player player, char *coordText, int level);
 
 #endif

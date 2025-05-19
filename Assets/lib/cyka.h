@@ -21,11 +21,11 @@
 #define CAMERA_DEATH_DISTANCE 500
 #define putihs 4
 #define check 4
+#define POINTS 5
 
-#define POINTS 6
 #define ROAD 0
 #define LANE_MARK 1
-#define CHECKPOINT_LINE 5
+#define CHECKPOINT_LINE 2
 #define HEALTH_UP 4
 #define PLAYER 2
 #define CAR 3
@@ -41,6 +41,8 @@ typedef struct LinkedListCheckPoint
 {
     int chckpointgrid[GRID_HEIGHT][GRID_WIDTH];
     int x, y;
+    int rangeX, rangeY;
+    int middleX, middleY;
     bool enabled;
     struct LinkedListCheckPoint *Next;
     struct LinkedListCheckPoint *Before;
@@ -78,20 +80,5 @@ typedef struct {
 typedef struct vector {
     int x, y;
 } vector;
-
-typedef Car infotype; 
-typedef struct tElmtList *address;
-typedef struct tElmtList {
-    infotype info;     
-    address next;
-} ElmtList;
-
-typedef struct {
-    address First;
-} List;
-
-typedef List Carlist;
-
-Carlist carList;
 
 #endif

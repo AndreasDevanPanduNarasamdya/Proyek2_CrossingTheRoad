@@ -7,27 +7,6 @@
 #include "../GLOBALHEADER.h"
 #include "../azzam/LibraryAzzam.h"
 
-void CreateEmpty(Carlist *L) {
-    L->First = NULL;
-}
-
-address Alokasi(Car carData) {
-    address P = (address)malloc(sizeof(ElmtList));
-    if (P != NULL) {
-        P->info = carData;
-        P->next = NULL;
-    }
-    return P;
-}
-
-void InsertFirst(Carlist *L, Car carData) {
-    address P = Alokasi(carData);
-    if (P != NULL) {
-        P->next = L->First;
-        L->First = P;
-    }
-}
-
 void DrawCenteredText(const char *text, int fontSize, Color color)
 {
     int textWidth = MeasureText(text, fontSize); // Mengukur lebar teks
@@ -46,7 +25,7 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     sprintf(coordText, "Coordinate: %2d,%2d", player.x, player.y);
     RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    RenderCars(&carList);
+    RenderCars(&numCars, cars);
 
     RenderFlags(Home);
 
@@ -55,10 +34,6 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     RenderPoints(Points);
 
     RenderCharacter(&PlayerSprite, player);
-    
-    // Gambar partikel di sini
-    DrawParticles();
-
     // Selesai menggambar elemen dalam dunia
     EndMode2D();
 
@@ -83,38 +58,43 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     EndDrawing();
 } // 101, 59
 
-void UpdateCarMovement() {
+void UpdateCarMovement()
+{
     frameCounter++;
-    if (frameCounter >= CAR_MOVE_DELAY) {
-        address curr = carList.First;
-        while (curr != NULL) {
-            Car *c = &curr->info;
+    if (frameCounter >= CAR_MOVE_DELAY)
+    {
+        for (int i = 0; i < numCars; i++)
+        {
+            int newX = cars[i].x + cars[i].direction * cars[i].speed;
+            if (newX < 0)
+            {
+                newX = GRID_WIDTH - 1;
+            }
+            if (newX >= GRID_WIDTH)
+            {
+                newX = 0;
+            }
+            grid[cars[i].y][cars[i].x] = ROAD;
+            cars[i].x = newX;
+            grid[cars[i].y][cars[i].x] = CAR;
 
-            int newX = c->x + c->direction * c->speed;
-            if (newX < 0) newX = GRID_WIDTH - 1;
-            if (newX >= GRID_WIDTH) newX = 0;
-
-            grid[c->y][c->x] = ROAD;
-            c->x = newX;
-            grid[c->y][c->x] = CAR;
-
+            // Hitung jarak antara mobil dan pemain
             Vector2 playerPos = {player.x * CELL_SIZE, player.y * CELL_SIZE};
-            Vector2 carPos = {c->x * CELL_SIZE, c->y * CELL_SIZE};
+            Vector2 carPos = {cars[i].x * CELL_SIZE, cars[i].y * CELL_SIZE};
             float distance = CalculateDistance(playerPos, carPos);
 
+            // Atur volume berdasarkan jarak (semakin dekat, semakin keras)
             float maxDistance = 500.0f;
             float volume = 1.0f - (distance / maxDistance);
             if (volume < 0.0f)
                 volume = 0.0f;
             SetSoundVolume(carSound, volume);
 
-            if (!IsSoundPlaying(carSound)) {
+            if (!IsSoundPlaying(carSound))
+            {
                 PlaySound(carSound);
             }
-
-            curr = curr->next;
         }
-
         frameCounter = 0;
     }
 }
@@ -131,34 +111,34 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
         TempCheck->Next->chckpointgrid[39][53] = CHECKPOINT_LINE;
 
         TempHealth->healthgrid[131][51] = HEALTH_UP;
-        TempHealth->Next->healthgrid[53][37] = HEALTH_UP;
+        TempHealth->healthgrid[53][37] = HEALTH_UP;
 
         TempPoints->pointgrid[151][29] = POINTS;
-        TempPoints->Next->pointgrid[21][76] = POINTS;
+        TempPoints->pointgrid[21][55] = POINTS;
     }
-    while (TempCheck != NULL)
-    {
-        for (int i = 0; i < GRID_WIDTH; i++)
-        {
-            for (int j = 0; j < GRID_HEIGHT; j++)
-            {
-                if (TempCheck->chckpointgrid[j][i] == CHECKPOINT_LINE)
-                {
-                    for (int p = i - 5; p < i + 5; p++) 
-                    {
-                        for (int o = j - 5; o < j + 5; o++) 
-                        {
-                            if (p >= 0 && p < GRID_WIDTH && o >= 0 && o < GRID_HEIGHT) 
-                            {
-                                grid[o][p] = CHECKPOINT_LINE;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        TempCheck = TempCheck->Next;
-    }
+    // while (TempCheck != NULL)
+    // {
+    //     for (int i = 0; i < GRID_WIDTH; i++)
+    //     {
+    //         for (int j = 0; j < GRID_HEIGHT; j++)
+    //         {
+    //             if (TempCheck->chckpointgrid[j][i] == CHECKPOINT_LINE)
+    //             {
+    //                 for (int p = i - 5; p < i + 5; p++) 
+    //                 {
+    //                     for (int o = j - 5; o < j + 5; o++) 
+    //                     {
+    //                         if (p >= 0 && p < GRID_WIDTH && o >= 0 && o < GRID_HEIGHT) 
+    //                         {
+    //                             grid[o][p] = CHECKPOINT_LINE;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     TempCheck = TempCheck->Next;
+    // }
     while (TempHealth != NULL)
     {
         for (int i = 0; i < GRID_WIDTH; i++)
@@ -180,7 +160,6 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
                 }
             }
         }
-        TempHealth->enabled = true;
         TempHealth = TempHealth->Next;
     }
     while (TempPoints != NULL)
@@ -206,12 +185,41 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
         }
         TempPoints = TempPoints->Next;
     }
+    // for (int i = 0; i < GRID_HEIGHT; i++)
+    // {
+    //     for (int j = 0; j < GRID_WIDTH; j++)
+    //     {
+    //         if ((i == 166 && j == 23) || (i == 39 && j == 53))
+    //         {
+    //             grid[i][j] = CHECKPOINT_LINE; // Garis biru setiap 50 baris
+    //         } // else if (i % 8 == 0) {
+    //           // grid[i][j] = LANE_MARK; // Garis putih tiap 8 baris
+
+    //         else if ((i == 131 && j == 51) || (i == 53 && j == 37))
+    //         {
+    //             grid[i][j] = HEALTH_UP; // Garis biru setiap 50 baris
+    //         }
+    //         else if ((i == 151 && j == 29) || (i == 21 && j == 55))
+    //         {
+    //             grid[i][j] = POINTS;
+    //         }
+    //         else
+    //         {
+    //             grid[i][j] = ROAD; // Jalan normal
+    //         }
+    //         // grid [209][j] = LANE_MARK;
+    //         // grid [203][j] = LANE_MARK;
+    //         // grid [199][j] = LANE_MARK;
+    //         // grid [187][j] = LANE_MARK;
+    //     }
+    // }
 }
 
 void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 {
     Checkpoint TempCheck = *Home;
-    Checkpoint prev = NULL;
+    HealthHP TempHealth = *Health;
+    PointsXP TempPoints = *Points;
 
     if (player->y % 50 == 0 && lastScorePosition != player->y && player->y < 200) 
     {
@@ -226,164 +234,45 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
         }
     }
 
-    if (grid[player->y][player->x] == CHECKPOINT_LINE)
+    while (TempCheck != NULL)
     {
-        passed = true;
-        checkpoint.x = player->x;
-        checkpoint.y = player->y;
-        player->score += 10 * comboMultiplier;
-
-        while (TempCheck != NULL)
+        if ((player->y > (TempCheck->middleY - TempCheck->rangeY) && player->y < (TempCheck->middleY + TempCheck->rangeY)) &&  (player->x > (TempCheck->middleX - TempCheck->rangeX) && player->x < (TempCheck->middleX + TempCheck->rangeX)))
         {
-            // Look for the checkpoint that "owns" this hitbox
-            for (int j = 0; j < GRID_HEIGHT; j++)
-            {
-                for (int i = 0; i < GRID_WIDTH; i++)
-                {
-                    if (TempCheck->chckpointgrid[j][i] == CHECKPOINT_LINE)
-                    {
-                        // Check if player is inside the 10x10 area of this checkpoint
-                        if (player->x >= i - 5 && player->x <= i + 5 &&
-                            player->y >= j - 5 && player->y <= j + 5)
-                        {
-                            // Convert entire hitbox area to ROAD
-                            for (int dx = -5; dx <= 5; dx++)
-                            {
-                                for (int dy = -5; dy <= 5; dy++)
-                                {
-                                    int nx = i + dx;
-                                    int ny = j + dy;
-                                    if (nx >= 0 && nx < GRID_WIDTH && ny >= 0 && ny < GRID_HEIGHT)
-                                    {
-                                        grid[ny][nx] = ROAD;
-                                    }
-                                }
-                            }                            
-                            // Delete the checkpoint node
-                            if (TempCheck->Next != NULL)
-                            {
-                                if (TempCheck->Before != NULL)
-                                {
-                                    TempCheck->Before->Next = TempCheck->Next;
-                                    TempCheck->Next->Before = TempCheck->Before;
-                                }
-                                else
-                                {
-                                    TempCheck->Next->Before = NULL;
-                                }
-                            }
-                            else
-                            {
-                                if (TempCheck->Before != NULL)
-                                {
-                                    TempCheck->Before->Next = NULL;
-                                }
-                            }
-                            // if (prev == NULL)
-                            //     *Home = TempCheck->Next;
-                            // else
-                            //     prev->Next = TempCheck->Next;
-
-                            // free(TempCheck);
-                            return; // Done, exit early
-                        }
-                    }
-                }
-            }
-
+            passed = true;
+            checkpoint.x = player->x;
+            checkpoint.y = player->y;
+            player->score += 10 * comboMultiplier;
+            grid[player->y][player->x] = ROAD;
+            Checkpoint prev = NULL;
+            // while (TempCheck != NULL)
+            // {
+            //     if (TempCheck->chckpointgrid[player->y][player->x] != grid[player->y][player->x])
+            //     {
+            //         if (prev == NULL)
+            //         {
+            //             // Deleting the head node
+            //             *Home = TempCheck->Next;
+            //         }
+            //         else
+            //         {
+            //             prev->Next = TempCheck->Next;
+            //         }
+            //         free(TempCheck);
+            //         break;
+            //     }
             prev = TempCheck;
+            free(prev);
             TempCheck = TempCheck->Next;
         }
     }
-
-    else if (grid[player->y][player->x] == HEALTH_UP)
+    if (grid[player->y][player->x] == HEALTH_UP)
     {
-        HealthHP current = *Health;
-
-        while (current != NULL)
-        {
-            if (current->enabled == true) // Only check active healths
-            {
-                // Check if player is inside the 10x10 hitbox of THIS health pickup
-                int centerX = current->x / CELL_SIZE; // Convert pixel pos to grid pos
-                int centerY = current->y / CELL_SIZE;
-
-                if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
-                    player->y >= centerY - 5 && player->y <= centerY + 5)
-                {
-                    current->enabled = false;
-                    player->lives++;
-
-                    // Set entire 10x10 area around this pickup to ROAD
-                    for (int dx = -5; dx <= 5; dx++)
-                    {
-                        for (int dy = -5; dy <= 5; dy++)
-                        {
-                            int gx = centerX + dx;
-                            int gy = centerY + dy;
-
-                            if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
-                            {
-                                grid[gy][gx] = ROAD;
-                            }
-                        }
-                    }
-
-                    // Optional: break early, only one health per step
-                    break;
-                }
-            }
-
-            current = current->Next;
-        }
-
-        // Clean up the player’s current grid tile
+        ++player->lives;
         grid[player->y][player->x] = ROAD;
     }
-
-
     else if (grid[player->y][player->x] == POINTS)
     {
-        PointsXP current = *Points;
-
-        while (current != NULL)
-        {
-            if (current->enabled == true) // Only check active healths
-            {
-                // Check if player is inside the 10x10 hitbox of THIS health pickup
-                int centerX = current->x / CELL_SIZE; // Convert pixel pos to grid pos
-                int centerY = current->y / CELL_SIZE;
-
-                if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
-                    player->y >= centerY - 5 && player->y <= centerY + 5)
-                {
-                    current->enabled = false;
-                    player->score += 10 * comboMultiplier;
-
-                    // Set entire 10x10 area around this pickup to ROAD
-                    for (int dx = -5; dx <= 5; dx++)
-                    {
-                        for (int dy = -5; dy <= 5; dy++)
-                        {
-                            int gx = centerX + dx;
-                            int gy = centerY + dy;
-
-                            if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
-                            {
-                                grid[gy][gx] = ROAD;
-                            }
-                        }
-                    }
-
-                    // Optional: break early, only one health per step
-                    break;
-                }
-            }
-
-            current = current->Next;
-        }
-
-        // Clean up the player’s current grid tile
+        player->score += 10 * comboMultiplier; 
         grid[player->y][player->x] = ROAD;
     }
 }
@@ -398,12 +287,20 @@ void InitiateCheckpointlist(Checkpoint *First)
         (*First)->enabled = true;
         (*First)->x = 500;
         (*First)->y = 375;
+        (*First)->rangeX = 5;
+        (*First)->rangeY = 5;
+        (*First)->middleX = 23;
+        (*First)->middleY = 166;
         (*First)->Before = NULL;
 
         (*First)->Next = (Checkpoint)malloc(sizeof(struct LinkedListCheckPoint));
         (*First)->Next->enabled = true;
         (*First)->Next->x = 200;
         (*First)->Next->y = 1650;
+        (*First)->Next->rangeX = 5;
+        (*First)->Next->rangeY = 5;
+        (*First)->Next->middleX = 53;
+        (*First)->Next->middleY = 39;
         (*First)->Next->Next = NULL;
         (*First)->Next->Before = (*First);
     }
@@ -431,6 +328,37 @@ void InitiateHealthList(HealthHP *Health)
 
 void InitiatePointsList(PointsXP *Points)
 {
+//     void InitGrid()
+// {
+//     for (int i = 0; i < GRID_HEIGHT; i++)
+//     {
+//         for (int j = 0; j < GRID_WIDTH; j++)
+//         {
+//             if ((i == 166 && j == 23) || (i == 39 && j == 53))
+//             {
+//                 grid[i][j] = CHECKPOINT_LINE; // Garis biru setiap 50 baris
+//             } // else if (i % 8 == 0) {
+//               // grid[i][j] = LANE_MARK; // Garis putih tiap 8 baris
+
+//             else if ((i == 131 && j == 51) || (i == 53 && j == 37))
+//             {
+//                 grid[i][j] = HEALTH_UP; // Garis biru setiap 50 baris
+//             }
+//             else if ((i == 151 && j == 29) || (i == 21 && j == 55))
+//             {
+//                 grid[i][j] = POINTS;
+//             }
+//             else
+//             {
+//                 grid[i][j] = ROAD; // Jalan normal
+//             }
+//             // grid [209][j] = LANE_MARK;
+//             // grid [203][j] = LANE_MARK;
+//             // grid [199][j] = LANE_MARK;
+//             // grid [187][j] = LANE_MARK;
+//         }
+//     }
+// }
     *Points = NULL;
 
     if (level == 1)
@@ -440,7 +368,6 @@ void InitiatePointsList(PointsXP *Points)
         (*Points)->x = 178;
         (*Points)->y = 548;
         (*Points)->Before = NULL;
-
         (*Points)->Next = (PointsXP)malloc(sizeof(struct CoinPoin));
         (*Points)->Next->enabled = true;
         (*Points)->Next->x = 267;
@@ -482,16 +409,15 @@ void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 
     InitGrid(Home, Health, Points); // Pastikan grid diinisialisasi sebelum menempatkan mobil
 
-    CreateEmpty(&carList); // Inisialisasi list mobil
+    for (int i = 0; i < numCars; i++)
+    {
+        int col;
 
-    for (int i = 0; i < NUM_CARS_START; i++) {
-        int col = rand() % (GRID_WIDTH - GRID_START);
-        int row = array[i];
+        col = rand() % (GRID_WIDTH - GRID_START);
         int direction = directray[i];
-        Car newCar = {col, row, carSpeed, direction};
-        newCar.type = rand() % 4;
 
-        InsertFirst(&carList, newCar);
+        cars[i] = (Car){col, array[i], carSpeed, direction};
+        cars[i].type = (rand() % 4), (rand() % 4), (rand() % 4); // Pilih jenis mobil secara acak
     }
 
     camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
@@ -508,31 +434,52 @@ void ResetCombo()
     comboStreak = 0;
 }
 
-void CheckCollision(Camera2D *camera) {
-    address curr = carList.First;
-    while (curr != NULL) {
-        Car *c = &curr->info;
+void ResetPlayerToCheckpoint(Camera2D *camera)
+{
+    player.x = checkpoint.x;
+    player.y = checkpoint.y;
+    camera->target.y = checkpoint.y * CELL_SIZE;
+}
 
-        bool collision = false;
-        if (c->direction == 1){
-            collision = ((player.x <= c->x + 7) && (player.x >= c->x - 2.3)) &&
-                        ((player.y <= c->y + 2.7) && (player.y >= c->y - 2));
-        } else {
-            collision = ((player.x <= c->x - 3) && (player.x >= c->x - 9.3)) &&
-                        ((player.y <= c->y + 2.7) && (player.y >= c->y - 2));
+
+void CheckCollision(Camera2D *camera)
+{
+    for (int i = 0; i < numCars; i++)
+    {
+        if (cars[i].direction == 1)
+        {
+            if (((player.x <= cars[i].x + 7) && (player.x >= cars[i].x - 2.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
+            {
+                PlaySound(nabrak);
+
+                player.x = checkpoint.x;
+                player.y = checkpoint.y;
+                player.lives--;
+                ResetPlayerToCheckpoint(camera);
+                if (player.lives <= 0)
+                {
+                    kalah = true;
+                }
+                break;
+            }
         }
+        else
+        {
+            if (((player.x <= cars[i].x - 3) && (player.x >= cars[i].x - 9.3)) && ((player.y <= cars[i].y + 2.7) && (player.y >= cars[i].y - 2)))
+            {
+                PlaySound(nabrak);
 
-        if (collision) {
-            player.x = checkpoint.x;
-            player.y = checkpoint.y;
-            player.lives--;
-            PlaySound(nabrak);
-            ResetCombo();
-            if (player.lives <= 0) kalah = true;
-            break;
+                player.x = checkpoint.x;
+                player.y = checkpoint.y;
+                player.lives--;
+                ResetPlayerToCheckpoint(camera);
+                if (player.lives <= 0)
+                {
+                    kalah = true;
+                }
+                break;
+            }
         }
-
-        curr = curr->next;
     }
 }
 
@@ -581,7 +528,6 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
             movement[3] = false;
         }
 
-        if (player.y>=GRID_HEIGHT)player.y = GRID_HEIGHT-1;
         checkposition(&player, Home, Health, Points);
         CheckCollision(camera);
     }

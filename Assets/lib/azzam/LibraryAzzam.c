@@ -5,7 +5,7 @@ Particle particles[MAX_PARTICLES];  // Array partikel
 bool playerHit = false;             // Status collision
 
 
-void NextLevel(Camera2D *camera, Player *player) {
+void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points) {
     // Tingkatkan level
     level++;
     
@@ -19,7 +19,7 @@ void NextLevel(Camera2D *camera, Player *player) {
     // Reset posisi kamera ke awal
     camera->target.y = player->y * CELL_SIZE;
     // Inisialisasi ulang game untuk level baru
-    InitGame();
+    InitGame(Home, Health, Points);
 }
 
 // --- Modul Efek Partikel ---
