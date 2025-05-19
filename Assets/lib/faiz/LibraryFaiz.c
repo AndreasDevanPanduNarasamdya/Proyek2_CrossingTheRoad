@@ -231,18 +231,15 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
 
         while (TempCheck != NULL)
         {
-            // Look for the checkpoint that "owns" this hitbox
             for (int j = 0; j < GRID_HEIGHT; j++)
             {
                 for (int i = 0; i < GRID_WIDTH; i++)
                 {
                     if (TempCheck->chckpointgrid[j][i] == CHECKPOINT_LINE)
                     {
-                        // Check if player is inside the 10x10 area of this checkpoint
                         if (player->x >= i - 5 && player->x <= i + 5 &&
                             player->y >= j - 5 && player->y <= j + 5)
                         {
-                            // Convert entire hitbox area to ROAD
                             for (int dx = -5; dx <= 5; dx++)
                             {
                                 for (int dy = -5; dy <= 5; dy++)
@@ -255,7 +252,6 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
                                     }
                                 }
                             }                            
-                            // Delete the checkpoint node
                             if (TempCheck->Next != NULL)
                             {
                                 if (TempCheck->Before != NULL)
@@ -281,7 +277,7 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
                             //     prev->Next = TempCheck->Next;
 
                             // free(TempCheck);
-                            return; // Done, exit early
+                            return;
                         }
                     }
                 }
@@ -298,10 +294,9 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
 
         while (current != NULL)
         {
-            if (current->enabled == true) // Only check active healths
+            if (current->enabled == true)
             {
-                // Check if player is inside the 10x10 hitbox of THIS health pickup
-                int centerX = current->x / CELL_SIZE; // Convert pixel pos to grid pos
+                int centerX = current->x / CELL_SIZE;
                 int centerY = current->y / CELL_SIZE;
 
                 if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
@@ -310,7 +305,6 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
                     current->enabled = false;
                     player->lives++;
 
-                    // Set entire 10x10 area around this pickup to ROAD
                     for (int dx = -5; dx <= 5; dx++)
                     {
                         for (int dy = -5; dy <= 5; dy++)
@@ -324,8 +318,6 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
                             }
                         }
                     }
-
-                    // Optional: break early, only one health per step
                     break;
                 }
             }
@@ -333,7 +325,6 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
             current = current->Next;
         }
 
-        // Clean up the player’s current grid tile
         grid[player->y][player->x] = ROAD;
     }
 
@@ -344,10 +335,9 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
 
         while (current != NULL)
         {
-            if (current->enabled == true) // Only check active healths
+            if (current->enabled == true)
             {
-                // Check if player is inside the 10x10 hitbox of THIS health pickup
-                int centerX = current->x / CELL_SIZE; // Convert pixel pos to grid pos
+                int centerX = current->x / CELL_SIZE;
                 int centerY = current->y / CELL_SIZE;
 
                 if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
@@ -356,7 +346,6 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
                     current->enabled = false;
                     player->score += 10 * comboMultiplier;
 
-                    // Set entire 10x10 area around this pickup to ROAD
                     for (int dx = -5; dx <= 5; dx++)
                     {
                         for (int dy = -5; dy <= 5; dy++)
@@ -370,16 +359,12 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
                             }
                         }
                     }
-
-                    // Optional: break early, only one health per step
                     break;
                 }
             }
 
             current = current->Next;
         }
-
-        // Clean up the player’s current grid tile
         grid[player->y][player->x] = ROAD;
     }
 }

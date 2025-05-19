@@ -39,13 +39,10 @@ void RenderFlags(Checkpoint *First)
     float timePerFrame = 0.1f; 
     static float lastFrameTime = 0.0f;
 
-   // Ini harus di luar loop TempFlag
     if (GetTime() - lastFrameTime >= timePerFrame) {
     lastFrameTime = GetTime();
-    currentFrame = (currentFrame + 1) % 4; // Update frame animasi (0 - 3)
+    currentFrame = (currentFrame + 1) % 4;
     }
-
-    // Ini tetap jalan terus, untuk render semua flag
 
     while (TempFlag != NULL)
     {

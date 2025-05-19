@@ -42,7 +42,7 @@ void start(Checkpoint *Home, HealthHP *Health, PointsXP *Points) {
         camera.target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
         camera.offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
         camera.rotation = 0.0f;
-        camera.zoom = 0.1f;
+        camera.zoom = 1.7f;
     
         while (!WindowShouldClose() && !isInMainMenu) {
             UpdateMusicStream(backgroundMusic1);
