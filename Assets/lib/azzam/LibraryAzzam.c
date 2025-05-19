@@ -1,8 +1,6 @@
 #include "../header.h"
 
-// Variabel global untuk modul partikel (tidak didefinisikan di LibraryFaiz.h)
-Particle particles[MAX_PARTICLES];  // Array partikel
-bool playerHit = false;             // Status collision
+// Variabel global untuk modul partikel
 
 
 void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points) {
@@ -24,105 +22,82 @@ void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Hea
 
 // --- Modul Efek Partikel ---
 // Inisialisasi partikel saat terjadi collision
-// Struktur partikel yang diperbaiki
 
-// Inisialisasi partikel dengan variasi yang lebih menarik
 void InitParticles(Vector2 playerPos) {
     for (int i = 0; i < MAX_PARTICLES; i++) {
-        // Offset posisi sedikit untuk efek ledakan yang lebih natural
-        particles[i].pos.x = playerPos.x + GetRandomValue(-10, 10);
-        particles[i].pos.y = playerPos.y + GetRandomValue(-10, 10);
-        
-        // Kecepatan dengan pola melingkar untuk efek ledakan
-        float angle = GetRandomValue(0, 360) * DEG2RAD;
-        float velocity = GetRandomValue(2, 6);
-        particles[i].speed.x = cosf(angle) * velocity;
-        particles[i].speed.y = sinf(angle) * velocity - GetRandomValue(1, 3); // Bias ke atas
-        
-        // Hidup partikel dengan variasi
-        particles[i].maxLife = GetRandomValue(30, 60);
-        particles[i].life = particles[i].maxLife;
-        
-        // Ukuran partikel bervariasi
-        particles[i].size = GetRandomValue(2, 5);
-        
-        // Variasi warna partikel (merah, oranye, kuning)
-        int colorType = GetRandomValue(0, 2);
-        switch(colorType) {
-            case 0: particles[i].color = (Color){255, 50, 50, 255}; break;   // Merah
-            case 1: particles[i].color = (Color){255, 150, 50, 255}; break;  // Oranye
-            case 2: particles[i].color = (Color){255, 255, 100, 255}; break; // Kuning
-        }
+        particles[i].pos = playerPos;
+        particles[i].speed = (Vector2){ GetRandomValue(-3, 3), GetRandomValue(-5, -1) };
+        particles[i].life = GetRandomValue(20, 40);  // Lama hidup acak
     }
 }
 
-// Update partikel dengan physics yang lebih realistis
+// Update pergerakan partikel setiap frame
 void UpdateParticles() {
     for (int i = 0; i < MAX_PARTICLES; i++) {
         if (particles[i].life > 0) {
-            // Update posisi
             particles[i].pos.x += particles[i].speed.x;
             particles[i].pos.y += particles[i].speed.y;
-            
-            // Gravitasi bertahap
-            particles[i].speed.y += 0.15;
-            
-            // Resistansi udara (drag)
-            particles[i].speed.x *= 0.98;
-            particles[i].speed.y *= 0.99;
-            
-            // Kurangi ukuran partikel seiring waktu
-            particles[i].size *= 0.98;
-            
-            // Kurangi hidup partikel
+            particles[i].speed.y += 0.2;  // Efek gravitasi
             particles[i].life--;
         }
     }
 }
 
-// Render partikel dengan efek visual yang lebih menarik
+// Render partikel di layar
 void DrawParticles() {
     for (int i = 0; i < MAX_PARTICLES; i++) {
         if (particles[i].life > 0) {
-            // Hitung alpha berdasarkan sisa hidup
-            float lifeRatio = (float)particles[i].life / particles[i].maxLife;
-            int alpha = (int)(255 * lifeRatio);
-            
-            // Terapkan alpha ke warna partikel
-            Color particleColor = particles[i].color;
-            particleColor.a = alpha;
-            
-            // Gambar partikel dengan ukuran yang berubah
-            DrawCircleV(particles[i].pos, particles[i].size, particleColor);
-            
-            // Efek tambahan: lingkaran luar untuk glow effect
-            if (lifeRatio > 0.7) {
-                Color glowColor = particleColor;
-                glowColor.a = alpha / 4;
-                DrawCircleV(particles[i].pos, particles[i].size + 2, glowColor);
-            }
+            // Warna partikel dengan efek fade-out: opacity tergantung pada life
+            Color particleColor = (Color){255, 50, 50, particles[i].life * 8};
+            DrawCircle((int)particles[i].pos.x, (int)particles[i].pos.y, 3, particleColor);
         }
     }
 }
 
-// Fungsi untuk partikel spark kecil (opsional - efek tambahan)
-void InitSparkParticles(Vector2 playerPos) {
-    // Tambahan: partikel spark kecil untuk efek lebih dramatis
-    for (int i = 0; i < 15; i++) {
-        particles[MAX_PARTICLES - 15 + i].pos = playerPos;
-        
-        // Kecepatan random untuk spark
-        particles[MAX_PARTICLES - 15 + i].speed.x = GetRandomValue(-8, 8);
-        particles[MAX_PARTICLES - 15 + i].speed.y = GetRandomValue(-8, -2);
-        
-        // Hidup pendek untuk spark
-        particles[MAX_PARTICLES - 15 + i].maxLife = GetRandomValue(10, 20);
-        particles[MAX_PARTICLES - 15 + i].life = particles[MAX_PARTICLES - 15 + i].maxLife;
-        
-        // Ukuran kecil untuk spark
-        particles[MAX_PARTICLES - 15 + i].size = 1.5;
-        
-        // Warna putih/kuning terang untuk spark
-        particles[MAX_PARTICLES - 15 + i].color = (Color){255, 255, 200, 255};
+// Array terpisah untuk partikel checkpoint (opsional)
+// Atau bisa menggunakan array particles yang sama dengan flag berbeda
+
+void InitCheckpointParticles(Vector2 checkpointPos) {
+    for (int i = 0; i < MAX_CHECKPOINT_PARTICLES; i++) {
+        checkpointParticles[i].pos = checkpointPos;
+
+        // Kecepatan acak di X dan Y, cukup untuk efek sebar
+        checkpointParticles[i].speed.x = GetRandomValue(-30, 30) / 10.0f;
+        checkpointParticles[i].speed.y = GetRandomValue(-30, 30) / 10.0f;
+
+        checkpointParticles[i].life = GetRandomValue(40, 60);
+        checkpointParticles[i].size = GetRandomValue(2, 4);
+
+        // Warna tetap terang dan menyala
+        checkpointParticles[i].color = (Color){255, 230, 100, 255};
     }
 }
+
+void UpdateCheckpointParticles() {
+    for (int i = 0; i < MAX_CHECKPOINT_PARTICLES; i++) {
+        if (checkpointParticles[i].life > 0) {
+            checkpointParticles[i].pos.x += checkpointParticles[i].speed.x;
+            checkpointParticles[i].pos.y += checkpointParticles[i].speed.y;
+
+            // Peredam kecepatan ringan
+            checkpointParticles[i].speed.x *= 0.95f;
+            checkpointParticles[i].speed.y *= 0.95f;
+
+            checkpointParticles[i].life--;
+        }
+    }
+}
+
+void DrawCheckpointParticles() {
+    for (int i = 0; i < MAX_CHECKPOINT_PARTICLES; i++) {
+        if (checkpointParticles[i].life > 0) {
+            float alphaRatio = (float)checkpointParticles[i].life / 60.0f;
+            Color fade = checkpointParticles[i].color;
+            fade.a = (int)(255 * alphaRatio);
+
+            DrawCircleV(checkpointParticles[i].pos, checkpointParticles[i].size, fade);
+        }
+    }
+}
+
+

@@ -8,24 +8,34 @@ void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Hea
 
 //void NextLevel(); // Deklarasi fungsi NextLevel()
 
-// Struct untuk partikel
+#define MAX_CHECKPOINT_PARTICLES 50
 
 typedef struct {
     Vector2 pos;
     Vector2 speed;
     int life;
-    int maxLife;  // Untuk menghitung alpha fade
-    float size;   // Ukuran partikel
-    Color color;  // Warna awal partikel
+    float size;
+    Color color;
 } Particle;
 
+
+Particle checkpointParticles[MAX_CHECKPOINT_PARTICLES];
+
+
+
 // Deklarasi array partikel dan variabel status collision
-extern Particle particles[MAX_PARTICLES];
-extern bool playerHit;
+Particle particles[MAX_PARTICLES];
+bool playerHit;
 
 // Deklarasi fungsi modul partikel
 void InitParticles(Vector2 playerPos);
 void UpdateParticles();
 void DrawParticles();
+
+// Deklarasi Partikel Checkpoint
+void InitCheckpointParticles(Vector2 checkpointPos);
+void UpdateCheckpointParticles();
+void DrawCheckpointParticles();
+
 
 #endif

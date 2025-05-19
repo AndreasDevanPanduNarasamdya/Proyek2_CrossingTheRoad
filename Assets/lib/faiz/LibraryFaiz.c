@@ -7,6 +7,7 @@
 #include "../GLOBALHEADER.h"
 #include "../azzam/LibraryAzzam.h"
 
+
 void CreateEmpty(Carlist *L) {
     L->First = NULL;
 }
@@ -58,6 +59,8 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     
     // Gambar partikel di sini
     DrawParticles();
+    DrawCheckpointParticles();
+
 
     // Selesai menggambar elemen dalam dunia
     EndMode2D();
@@ -232,6 +235,8 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
         checkpoint.x = player->x;
         checkpoint.y = player->y;
         player->score += 10 * comboMultiplier;
+        InitCheckpointParticles((Vector2){player->x * CELL_SIZE, player->y * CELL_SIZE});
+    
 
         while (TempCheck != NULL)
         {
@@ -551,6 +556,7 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
     }
 
     UpdateParticles();
+    UpdateCheckpointParticles();
     if (!PermainanBerakhir) {
         UpdateCarMovement();
 
