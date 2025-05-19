@@ -9,10 +9,14 @@ void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Hea
 //void NextLevel(); // Deklarasi fungsi NextLevel()
 
 // Struct untuk partikel
+
 typedef struct {
     Vector2 pos;
     Vector2 speed;
     int life;
+    int maxLife;  // Untuk menghitung alpha fade
+    float size;   // Ukuran partikel
+    Color color;  // Warna awal partikel
 } Particle;
 
 // Deklarasi array partikel dan variabel status collision

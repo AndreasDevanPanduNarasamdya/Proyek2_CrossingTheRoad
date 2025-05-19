@@ -523,6 +523,7 @@ void CheckCollision(Camera2D *camera) {
         }
 
         if (collision) {
+        InitParticles((Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE});
             player.x = checkpoint.x;
             player.y = checkpoint.y;
             player.lives--;
@@ -538,6 +539,7 @@ void CheckCollision(Camera2D *camera) {
 
 
 void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points) {
+    
 
     if (!gameStarted) 
     {
@@ -547,7 +549,8 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
         }
         return; // Jangan update posisi player sebelum permainan dimulai
     }
-    
+
+    UpdateParticles();
     if (!PermainanBerakhir) {
         UpdateCarMovement();
 
