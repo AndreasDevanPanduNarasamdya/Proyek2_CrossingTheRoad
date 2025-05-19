@@ -11,7 +11,7 @@ void LoadAllSounds() {
     lose = LoadSound("Assets/sound/gameover.wav");
     checkpointSound = LoadSound("Assets/sound/result.wav");
     healthUpSound = LoadSound("Assets/sound/health.wav");
-    pointsSound = LoadSound("Assets/sound/point+.wav");
+    pointsSound = LoadSound("Assets/sound/point.wav");
 }
 
 void UnloadAllSounds() {
