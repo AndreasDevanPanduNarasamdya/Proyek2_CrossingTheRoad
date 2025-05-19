@@ -4,7 +4,7 @@ Music backgroundMusic1, menuBacksound;
 
 // Fungsi untuk memuat semua suara dan musik
 void LoadAllSounds() {
-    menuMoveSound = LoadSound("Assets/sound/moveChar.wav");
+    menuMoveSound = LoadSound("Assets/sound/moveChar1.wav");
     menuBacksound = LoadMusicStream("Assets/sound/menusound.wav"); 
     backgroundMusic1 = LoadMusicStream("Assets/sound/backsound5.wav"); 
     nabrak = LoadSound("Assets/sound/nabrak.wav");
