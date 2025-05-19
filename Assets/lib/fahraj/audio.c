@@ -6,9 +6,7 @@ Music backgroundMusic1, menuBacksound;
 void LoadAllSounds() {
     menuMoveSound = LoadSound("Assets/sound/moveChar.wav");
     menuBacksound = LoadMusicStream("Assets/sound/menusound.wav"); 
-    carSound = LoadSound("Assets/sound/car2.wav"); 
-    moveCharSound = LoadSound("Assets/sound/moveChar.wav");
-    backgroundMusic1 = LoadMusicStream("Assets/sound/backsound3.wav"); 
+    backgroundMusic1 = LoadMusicStream("Assets/sound/backsound5.wav"); 
     nabrak = LoadSound("Assets/sound/nabrak.wav");
     lose = LoadSound("Assets/sound/gameover.wav");
     checkpointSound = LoadSound("Assets/sound/result.wav");
@@ -36,7 +34,7 @@ void menusound() {
 
 void PlayMenuBacksound() {
     PlayMusicStream(menuBacksound); // Memainkan musik backsound menu
-    SetMusicVolume(menuBacksound, 0.5f); // Atur volume (opsional)
+    SetMusicVolume(menuBacksound, 1.0f); // Atur volume (opsional)
 }
 
 void StopMenuBacksound() {
@@ -46,7 +44,7 @@ void StopMenuBacksound() {
 // BACKSOUND GAME
 void PlayBackgroundMusic1() {
     PlayMusicStream(backgroundMusic1); // Memainkan musik backsound level 1
-    SetMusicVolume(backgroundMusic1, 0.5f); // Atur volume (opsional)
+    SetMusicVolume(backgroundMusic1, 1.0f); // Atur volume (opsional)
 }
 
 void UpdateBackgroundMusic() {
