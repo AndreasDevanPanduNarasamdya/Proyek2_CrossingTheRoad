@@ -6,6 +6,8 @@
 #include <time.h>
 #include "../GLOBALHEADER.h"
 #include "../azzam/LibraryAzzam.h"
+#include "../fahraj/audio.h"
+
 
 void CreateEmpty(Carlist *L)
 {
@@ -103,23 +105,24 @@ void UpdateCarMovement()
             if (newX >= GRID_WIDTH)
                 newX = 0;
 
+            // Clear previous car position in grid
             grid[c->y][c->x] = ROAD;
+
+            // Update car position
             c->x = newX;
             grid[c->y][c->x] = CAR;
 
+            // Calculate dynamic volume based on player distance
             Vector2 playerPos = {player.x * CELL_SIZE, player.y * CELL_SIZE};
             Vector2 carPos = {c->x * CELL_SIZE, c->y * CELL_SIZE};
-            float distance = CalculateDistance(playerPos, carPos);
+            float volume = CalculateVolumeByDistance(carPos, playerPos, 500.0f);
 
-            float maxDistance = 500.0f;
-            float volume = 1.0f - (distance / maxDistance);
-            if (volume < 0.0f)
-                volume = 0.0f;
-            SetSoundVolume(carSound, volume);
+            SetSoundVolume(carSound, volume); // Use the correct sound variable
 
+            // Play car sound if it's not already playing
             if (!IsSoundPlaying(carSound))
             {
-                PlaySound(carSound);
+                CarSound(carSound); // Use the CarSound function
             }
 
             curr = curr->next;
@@ -610,9 +613,4 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
     {
         NextLevel(camera, &player, Home, Health, Points);
     }
-}
-
-float CalculateDistance(Vector2 pos1, Vector2 pos2)
-{
-    return sqrtf((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.y - pos2.y) * (pos1.y - pos2.y));
 }

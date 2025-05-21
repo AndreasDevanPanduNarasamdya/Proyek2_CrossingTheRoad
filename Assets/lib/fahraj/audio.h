@@ -1,11 +1,12 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
-// Function prototypes for sounds
+// Fungsi untuk Sound
 void UnloadAllSounds();
 void LoadAllSounds();
 void PlayMenuBacksound();
 void StopMenuBacksound();
 void PlayBackgroundMusic1();
-
-#endif // SFX_H
+float CalculateDistance(Vector2 a, Vector2 b);
+float CalculateVolumeByDistance(Vector2 source, Vector2 listener, float maxDistance);
+#endif // AUDIO
