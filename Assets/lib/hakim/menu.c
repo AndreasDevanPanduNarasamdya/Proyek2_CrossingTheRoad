@@ -265,9 +265,6 @@ MenuOption ShowMenu() {
                 );
             }
             
-            // Draw decorative elements
-            DrawPixelCar(80, screenHeight - 170, 1.0f, GAME_PURPLE);
-            DrawPixelCar(screenWidth - 200, screenHeight - 190, 1.2f, GAME_GREEN);
             
             // Copyright text
             const char* copyright = "© 2025 Your Game Studio";
