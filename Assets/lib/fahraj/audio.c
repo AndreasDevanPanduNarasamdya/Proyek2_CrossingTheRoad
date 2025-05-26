@@ -4,16 +4,16 @@ Music backgroundMusic1, menuBacksound;
 
 // Fungsi untuk memuat semua suara dan musik
 void LoadAllSounds() {
-    menuMoveSound = LoadSound("Assets/sound/moveChar.wav");
+    menuMoveSound = LoadSound("Assets/sound/menu_selection.wav");
     menuBacksound = LoadMusicStream("Assets/sound/menusound.wav"); 
-    carSound = LoadSound("Assets/sound/car2.wav"); 
-    moveCharSound = LoadSound("Assets/sound/moveChar.wav");
-    backgroundMusic1 = LoadMusicStream("Assets/sound/backsound3.wav"); 
+    backgroundMusic1 = LoadMusicStream("Assets/sound/backsound5.wav"); 
     nabrak = LoadSound("Assets/sound/nabrak.wav");
+    carSound = LoadSound("Assets/sound/car1.wav");
     lose = LoadSound("Assets/sound/gameover.wav");
     checkpointSound = LoadSound("Assets/sound/result.wav");
     healthUpSound = LoadSound("Assets/sound/health.wav");
-    pointsSound = LoadSound("Assets/sound/point+.wav");
+    pointsSound = LoadSound("Assets/sound/point.wav");
+    volume = (volume < 0.0f) ? 0.0f : (volume > 1.0f) ? 1.0f : volume;
 }
 
 void UnloadAllSounds() {
@@ -36,7 +36,7 @@ void menusound() {
 
 void PlayMenuBacksound() {
     PlayMusicStream(menuBacksound); // Memainkan musik backsound menu
-    SetMusicVolume(menuBacksound, 0.5f); // Atur volume (opsional)
+    SetMusicVolume(menuBacksound, 1.0f); // Atur volume (opsional)
 }
 
 void StopMenuBacksound() {
@@ -46,7 +46,7 @@ void StopMenuBacksound() {
 // BACKSOUND GAME
 void PlayBackgroundMusic1() {
     PlayMusicStream(backgroundMusic1); // Memainkan musik backsound level 1
-    SetMusicVolume(backgroundMusic1, 0.5f); // Atur volume (opsional)
+    SetMusicVolume(backgroundMusic1, 1.0f); // Atur volume (opsional)
 }
 
 void UpdateBackgroundMusic() {
@@ -62,9 +62,14 @@ void SoundGameover() {
     PlaySound(lose);
 }
 
+// Car Sound
+void CarSound() {
+    PlaySound(carSound);
+}
+
 // Fungsi untuk memanggil suara ketika pemain bergerak
 void PlayPlayerMoveSound() {
-    PlaySound(moveCharSound);
+    PlaySound(menuMoveSound);
 }
 
 // Fungsi untuk memanggil suara ketika mendapatkan checkpoint
@@ -87,4 +92,8 @@ float CalculateVolumeByDistance(Vector2 source, Vector2 listener, float maxDista
     float distance = CalculateDistance(source, listener);
     float volume = 1.0f - (distance / maxDistance);
     return (volume < 0.0f) ? 0.0f : volume;
+}
+float CalculateDistance(Vector2 a, Vector2 b)
+{
+    return sqrtf(powf(b.x - a.x, 2) + powf(b.y - a.y, 2));
 }

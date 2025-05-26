@@ -24,7 +24,7 @@ static float globalAlpha = 0.0f;
 static Vector2 carPosition = { -100.0f, 0.0f };
 static Rectangle buttonBounds[3];  // Hitboxes for buttons
 
-// Update animation value with
+// Update animation value with easing
 static void UpdateAnimator(Animator *animator) {
     if (animator->value < animator->target) {
         animator->value += animator->speed;
@@ -35,10 +35,11 @@ static void UpdateAnimator(Animator *animator) {
     }
 }
 
-// Draw a car
+// Draw a pixel art style car
 static void DrawPixelCar(float posX, float posY, float scale, Color color) {
     // Car body
     DrawRectangle(posX, posY + 10*scale, 50*scale, 20*scale, color);
+    
     // Car top
     DrawRectangle(posX + 10*scale, posY, 25*scale, 10*scale, color);
     
@@ -53,10 +54,11 @@ static void DrawPixelCar(float posX, float posY, float scale, Color color) {
     DrawCircle(posX + 40*scale, posY + 30*scale, 3*scale, GRAY);
 }
 
-// Draw chicken
+// Draw pixel art style chicken (player character)
 static void DrawPixelChicken(float posX, float posY, float scale, Color color) {
     // Body
     DrawRectangle(posX, posY + 10*scale, 20*scale, 15*scale, color);
+    
     // Head
     DrawRectangle(posX + 2*scale, posY, 15*scale, 10*scale, color);
     
@@ -70,12 +72,13 @@ static void DrawPixelChicken(float posX, float posY, float scale, Color color) {
     
     // Eye
     DrawCircle(posX + 12*scale, posY + 5*scale, 2*scale, BLACK);
+    
     // Legs
     DrawRectangle(posX + 5*scale, posY + 25*scale, 3*scale, 7*scale, GAME_YELLOW);
     DrawRectangle(posX + 15*scale, posY + 25*scale, 3*scale, 7*scale, GAME_YELLOW);
 }
 
-// Draw a button 
+// Draw a button with hover effect
 static bool DrawButton(const char *text, int posX, int posY, int fontSize, bool selected, int index) {
     int textWidth = MeasureText(text, fontSize);
     int buttonWidth = textWidth + 60;
@@ -108,6 +111,7 @@ static bool DrawButton(const char *text, int posX, int posY, int fontSize, bool 
 static void DrawRoadPattern(int screenWidth, int screenHeight, float scroll) {
     // Draw asphalt
     DrawRectangle(0, screenHeight - 100, screenWidth, 100, DARKGRAY);
+    
     // Draw road lines
     for (int i = 0; i < screenWidth/50 + 1; i++) {
         int xPos = (i * 100 - (int)scroll % 100);
@@ -120,7 +124,7 @@ static void DrawBackground(int screenWidth, int screenHeight) {
     // Sky gradient
     DrawRectangleGradientV(0, 0, screenWidth, screenHeight, SKYBLUE, GAME_BLUE);
     
-    // Draw clouds
+    // Draw some clouds
     DrawCircle(screenWidth * 0.2f + sin(backgroundScroll/100) * 20, screenHeight * 0.2f, 30, ColorAlpha(WHITE, 0.7f));
     DrawCircle(screenWidth * 0.2f + 20 + sin(backgroundScroll/100) * 20, screenHeight * 0.2f - 10, 25, ColorAlpha(WHITE, 0.7f));
     DrawCircle(screenWidth * 0.2f - 15 + sin(backgroundScroll/100) * 20, screenHeight * 0.2f + 5, 20, ColorAlpha(WHITE, 0.7f));
@@ -131,7 +135,7 @@ static void DrawBackground(int screenWidth, int screenHeight) {
     
     // Draw ground
     DrawRectangle(0, screenHeight - 120, screenWidth, 20, GAME_GREEN);
-
+    
     // Draw road
     DrawRoadPattern(screenWidth, screenHeight, backgroundScroll);
 }
@@ -216,8 +220,8 @@ MenuOption ShowMenu() {
             DrawPixelChicken(screenWidth - 120, screenHeight - 170, 2.0f, WHITE);
             
             // Draw title with bounce effect
-            const char* title = "Why Did The Chicken Cross The Road";
-            int titleFontSize = 35;
+            const char* title = "Crossing The Road";
+            int titleFontSize = 50;
             int titleWidth = MeasureText(title, titleFontSize);
             
             // Title shadow
@@ -261,15 +265,14 @@ MenuOption ShowMenu() {
                 );
             }
             
-
             
             // Copyright text
-            const char* copyright = "© 2025 Digital Happiness";
-            int copyrightWidth = MeasureText(copyright, 25);
+            const char* copyright = "© 2025 Your Game Studio";
+            int copyrightWidth = MeasureText(copyright, 15);
             DrawText(copyright, 
                     (screenWidth - copyrightWidth)/2, 
                     screenHeight - 30, 
-                    25, 
+                    15, 
                     ColorAlpha(GAME_LIGHT, globalAlpha * 0.7f));
         EndDrawing();   
         
