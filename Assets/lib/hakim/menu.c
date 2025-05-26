@@ -267,7 +267,7 @@ MenuOption ShowMenu() {
             
             
             // Copyright text
-            const char* copyright = "© 2025 Your Game Studio";
+            const char* copyright = "© 2025 Digital Happiness Studio";
             int copyrightWidth = MeasureText(copyright, 15);
             DrawText(copyright, 
                     (screenWidth - copyrightWidth)/2, 
