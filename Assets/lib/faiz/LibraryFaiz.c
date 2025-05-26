@@ -31,7 +31,7 @@ void InsertFirst(Carlist *L, Car carData) {
 void DrawCenteredText(const char *text, int fontSize, Color color)
 {
     int textWidth = MeasureText(text, fontSize); // Mengukur lebar teks
-    int x = (SCREEN_WIDTH - textWidth) / 2;      // Posisi X agar teks di tengah
+    int x = (SCREEN_WIDTH - textWidth) / 2;      // Posisi X agar teks di tengah    
     int y = SCREEN_HEIGHT / 2 - fontSize / 2;    // Posisi Y agar teks di tengah
 
     DrawText(text, x, y, fontSize, color);
@@ -62,6 +62,9 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
 
     ResetTimer();
 
+   
+
+
     if (PermainanBerakhir)
     {
         if (!kalah)
@@ -90,10 +93,8 @@ void UpdateCarMovement() {
             if (newX < 0) newX = GRID_WIDTH - 1;
             if (newX >= GRID_WIDTH) newX = 0;
 
-            grid[c->y][c->x] = ROAD;
             c->x = newX;
-            grid[c->y][c->x] = CAR;
-
+           
             Vector2 playerPos = {player.x * CELL_SIZE, player.y * CELL_SIZE};
             Vector2 carPos = {c->x * CELL_SIZE, c->y * CELL_SIZE};
             float distance = CalculateDistance(playerPos, carPos);
@@ -161,7 +162,7 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
         checkpoint.x = player->x;
         checkpoint.y = player->y;
         checkpositions(player, Home, Health, Points);
-        player->score += 10 * comboMultiplier;
+        player->score += 100 * comboMultiplier;
         
     }
 
@@ -252,7 +253,6 @@ void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 
     kalah = false;
     PermainanBerakhir = false;
-    player.score = 0;
     player.lives = MAX_LIVES;  
     numCars = NUM_CARS_START; 
     carSpeed = CAR_SPEED_START;          
@@ -262,21 +262,20 @@ void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
     checkpoint.x = player.x;
     checkpoint.y = player.y;
 
-    printf("Game di-reset: lives = %d, score = %d, posisi = (%d, %d)\n",
-           player.lives, player.score, player.x, player.y);
+
 
     InitiateCheckpointlist(Home);
     InitiateHealthList(Health);
     InitiatePointsList(Points);
     InitGrid(Home, Health, Points);
-    printf("Grid berhasil di-reset\n");
+
     
     int array[24] = {9, 14, 27, 32, 49, 55, 61, 67, 95, 101, 115, 121, 127, 133, 139, 145, 151, 157, 175, 181, 187, 193, 205, 211};
     int directray[24] = {-1, -1, 1, 1, -1, -1, 1, 1, /**/ 1, /**/ -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1};
 
-    InitGrid(Home, Health, Points); // Pastikan grid diinisialisasi sebelum menempatkan mobil
+    InitGrid(Home, Health, Points); 
 
-    CreateEmpty(&carList); // Inisialisasi list mobil
+    CreateEmpty(&carList);
 
     for (int i = 0; i < NUM_CARS_START; i++) {
         int col = rand() % (GRID_WIDTH - GRID_START);
@@ -322,7 +321,9 @@ void CheckCollision(Camera2D *camera) {
             player.lives--;
             PlaySound(nabrak);
             ResetCombo();
-            if (player.lives <= 0) kalah = true;
+            if (player.lives <= 0) {
+                 kalah = true;
+            }
             break;
         }
 
@@ -376,6 +377,7 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
         }
 
         if (player.y>=GRID_HEIGHT)player.y = GRID_HEIGHT-1;
+
         checkposition(&player, Home, Health, Points);
         CheckCollision(camera);
     }
@@ -390,3 +392,6 @@ float CalculateDistance(Vector2 pos1, Vector2 pos2)
 {
     return sqrtf((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.y - pos2.y) * (pos1.y - pos2.y));
 }
+
+
+

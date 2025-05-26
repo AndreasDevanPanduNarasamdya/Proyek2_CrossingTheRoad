@@ -19,7 +19,12 @@ int comboThreshold = 3;
 int lastScorePosition = 0;
 bool gameStarted = false;
 
+
+
+
 int grid[GRID_HEIGHT][GRID_WIDTH];
+
+
 
 address Alokasi(Car carData);
 void CreateEmpty(Carlist *L);
@@ -38,5 +43,7 @@ float CalculateDistance(Vector2 pos1, Vector2 pos2);
 void InitiateCheckpointlist(Checkpoint *First);
 void InitiateHealthList(HealthHP *Health);
 void InitiatePointsList(PointsXP *Points);
+
+
 
 #endif
