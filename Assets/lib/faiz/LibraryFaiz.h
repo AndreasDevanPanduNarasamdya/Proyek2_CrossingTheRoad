@@ -43,6 +43,7 @@ float CalculateDistance(Vector2 pos1, Vector2 pos2);
 void InitiateCheckpointlist(Checkpoint *First);
 void InitiateHealthList(HealthHP *Health);
 void InitiatePointsList(PointsXP *Points);
+void ResetCameraCheckpoint(Player *player, Camera2D *camera);
 
 
 

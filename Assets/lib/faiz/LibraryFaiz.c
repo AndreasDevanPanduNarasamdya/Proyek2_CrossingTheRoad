@@ -136,6 +136,12 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
     InitGrids(Home, Health, Points);
 }
 
+void ResetCameraCheckpoint(Player *player, Camera2D *camera){
+    player->x = checkpoint.x;
+    player->y = checkpoint.y;
+    camera->target.y = player->y * CELL_SIZE;
+}
+
 void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 {
     Checkpoint TempCheck = *Home;
@@ -319,6 +325,7 @@ void CheckCollision(Camera2D *camera) {
             player.x = checkpoint.x;
             player.y = checkpoint.y;
             player.lives--;
+            ResetCameraCheckpoint(&player, camera);
             PlaySound(nabrak);
             ResetCombo();
             if (player.lives <= 0) {
