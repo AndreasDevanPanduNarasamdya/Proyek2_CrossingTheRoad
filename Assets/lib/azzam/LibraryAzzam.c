@@ -113,7 +113,7 @@ float CalculateProgress(Player *player, int finishY) {
 
 // Menggambar progress bar di layar
 void DrawProgressBar(float progress) {
-    int barX = 20;
+    int barX = SCREEN_WIDTH/2;
     int barY = 20;
     int barWidth = 200;
     int barHeight = 20;
