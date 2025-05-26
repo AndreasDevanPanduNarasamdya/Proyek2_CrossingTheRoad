@@ -32,7 +32,7 @@ void DrawCenteredText(const char *text, int fontSize, Color color)
 {
     int textWidth = MeasureText(text, fontSize); // Mengukur lebar teks
     int x = (SCREEN_WIDTH - textWidth) / 2;      // Posisi X agar teks di tengah    
-    int x = (SCREEN_WIDTH - textWidth) / 2;      // Posisi X agar teks di tengah    
+     // Posisi X agar teks di tengah    
     int y = SCREEN_HEIGHT / 2 - fontSize / 2;    // Posisi Y agar teks di tengah
 
     DrawText(text, x, y, fontSize, color);
@@ -325,6 +325,7 @@ void CheckCollision(Camera2D *camera) {
         }
 
         if (collision) {
+            InitParticles((Vector2){player.x * CELL_SIZE, player.y *CELL_SIZE});
             player.x = checkpoint.x;
             player.y = checkpoint.y;
             player.lives--;
@@ -403,11 +404,4 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
         NextLevel(camera, &player, Home, Health, Points);
     }
 }
-
-float CalculateDistance(Vector2 pos1, Vector2 pos2)
-{
-    return sqrtf((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.y - pos2.y) * (pos1.y - pos2.y));
-}
-
-
 
