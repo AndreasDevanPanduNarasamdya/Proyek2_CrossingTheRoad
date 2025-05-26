@@ -100,4 +100,30 @@ void DrawCheckpointParticles() {
     }
 }
 
+// Menghitung progress pemain dalam persentase (0.0 - 1.0)
+float CalculateProgress(Player *player, int finishY) {
+    float totalDistance = (float)(finishY - START_Y); // Misal START_Y = posisi awal player
+    float playerDistance = (float)(player->y - START_Y);
 
+    float progress = playerDistance / totalDistance;
+    if (progress > 1.0f) progress = 1.0f;
+    if (progress < 0.0f) progress = 0.0f;
+    return progress;
+}
+
+// Menggambar progress bar di layar
+void DrawProgressBar(float progress) {
+    int barX = 20;
+    int barY = 20;
+    int barWidth = 200;
+    int barHeight = 20;
+
+    // Background
+    DrawRectangle(barX, barY, barWidth, barHeight, GRAY);
+
+    // Isi (progress)
+    DrawRectangle(barX, barY, (int)(barWidth * progress), barHeight, GREEN);
+
+    // Border
+    DrawRectangleLines(barX, barY, barWidth, barHeight, DARKGRAY);
+}

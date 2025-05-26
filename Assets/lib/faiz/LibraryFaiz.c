@@ -56,8 +56,12 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     RenderPoints(Points);
 
     RenderCharacter(&PlayerSprite, player);
+
+    // Gambar progress bar
+    float progress = CalculateProgress(&player, FINISH_Y);  // Hitung progress
+    DrawProgressBar(progress);                             // Tampilkan progress bar
     
-    // Gambar partikel di sini
+    // Gambar partikel darah
     DrawParticles();
     DrawCheckpointParticles();
 
