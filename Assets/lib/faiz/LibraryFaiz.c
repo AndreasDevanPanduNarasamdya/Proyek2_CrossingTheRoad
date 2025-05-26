@@ -55,6 +55,7 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     RenderPoints(Points);
 
     RenderCharacter(&PlayerSprite, player);
+    DrawParticles();
     // Selesai menggambar elemen dalam dunia
     EndMode2D();
 
@@ -167,6 +168,7 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
         passed = true;
         checkpoint.x = player->x;
         checkpoint.y = player->y;
+        PlayCheckpointSound();
         checkpositions(player, Home, Health, Points);
         player->score += 100 * comboMultiplier;
         
@@ -322,6 +324,7 @@ void CheckCollision(Camera2D *camera) {
         }
 
         if (collision) {
+            InitParticles((Vector2){player.x *CELL_SIZE, player.y *CELL_SIZE});
             player.x = checkpoint.x;
             player.y = checkpoint.y;
             player.lives--;
@@ -329,7 +332,8 @@ void CheckCollision(Camera2D *camera) {
             PlaySound(nabrak);
             ResetCombo();
             if (player.lives <= 0) {
-                 kalah = true;
+                kalah = true;
+                SoundGameover();
             }
             break;
         }
@@ -349,7 +353,8 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
         }
         return; // Jangan update posisi player sebelum permainan dimulai
     }
-    
+
+    UpdateParticles();
     if (!PermainanBerakhir) {
         UpdateCarMovement();
 
@@ -365,21 +370,25 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
         if (movement[0])
         {
             player.y -= PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();           
             movement[0] = false;
         }
         if (movement[1])
         {
             player.y += PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();
             movement[1] = false;
         }
         if (movement[2])
         {
             player.x -= PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();
             movement[2] = false;
         }
         if (movement[3])
         {
             player.x += PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();
             movement[3] = false;
         }
 

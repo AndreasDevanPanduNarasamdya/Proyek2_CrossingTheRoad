@@ -64,7 +64,7 @@ void SoundGameover() {
 
 // Fungsi untuk memanggil suara ketika pemain bergerak
 void PlayPlayerMoveSound() {
-    PlaySound(moveCharSound);
+    PlaySound(menuMoveSound);
 }
 
 // Fungsi untuk memanggil suara ketika mendapatkan checkpoint
