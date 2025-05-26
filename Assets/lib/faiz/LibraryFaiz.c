@@ -32,6 +32,7 @@ void DrawCenteredText(const char *text, int fontSize, Color color)
 {
     int textWidth = MeasureText(text, fontSize); // Mengukur lebar teks
     int x = (SCREEN_WIDTH - textWidth) / 2;      // Posisi X agar teks di tengah    
+    int x = (SCREEN_WIDTH - textWidth) / 2;      // Posisi X agar teks di tengah    
     int y = SCREEN_HEIGHT / 2 - fontSize / 2;    // Posisi Y agar teks di tengah
 
     DrawText(text, x, y, fontSize, color);
@@ -324,7 +325,6 @@ void CheckCollision(Camera2D *camera) {
         }
 
         if (collision) {
-            InitParticles((Vector2){player.x * CELL_SIZE, player.y *CELL_SIZE});
             player.x = checkpoint.x;
             player.y = checkpoint.y;
             player.lives--;
