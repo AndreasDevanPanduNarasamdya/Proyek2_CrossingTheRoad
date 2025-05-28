@@ -33,6 +33,7 @@ void DrawCenteredText(const char *text, int fontSize, Color color)
 {
     int textWidth = MeasureText(text, fontSize); // Mengukur lebar teks
     int x = (SCREEN_WIDTH - textWidth) / 2;      // Posisi X agar teks di tengah    
+     // Posisi X agar teks di tengah    
     int y = SCREEN_HEIGHT / 2 - fontSize / 2;    // Posisi Y agar teks di tengah
 
     DrawText(text, x, y, fontSize, color);
@@ -180,6 +181,7 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
         passed = true;
         checkpoint.x = player->x;
         checkpoint.y = player->y;
+        PlayCheckpointSound();
         checkpositions(player, Home, Health, Points);
         player->score += 100 * comboMultiplier;
         
@@ -335,7 +337,7 @@ void CheckCollision(Camera2D *camera) {
         }
 
         if (collision) {
-        InitParticles((Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE});
+            InitParticles((Vector2){player.x * CELL_SIZE, player.y *CELL_SIZE});
             player.x = checkpoint.x;
             player.y = checkpoint.y;
             player.lives--;
@@ -343,7 +345,8 @@ void CheckCollision(Camera2D *camera) {
             PlaySound(nabrak);
             ResetCombo();
             if (player.lives <= 0) {
-                 kalah = true;
+                kalah = true;
+                SoundGameover();
             }
             break;
         }
@@ -382,21 +385,25 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
         if (movement[0])
         {
             player.y -= PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();           
             movement[0] = false;
         }
         if (movement[1])
         {
             player.y += PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();
             movement[1] = false;
         }
         if (movement[2])
         {
             player.x -= PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();
             movement[2] = false;
         }
         if (movement[3])
         {
             player.x += PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();
             movement[3] = false;
         }
 
@@ -411,11 +418,4 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
         NextLevel(camera, &player, Home, Health, Points);
     }
 }
-
-float CalculateDistance(Vector2 pos1, Vector2 pos2)
-{
-    return sqrtf((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.y - pos2.y) * (pos1.y - pos2.y));
-}
-
-
 

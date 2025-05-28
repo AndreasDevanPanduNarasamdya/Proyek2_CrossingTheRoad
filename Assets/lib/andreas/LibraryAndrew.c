@@ -39,13 +39,10 @@ void RenderFlags(Checkpoint *First)
     float timePerFrame = 0.1f; 
     static float lastFrameTime = 0.0f;
 
-   // Ini harus di luar loop TempFlag
     if (GetTime() - lastFrameTime >= timePerFrame) {
     lastFrameTime = GetTime();
-    currentFrame = (currentFrame + 1) % 4; // Update frame animasi (0 - 3)
+    currentFrame = (currentFrame + 1) % 4;
     }
-
-    // Ini tetap jalan terus, untuk render semua flag
 
     while (TempFlag != NULL)
     {
@@ -279,11 +276,10 @@ void RenderInstructions(Player player, char *coordText, int level)
 {
 
     // Menampilkan teks di sudut kiri atas layar
-    DrawText(TextFormat("Score: %d", player.score), margin, margin, 20, BLACK);
-    DrawText(TextFormat("Lives: %d", player.lives), margin, margin + 30, 20, BLACK);
-    DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, BLACK);
-    DrawText(coordText, margin, margin + 90, 20, BLACK);
-    DrawText(TextFormat("health: %d", health_upgrade), margin, margin + 150, 20, BLACK);
+    DrawText(TextFormat("Score: %d", player.score), margin, margin, 20, WHITE);
+    DrawText(TextFormat("Lives: %d", player.lives), margin, margin + 30, 20, WHITE);
+    DrawText(TextFormat("Level: %d", level), margin, margin + 60, 20, WHITE);
+    DrawText(coordText, margin, margin + 90, 20, WHITE);
 }
 
 void InitGrids(Checkpoint *Home, HealthHP *Health, PointsXP *Points){

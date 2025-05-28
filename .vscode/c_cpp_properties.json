@@ -1,7 +1,7 @@
 {
   "configurations": [
     {
-      "name": "windows-gcc-x86",
+      "name": "windows-gcc-x64",
       "includePath": [
         "${workspaceFolder}/**"
       ],
@@ -12,10 +12,10 @@
         "GRAPHICS_API_OPENGL_33",
         "PLATFORM_DESKTOP"
       ],
-      "compilerPath": "D:/MinGw/bin/gcc.exe",
+      "compilerPath": "C:/msys64/ucrt64/bin/gcc.exe",
       "cStandard": "${default}",
       "cppStandard": "${default}",
-      "intelliSenseMode": "windows-gcc-x86"
+      "intelliSenseMode": "windows-gcc-x64"
     },
     {
       "name": "Mac",

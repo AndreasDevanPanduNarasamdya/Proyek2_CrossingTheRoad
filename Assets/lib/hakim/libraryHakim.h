@@ -26,4 +26,4 @@ void HandlePause(bool *isPaused, bool *isInMainMenu, float *volume, bool *isFull
 void ShowTryAgain(bool *restartGame);
 void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points);
 
-#endif // LIBRARY_HAKIM_H
+#endif 
