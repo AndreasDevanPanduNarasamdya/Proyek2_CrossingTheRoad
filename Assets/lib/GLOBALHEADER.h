@@ -12,7 +12,7 @@
 #define CAR_HEIGHT 10
 #define NUM_CARS_START 24
 #define PLAYER_SPEED 1
-#define CAR_SPEED_START 1
+#define CAR_SPEED_START 2
 #define CAR_MOVE_DELAY 6
 #define LANE_COLOR DARKGRAY
 #define MAX_LIVES 3
@@ -64,12 +64,7 @@ typedef struct CoinPoin
     struct CoinPoin *Before;
 }*PointsXP;
 
-typedef struct {
-    int x, y;
-    int speed;
-    int direction;
-    int type;
-} Car;
+
 
 typedef struct {
     int x, y, score, lives;
@@ -78,6 +73,13 @@ typedef struct {
 typedef struct vector {
     int x, y;
 } vector;
+
+typedef struct {
+    int x, y;
+    int speed;
+    int direction;
+    int type;
+} Car;
 
 typedef Car infotype; 
 typedef struct tElmtList *address;
