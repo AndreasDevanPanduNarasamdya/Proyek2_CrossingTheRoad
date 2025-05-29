@@ -33,7 +33,6 @@ void ShowTryAgain(bool *restartGame) {
         if (IsKeyPressed(KEY_ENTER)) {
             if (selectedOption == 0) {  // Try Again
                 *restartGame = true;
-                level = 1;
                 return;
             } else if (selectedOption == 1) {  // Main Menu
                 *restartGame = false;

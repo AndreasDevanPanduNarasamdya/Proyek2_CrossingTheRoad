@@ -8,7 +8,7 @@ Camera2D camera = {0};
 int frameCounter = 0;
 bool PermainanBerakhir = false;
 bool kalah = false;
-int level = 1;
+int level = 2;
 int numCars = NUM_CARS_START;
 int carSpeed = CAR_SPEED_START;
 bool movement[4] = {false,false,false,false};
@@ -19,12 +19,7 @@ int comboThreshold = 3;
 int lastScorePosition = 0;
 bool gameStarted = false;
 
-
-
-
 int grid[GRID_HEIGHT][GRID_WIDTH];
-
-
 
 address Alokasi(Car carData);
 void CreateEmpty(Carlist *L);
@@ -43,9 +38,18 @@ float CalculateDistance(Vector2 pos1, Vector2 pos2);
 void InitiateCheckpointlist(Checkpoint *First);
 void InitiateHealthList(HealthHP *Health);
 void InitiatePointsList(PointsXP *Points);
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 void InitiateEggsList(EggyPoints *Egg);
 void ResetCameraCheckpoint(Player *player, Camera2D *camera);
 
 
+>>>>>>> Stashed changes
 
 #endif
