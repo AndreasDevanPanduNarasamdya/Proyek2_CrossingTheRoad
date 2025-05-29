@@ -29,11 +29,11 @@ int grid[GRID_HEIGHT][GRID_WIDTH];
 address Alokasi(Car carData);
 void CreateEmpty(Carlist *L);
 void InsertFirst(Carlist *L, Car carData);
-void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points);
-void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points);
-void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points);
-void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points);
-void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points);
+void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg);
+void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg);
+void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg);
+void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg);
+void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg);
 void UpdateCarMovement();
 void ResetPlayerToCheckpoint(Camera2D *camera);
 void CheckCollision(Camera2D *camera);
@@ -43,6 +43,7 @@ float CalculateDistance(Vector2 pos1, Vector2 pos2);
 void InitiateCheckpointlist(Checkpoint *First);
 void InitiateHealthList(HealthHP *Health);
 void InitiatePointsList(PointsXP *Points);
+void InitiateEggsList(EggyPoints *Egg);
 void ResetCameraCheckpoint(Player *player, Camera2D *camera);
 
 

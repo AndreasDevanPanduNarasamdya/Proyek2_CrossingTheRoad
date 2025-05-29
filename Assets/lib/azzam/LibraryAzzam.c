@@ -5,7 +5,7 @@ Particle particles[MAX_PARTICLES];  // Array partikel
 bool playerHit = false;             // Status collision
 
 
-void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points) {
+void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg) {
     // Tingkatkan level
     level++;
     
@@ -19,7 +19,7 @@ void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Hea
     // Reset posisi kamera ke awal
     camera->target.y = player->y * CELL_SIZE;
     // Inisialisasi ulang game untuk level baru
-    InitGame(Home, Health, Points);
+    InitGame(Home, Health, Points, Egg);
 }
 
 // --- Modul Efek Partikel ---
@@ -46,11 +46,13 @@ void UpdateParticles() {
 
 // Render partikel di layar
 void DrawParticles() {
+    Texture2D Blood = LoadTexture("Assets/sprite/blood.png");
     for (int i = 0; i < MAX_PARTICLES; i++) {
         if (particles[i].life > 0) {
             // Warna partikel dengan efek fade-out: opacity tergantung pada life
-            Color particleColor = (Color){255, 50, 50, particles[i].life * 8};
-            DrawCircle((int)particles[i].pos.x, (int)particles[i].pos.y, 3, particleColor);
+            //Color particleColor = (Color){255, 50, 50, particles[i].life * 8};
+            //DrawCircle((int)particles[i].pos.x, (int)particles[i].pos.y, 3, WHITE);
+            DrawTextureEx(Blood, (Vector2){particles[i].pos.x, particles[i].pos.y}, 0, 0.25f, WHITE);
         }
     }
 }
