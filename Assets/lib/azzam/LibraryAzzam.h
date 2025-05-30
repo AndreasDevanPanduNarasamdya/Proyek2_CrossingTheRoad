@@ -6,8 +6,8 @@ void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Hea
 
 #define MAX_PARTICLES 50  // Jumlah maksimal partikel efek
 
-#define START_Y (GRID_HEIGHT - 2)
-#define FINISH_Y 0
+#define START_Y 20         // posisi Y awal pemain
+#define FINISH_Y -1000     // Y koordinat garis finish (ubah sesuai posisi sebenarnya)
 
 //void NextLevel(); // Deklarasi fungsi NextLevel()
 

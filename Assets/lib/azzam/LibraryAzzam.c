@@ -112,18 +112,27 @@ float CalculateProgress(Player *player, int finishY) {
 }
 
 // Menggambar progress bar di layar
-void DrawProgressBar(float progress) {
-    int barX = SCREEN_WIDTH/2;
-    int barY = 20;
-    int barWidth = 200;
-    int barHeight = 20;
+void DrawProgressBar(Player player, int startY, int finishY) {
+    int progress = (startY - player.y) * 100 / (startY - finishY);
 
-    // Background
-    DrawRectangle(barX, barY, barWidth, barHeight, GRAY);
+    // Clamp progress
+    if (progress < 0) progress = 0;
+    if (progress > 100) progress = 100;
 
-    // Isi (progress)
-    DrawRectangle(barX, barY, (int)(barWidth * progress), barHeight, GREEN);
+    // Ukuran dan posisi bar
+    int barX = 750; // Misalnya sisi kanan layar
+    int barY = 100; // Posisi top bar
+    int barWidth = 20;
+    int barMaxHeight = 200;
 
-    // Border
-    DrawRectangleLines(barX, barY, barWidth, barHeight, DARKGRAY);
+    int barHeight = (progress * barMaxHeight) / 100;
+
+    // Background bar (abu-abu)
+    DrawRectangle(barX, barY, barWidth, barMaxHeight, GRAY);
+
+    // Bar progress (hijau) -- perhatiin Y-nya supaya naik dari bawah
+    DrawRectangle(barX, barY + barMaxHeight - barHeight, barWidth, barHeight, GREEN);
+
+    // Tulis persentase
+    DrawText(TextFormat("%d%%", progress), barX - 10, barY + barMaxHeight + 10, 20, WHITE);
 }

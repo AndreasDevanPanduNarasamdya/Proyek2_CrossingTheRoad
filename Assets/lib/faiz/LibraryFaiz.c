@@ -70,7 +70,7 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     EndMode2D();
 
     // Gambar progress bar
-    DrawProgressBar(progress);
+    DrawProgressBar(player.y);
 
     RenderInstructions(player, coordText, level);
 
