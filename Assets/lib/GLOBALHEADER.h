@@ -23,6 +23,7 @@
 #define check 4
 
 #define POINTS 6
+#define EGG 7
 #define ROAD 0
 #define LANE_MARK 1
 #define CHECKPOINT_LINE 5
@@ -64,7 +65,14 @@ typedef struct CoinPoin
     struct CoinPoin *Before;
 }*PointsXP;
 
-
+typedef struct Eggy
+{
+    int Eggygrid[GRID_HEIGHT][GRID_WIDTH];
+    int x, y;
+    bool enabled;
+    struct Eggy *Next;
+    struct Eggy *Before;
+}*EggyPoints;
 
 typedef struct {
     int x, y, score, lives;

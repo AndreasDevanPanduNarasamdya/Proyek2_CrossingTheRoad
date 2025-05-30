@@ -5,6 +5,7 @@ int main ()
     Checkpoint Home;
     HealthHP Health;
     PointsXP Points;
-    start(&Home, &Health, &Points);
+    EggyPoints Egg;
+    start(&Home, &Health, &Points, &Egg);
     return 0;
 }

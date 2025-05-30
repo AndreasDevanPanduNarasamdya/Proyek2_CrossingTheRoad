@@ -220,7 +220,7 @@ MenuOption ShowMenu() {
             DrawPixelChicken(screenWidth - 120, screenHeight - 170, 2.0f, WHITE);
             
             // Draw title with bounce effect
-            const char* title = "Crossing The Road";
+            const char* title = "Why Did the Chicken Cross The Road?";
             int titleFontSize = 50;
             int titleWidth = MeasureText(title, titleFontSize);
             
@@ -267,7 +267,7 @@ MenuOption ShowMenu() {
             
             
             // Copyright text
-            const char* copyright = "© 2025 Digital Happiness Studio";
+            const char* copyright = "© 2025 ProjectB6 Studio Corp";
             int copyrightWidth = MeasureText(copyright, 15);
             DrawText(copyright, 
                     (screenWidth - copyrightWidth)/2, 

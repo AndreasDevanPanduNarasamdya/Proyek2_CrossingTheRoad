@@ -44,7 +44,7 @@ void ShowTryAgain(bool *restartGame) {
 }
 
 // modul yang menangani gameover untuk try again
-void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points) {
+void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg) {
     printf("HandleGameOver() DIPANGGIL! Game Over terjadi!\n");
 
     bool restartGame = false;
@@ -60,7 +60,7 @@ void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera, Chec
         printf("Sebelum InitGame(): kalah = %d, PermainanBerakhir = %d, lives = %d\n", 
                *kalah, *PermainanBerakhir, player.lives);
 
-        InitGame(Home, Health, Points); // ke initgame
+        InitGame(Home, Health, Points, Egg); // ke initgame
 
         // mengembalikan kamera ke posisi semula
         camera->target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
