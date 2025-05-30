@@ -4,15 +4,15 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 800
 #define CELL_SIZE 10
-#define GRID_WIDTH 100
+#define GRID_WIDTH 78
 #define GRID_START 22
 #define GRID_HEIGHT 220
 #define PLAYER_SIZE 10
 #define CAR_WIDTH 20
 #define CAR_HEIGHT 10
-#define NUM_CARS_START 25
+#define NUM_CARS_START 24
 #define PLAYER_SPEED 1
-#define CAR_SPEED_START 1
+#define CAR_SPEED_START 2
 #define CAR_MOVE_DELAY 6
 #define LANE_COLOR DARKGRAY
 #define MAX_LIVES 3
@@ -65,13 +65,6 @@ typedef struct CoinPoin
     struct CoinPoin *Before;
 }*PointsXP;
 
-typedef struct {
-    int x, y;
-    int speed;
-    int direction;
-    int type;
-} Car;
-
 typedef struct Eggy
 {
     int Eggygrid[GRID_HEIGHT][GRID_WIDTH];
@@ -88,6 +81,13 @@ typedef struct {
 typedef struct vector {
     int x, y;
 } vector;
+
+typedef struct {
+    int x, y;
+    int speed;
+    int direction;
+    int type;
+} Car;
 
 typedef Car infotype; 
 typedef struct tElmtList *address;

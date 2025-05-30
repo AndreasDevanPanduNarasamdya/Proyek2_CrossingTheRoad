@@ -6,16 +6,11 @@ void RenderRoads()
 {
     if (level == 1)
     {
-        DrawTextureEx(newmap, (Vector2){250, -370}, 0.0f, 0.25f, WHITE);
+        DrawTextureEx(newmap, (Vector2){150, -370}, 0.0f, 0.25f, WHITE);
     }
-    // else if (level == 2)
-    // {
-    //     DrawTextureEx(newmap2, (Vector2){250, -306}, 0.0f, 0.315f, WHITE);
-    //     DrawTextureEx(newmap, (Vector2){130, -370}, 0.0f, 0.25f, WHITE);
-    // }
     else if (level == 2)
     {
-        DrawTextureEx(newmap2, (Vector2){200, -306}, 0.0f, 0.315f, WHITE);
+        DrawTextureEx(newmap2, (Vector2){100, -306}, 0.0f, 0.315f, WHITE);
     }
 }
 
@@ -164,8 +159,6 @@ void RenderHealths(HealthHP *Health)
 
         drawPtr = drawPtr->Next;
     }
-    //DrawTextureEx(healthup, (Vector2){345, 548}, 0.0f, 0.07, WHITE);
-    //DrawTextureEx(healthup, (Vector2){478, 1323}, 0.0f, 0.07, WHITE);
 }
 
 void RenderPoints(PointsXP *Points)
@@ -287,9 +280,6 @@ void LoadAllTextures()
     PlayerSprite = LoadTexture("Assets/sprite/chickenlittlesideright.png");
     newmap = LoadTexture("Assets/sprite/newmaplitelvl2png.png");
     background = LoadTexture("Assets/sprite/mapproyek2.png");
-    // newmap2 = LoadTexture("Assets/sprite/newmaplvl2.png");
-    // newmap2 = LoadTexture("Assets/sprite/newmaplitelvl2.png");
-    // newmap2 = LoadTexture("Assets/sprite/newmaplitelvl2.png");
     newmap2 = LoadTexture("Assets/sprite/newmaplitelvl2.png");
     logs = LoadTexture("Assets/sprite/logbridge.png");
     train = LoadTexture("Assets/sprite/KAIout.png");
@@ -334,3 +324,221 @@ void RenderInstructions(Player player, char *coordText, int level)
     DrawText(coordText, margin, margin + 90, 20, WHITE);
     DrawText(TextFormat("health: %d", health_upgrade), margin, margin + 150, 20, WHITE);
 }
+
+// void InitGrids(Checkpoint *Home, HealthHP *Health, PointsXP *Points){
+//         Checkpoint TempCheck = *Home;
+//         HealthHP TempHealth = *Health;
+//         PointsXP TempPoints = *Points;
+//        while (TempCheck != NULL){
+//         for (int i = 0; i < GRID_WIDTH; i++)
+//         {
+//             for (int j = 0; j < GRID_HEIGHT; j++)
+//             {
+//                 if (TempCheck->chckpointgrid[j][i] == CHECKPOINT_LINE)
+//                 {
+//                     for (int p = i - 5; p < i + 5; p++) 
+//                     {
+//                         for (int o = j - 5; o < j + 5; o++) 
+//                         {
+//                             if (p >= 0 && p < GRID_WIDTH && o >= 0 && o < GRID_HEIGHT) 
+//                             {
+//                                 grid[o][p] = CHECKPOINT_LINE;
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//         TempCheck = TempCheck->Next;
+//     }
+//     while (TempHealth != NULL)
+//     {
+//         for (int i = 0; i < GRID_WIDTH; i++)
+//         {
+//             for (int j = 0; j < GRID_HEIGHT; j++)
+//             {
+//                 if (TempHealth->healthgrid[j][i] == HEALTH_UP)
+//                 {
+//                     for (int p = i - 5; p < i + 5; p++) 
+//                     {
+//                         for (int o = j - 5; o < j + 5; o++) 
+//                         {
+//                             if (p >= 0 && p < GRID_WIDTH && o >= 0 && o < GRID_HEIGHT) 
+//                             {
+//                                 grid[o][p] = HEALTH_UP;
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//         TempHealth->enabled = true;
+//         TempHealth = TempHealth->Next;
+//     }
+//     while (TempPoints != NULL)
+//     {
+//         for (int i = 0; i < GRID_WIDTH; i++)
+//         {
+//             for (int j = 0; j < GRID_HEIGHT; j++)
+//             {
+//                 if (TempPoints->pointgrid[j][i] == POINTS)
+//                 {
+//                     for (int p = i - 5; p < i + 5; p++) 
+//                     {
+//                         for (int o = j - 5; o < j + 5; o++) 
+//                         {
+//                             if (p >= 0 && p < GRID_WIDTH && o >= 0 && o < GRID_HEIGHT) 
+//                             {
+//                                 grid[o][p] = POINTS;
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//         TempPoints = TempPoints->Next;
+//     }
+// }
+
+// void checkpositions(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points){
+//     Checkpoint TempCheck = *Home;
+//     Checkpoint prev = NULL;
+//     while (TempCheck != NULL)
+//         {
+//             // Look for the checkpoint that "owns" this hitbox
+//             for (int j = 0; j < GRID_HEIGHT; j++)
+//             {
+//                 for (int i = 0; i < GRID_WIDTH; i++)
+//                 {
+//                     if (TempCheck->chckpointgrid[j][i] == CHECKPOINT_LINE)
+//                     {
+//                         // Check if player is inside the 10x10 area of this checkpoint
+//                         if (player->x >= i - 5 && player->x <= i + 5 &&
+//                             player->y >= j - 5 && player->y <= j + 5)
+//                         {
+//                             // Convert entire hitbox area to ROAD
+//                             for (int dx = -5; dx <= 5; dx++)
+//                             {
+//                                 for (int dy = -5; dy <= 5; dy++)
+//                                 {
+//                                     int nx = i + dx;
+//                                     int ny = j + dy;
+//                                     if (nx >= 0 && nx < GRID_WIDTH && ny >= 0 && ny < GRID_HEIGHT)
+//                                     {
+//                                         grid[ny][nx] = ROAD;
+//                                     }
+//                                 }
+//                             }                            
+//                             // Delete the checkpoint node
+//                             if (TempCheck->Next != NULL)
+//                             {
+//                                 if (TempCheck->Before != NULL)
+//                                 {
+//                                     TempCheck->Before->Next = TempCheck->Next;
+//                                     TempCheck->Next->Before = TempCheck->Before;
+//                                 }
+//                                 else
+//                                 {
+//                                     TempCheck->Next->Before = NULL;
+//                                 }
+//                             }
+//                             else
+//                             {
+//                                 if (TempCheck->Before != NULL)
+//                                 {
+//                                     TempCheck->Before->Next = NULL;
+//                                 }
+//                             }
+//                             // if (prev == NULL)
+//                             //     *Home = TempCheck->Next;
+//                             // else
+//                             //     prev->Next = TempCheck->Next;
+
+//                             // free(TempCheck);
+//                             return; // Done, exit early
+//                         }
+//                     }
+//                 }
+//             }
+
+//             prev = TempCheck;
+//             TempCheck = TempCheck->Next;
+//         }
+
+//         HealthHP current = *Health;
+
+//         while (current != NULL)
+//         {
+//             if (current->enabled == true) // Only check active healths
+//             {
+//                 // Check if player is inside the 10x10 hitbox of THIS health pickup
+//                 int centerX = current->x / CELL_SIZE; // Convert pixel pos to grid pos
+//                 int centerY = current->y / CELL_SIZE;
+
+//                 if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
+//                     player->y >= centerY - 5 && player->y <= centerY + 5)
+//                 {
+//                     current->enabled = false;
+//                     player->lives++;
+
+//                     // Set entire 10x10 area around this pickup to ROAD
+//                     for (int dx = -5; dx <= 5; dx++)
+//                     {
+//                         for (int dy = -5; dy <= 5; dy++)
+//                         {
+//                             int gx = centerX + dx;
+//                             int gy = centerY + dy;
+
+//                             if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
+//                             {
+//                                 grid[gy][gx] = ROAD;
+//                             }
+//                         }
+//                     }
+
+//                     // Optional: break early, only one health per step
+//                     break;
+//                 }
+//             }
+
+//             current = current->Next;
+//         }
+        
+
+//         while (current != NULL)
+//         {
+//             if (current->enabled == true) // Only check active healths
+//             {
+//                 // Check if player is inside the 10x10 hitbox of THIS health pickup
+//                 int centerX = current->x / CELL_SIZE; // Convert pixel pos to grid pos
+//                 int centerY = current->y / CELL_SIZE;
+
+//                 if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
+//                     player->y >= centerY - 5 && player->y <= centerY + 5)
+//                 {
+//                     current->enabled = false;
+//                     player->score += 10 * comboMultiplier;
+
+//                     // Set entire 10x10 area around this pickup to ROAD
+//                     for (int dx = -5; dx <= 5; dx++)
+//                     {
+//                         for (int dy = -5; dy <= 5; dy++)
+//                         {
+//                             int gx = centerX + dx;
+//                             int gy = centerY + dy;
+
+//                             if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
+//                             {
+//                                 grid[gy][gx] = ROAD;
+//                             }
+//                         }
+//                     }
+
+//                     // Optional: break early, only one health per step
+//                     break;
+//                 }
+//             }
+
+//             current = current->Next;
+//         }
+// }

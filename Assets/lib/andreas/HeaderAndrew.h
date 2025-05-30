@@ -37,5 +37,7 @@ void RenderCars(Carlist *carList);
 void UnloadAllTextures();
 void LoadAllTextures();
 void RenderInstructions(Player player, char *coordText, int level);
+// void InitGrids(Checkpoint *Home, HealthHP *Health, PointsXP *Points);
+// void checkpositions(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points);
 
 #endif
