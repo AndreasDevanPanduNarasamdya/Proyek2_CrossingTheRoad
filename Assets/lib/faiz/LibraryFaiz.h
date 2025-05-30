@@ -38,18 +38,7 @@ float CalculateDistance(Vector2 pos1, Vector2 pos2);
 void InitiateCheckpointlist(Checkpoint *First);
 void InitiateHealthList(HealthHP *Health);
 void InitiatePointsList(PointsXP *Points);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 void InitiateEggsList(EggyPoints *Egg);
 void ResetCameraCheckpoint(Player *player, Camera2D *camera);
-
-
->>>>>>> Stashed changes
 
 #endif

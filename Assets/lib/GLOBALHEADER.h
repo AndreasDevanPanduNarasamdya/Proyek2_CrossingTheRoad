@@ -65,20 +65,13 @@ typedef struct CoinPoin
     struct CoinPoin *Before;
 }*PointsXP;
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 typedef struct {
     int x, y;
     int speed;
     int direction;
     int type;
 } Car;
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
 typedef struct Eggy
 {
     int Eggygrid[GRID_HEIGHT][GRID_WIDTH];
@@ -87,17 +80,6 @@ typedef struct Eggy
     struct Eggy *Next;
     struct Eggy *Before;
 }*EggyPoints;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
-
->>>>>>> Stashed changes
-
->>>>>>> Stashed changes
-
-
->>>>>>> Stashed changes
 
 typedef struct {
     int x, y, score, lives;

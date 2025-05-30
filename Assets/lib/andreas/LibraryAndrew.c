@@ -6,31 +6,16 @@ void RenderRoads()
 {
     if (level == 1)
     {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
         DrawTextureEx(newmap, (Vector2){250, -370}, 0.0f, 0.25f, WHITE);
     }
-    else if (level == 2)
-    {
-        DrawTextureEx(newmap2, (Vector2){250, -306}, 0.0f, 0.315f, WHITE);
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-        DrawTextureEx(newmap, (Vector2){130, -370}, 0.0f, 0.25f, WHITE);
-    }
+    // else if (level == 2)
+    // {
+    //     DrawTextureEx(newmap2, (Vector2){250, -306}, 0.0f, 0.315f, WHITE);
+    //     DrawTextureEx(newmap, (Vector2){130, -370}, 0.0f, 0.25f, WHITE);
+    // }
     else if (level == 2)
     {
         DrawTextureEx(newmap2, (Vector2){200, -306}, 0.0f, 0.315f, WHITE);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     }
 }
 
@@ -302,19 +287,10 @@ void LoadAllTextures()
     PlayerSprite = LoadTexture("Assets/sprite/chickenlittlesideright.png");
     newmap = LoadTexture("Assets/sprite/newmaplitelvl2png.png");
     background = LoadTexture("Assets/sprite/mapproyek2.png");
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    newmap2 = LoadTexture("Assets/sprite/newmaplvl2.png");
-=======
+    // newmap2 = LoadTexture("Assets/sprite/newmaplvl2.png");
+    // newmap2 = LoadTexture("Assets/sprite/newmaplitelvl2.png");
+    // newmap2 = LoadTexture("Assets/sprite/newmaplitelvl2.png");
     newmap2 = LoadTexture("Assets/sprite/newmaplitelvl2.png");
->>>>>>> Stashed changes
-=======
-    newmap2 = LoadTexture("Assets/sprite/newmaplitelvl2.png");
->>>>>>> Stashed changes
-=======
-    newmap2 = LoadTexture("Assets/sprite/newmaplitelvl2.png");
->>>>>>> Stashed changes
     logs = LoadTexture("Assets/sprite/logbridge.png");
     train = LoadTexture("Assets/sprite/KAIout.png");
     checkpointflag = LoadTexture("Assets/sprite/checkpointflag.png");

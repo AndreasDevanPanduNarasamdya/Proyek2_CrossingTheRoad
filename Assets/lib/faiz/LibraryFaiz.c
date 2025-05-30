@@ -44,7 +44,7 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     BeginMode2D(camera);
 
     sprintf(coordText, "Coordinate: %2d,%2d", player.x, player.y);
-    RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
+    RenderRoads();//SCREEN_WIDTH, SCREEN_HEIGHT);
 
     RenderCars(&carList);
 
@@ -322,7 +322,6 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
                     }
                 }
             }
-
             prev = TempCheck;
             TempCheck = TempCheck->Next;
         }
@@ -410,10 +409,6 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
     else if (grid[player->y][player->x] == EGG)
     {
         EggyPoints current = *Egg;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
 
         while (current != NULL)
         {
@@ -451,82 +446,82 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
         grid[player->y][player->x] = ROAD;
     }
 }
->>>>>>> Stashed changes
+// >>>>>>> Stashed changes
 
-        while (current != NULL)
-        {
-            if (current->enabled == true)
-            {
-                int centerX = current->x / CELL_SIZE;
-                int centerY = current->y / CELL_SIZE;
+//         while (current != NULL)
+//         {
+//             if (current->enabled == true)
+//             {
+//                 int centerX = current->x / CELL_SIZE;
+//                 int centerY = current->y / CELL_SIZE;
 
-                if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
-                    player->y >= centerY - 5 && player->y <= centerY + 5)
-                {
-                    current->enabled = false;
-                    player->score += 150;
-                    PlaySound(pointsSound);
+//                 if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
+//                     player->y >= centerY - 5 && player->y <= centerY + 5)
+//                 {
+//                     current->enabled = false;
+//                     player->score += 150;
+//                     PlaySound(pointsSound);
 
-                    for (int dx = -5; dx <= 5; dx++)
-                    {
-                        for (int dy = -5; dy <= 5; dy++)
-                        {
-                            int gx = centerX + dx;
-                            int gy = centerY + dy;
+//                     for (int dx = -5; dx <= 5; dx++)
+//                     {
+//                         for (int dy = -5; dy <= 5; dy++)
+//                         {
+//                             int gx = centerX + dx;
+//                             int gy = centerY + dy;
 
-                            if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
-                            {
-                                grid[gy][gx] = ROAD;
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
+//                             if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
+//                             {
+//                                 grid[gy][gx] = ROAD;
+//                             }
+//                         }
+//                     }
+//                     break;
+//                 }
+//             }
 
-            current = current->Next;
-        }
-        grid[player->y][player->x] = ROAD;
-    }
-}
->>>>>>> Stashed changes
+//             current = current->Next;
+//         }
+//         grid[player->y][player->x] = ROAD;
+//     }
+// }
+// >>>>>>> Stashed changes
 
-        while (current != NULL)
-        {
-            if (current->enabled == true)
-            {
-                int centerX = current->x / CELL_SIZE;
-                int centerY = current->y / CELL_SIZE;
+//         while (current != NULL)
+//         {
+//             if (current->enabled == true)
+//             {
+//                 int centerX = current->x / CELL_SIZE;
+//                 int centerY = current->y / CELL_SIZE;
 
-                if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
-                    player->y >= centerY - 5 && player->y <= centerY + 5)
-                {
-                    current->enabled = false;
-                    player->score += 150;
-                    PlaySound(pointsSound);
+//                 if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
+//                     player->y >= centerY - 5 && player->y <= centerY + 5)
+//                 {
+//                     current->enabled = false;
+//                     player->score += 150;
+//                     PlaySound(pointsSound);
 
-                    for (int dx = -5; dx <= 5; dx++)
-                    {
-                        for (int dy = -5; dy <= 5; dy++)
-                        {
-                            int gx = centerX + dx;
-                            int gy = centerY + dy;
+//                     for (int dx = -5; dx <= 5; dx++)
+//                     {
+//                         for (int dy = -5; dy <= 5; dy++)
+//                         {
+//                             int gx = centerX + dx;
+//                             int gy = centerY + dy;
 
-                            if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
-                            {
-                                grid[gy][gx] = ROAD;
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
+//                             if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
+//                             {
+//                                 grid[gy][gx] = ROAD;
+//                             }
+//                         }
+//                     }
+//                     break;
+//                 }
+//             }
 
-            current = current->Next;
-        }
-        grid[player->y][player->x] = ROAD;
-    }
-}
+//             current = current->Next;
+//         }
+//         grid[player->y][player->x] = ROAD;
+//     }
+// }
 
 
 void InitiateCheckpointlist(Checkpoint *First)
@@ -594,10 +589,6 @@ void InitiatePointsList(PointsXP *Points)
 void InitiateEggsList(EggyPoints *Egg)
 {
     *Egg = NULL;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
 
     if (level == 1)
     {
@@ -615,61 +606,44 @@ void InitiateEggsList(EggyPoints *Egg)
         (*Egg)->Next->Before = *Egg;
     }
 }
->>>>>>> Stashed changes
 
-    if (level == 1)
-    {
-        *Egg = (EggyPoints)malloc(sizeof(struct Eggy));
-        (*Egg)->enabled = true;
-        (*Egg)->x = 340;
-        (*Egg)->y = 235;
-        (*Egg)->Before = NULL;
+//     if (level == 1)
+//     {
+//         *Egg = (EggyPoints)malloc(sizeof(struct Eggy));
+//         (*Egg)->enabled = true;
+//         (*Egg)->x = 340;
+//         (*Egg)->y = 235;
+//         (*Egg)->Before = NULL;
 
-        (*Egg)->Next = (EggyPoints)malloc(sizeof(struct Eggy));
-        (*Egg)->Next->enabled = true;
-        (*Egg)->Next->x = 345;
-        (*Egg)->Next->y = 1323;
-        (*Egg)->Next->Next = NULL;
-        (*Egg)->Next->Before = *Egg;
-    }
-}
->>>>>>> Stashed changes
+//         (*Egg)->Next = (EggyPoints)malloc(sizeof(struct Eggy));
+//         (*Egg)->Next->enabled = true;
+//         (*Egg)->Next->x = 345;
+//         (*Egg)->Next->y = 1323;
+//         (*Egg)->Next->Next = NULL;
+//         (*Egg)->Next->Before = *Egg;
+//     }
+// }
+//     if (level == 1)
+//     {
+//         *Egg = (EggyPoints)malloc(sizeof(struct Eggy));
+//         (*Egg)->enabled = true;
+//         (*Egg)->x = 340;
+//         (*Egg)->y = 235;
+//         (*Egg)->Before = NULL;
 
-<<<<<<< Updated upstream
-    if (level == 1)
-    {
-        *Egg = (EggyPoints)malloc(sizeof(struct Eggy));
-        (*Egg)->enabled = true;
-        (*Egg)->x = 340;
-        (*Egg)->y = 235;
-        (*Egg)->Before = NULL;
-
-        (*Egg)->Next = (EggyPoints)malloc(sizeof(struct Eggy));
-        (*Egg)->Next->enabled = true;
-        (*Egg)->Next->x = 345;
-        (*Egg)->Next->y = 1323;
-        (*Egg)->Next->Next = NULL;
-        (*Egg)->Next->Before = *Egg;
-    }
-}
-
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
-=======
+//         (*Egg)->Next = (EggyPoints)malloc(sizeof(struct Eggy));
+//         (*Egg)->Next->enabled = true;
+//         (*Egg)->Next->x = 345;
+//         (*Egg)->Next->y = 1323;
+//         (*Egg)->Next->Next = NULL;
+//         (*Egg)->Next->Before = *Egg;
+//     }
+// }
 
 
+// void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
 
 void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
->>>>>>> Stashed changes
-=======
-
-void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
->>>>>>> Stashed changes
-=======
-
-void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
->>>>>>> Stashed changes
 {
     srand(time(NULL));
 
@@ -698,19 +672,7 @@ void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *
     int array[25] = {9, 14, 27, 32, 49, 55, 61, 67, 77, 95, 101, 115, 121, 127, 133, 141, 145, 151, 157, 175, 181, 187, 193, 208, 212};
     int directray[25] = {-1, -1, 1, 1, -1, -1, 1, 1, -1,/**/ 1, /**/ -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1};
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    InitGrid(Home, Health, Points); // Pastikan grid diinisialisasi sebelum menempatkan mobil
-=======
     InitGrid(Home, Health, Points, Egg); 
->>>>>>> Stashed changes
-=======
-    InitGrid(Home, Health, Points, Egg); 
->>>>>>> Stashed changes
-=======
-    InitGrid(Home, Health, Points, Egg); 
->>>>>>> Stashed changes
 
     CreateEmpty(&carList); // Inisialisasi list mobil
 
