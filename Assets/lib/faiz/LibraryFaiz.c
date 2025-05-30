@@ -7,6 +7,7 @@
 #include "../GLOBALHEADER.h"
 #include "../azzam/LibraryAzzam.h"
 
+
 void CreateEmpty(Carlist *L) {
     L->First = NULL;
 }
@@ -31,20 +32,21 @@ void InsertFirst(Carlist *L, Car carData) {
 void DrawCenteredText(const char *text, int fontSize, Color color)
 {
     int textWidth = MeasureText(text, fontSize); // Mengukur lebar teks
-    int x = (SCREEN_WIDTH - textWidth) / 2;      // Posisi X agar teks di tengah
+    int x = (SCREEN_WIDTH - textWidth) / 2;      // Posisi X agar teks di tengah    
+     // Posisi X agar teks di tengah    
     int y = SCREEN_HEIGHT / 2 - fontSize / 2;    // Posisi Y agar teks di tengah
 
     DrawText(text, x, y, fontSize, color);
 }
 
-void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
+void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 {
     BeginDrawing();
     ClearBackground(WHITE);
     BeginMode2D(camera);
 
     sprintf(coordText, "Coordinate: %2d,%2d", player.x, player.y);
-    RenderRoads();//SCREEN_WIDTH, SCREEN_HEIGHT);
+    RenderRoads(SCREEN_WIDTH, SCREEN_HEIGHT);
 
     RenderCars(&carList);
 
@@ -54,15 +56,28 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
 
     RenderPoints(Points);
 
-    RenderEggs(Egg);
-
     RenderCharacter(&PlayerSprite, player);
+
+    // Hitung progress bar
+    float progress = CalculateProgress(&player, FINISH_Y);  // Hitung progress
+    
+    // Gambar partikel darah
+    DrawParticles();
+    DrawCheckpointParticles();
+
+
     // Selesai menggambar elemen dalam dunia
     EndMode2D();
+
+    // Gambar progress bar
+    DrawProgressBar(progress);
 
     RenderInstructions(player, coordText, level);
 
     ResetTimer();
+
+   
+
 
     if (PermainanBerakhir)
     {
@@ -92,10 +107,8 @@ void UpdateCarMovement() {
             if (newX < 0) newX = GRID_WIDTH - 1;
             if (newX >= GRID_WIDTH) newX = 0;
 
-            grid[c->y][c->x] = ROAD;
             c->x = newX;
-            grid[c->y][c->x] = CAR;
-
+           
             Vector2 playerPos = {player.x * CELL_SIZE, player.y * CELL_SIZE};
             Vector2 carPos = {c->x * CELL_SIZE, c->y * CELL_SIZE};
             float distance = CalculateDistance(playerPos, carPos);
@@ -118,13 +131,11 @@ void UpdateCarMovement() {
 }
 
 
-void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
+void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 {
     Checkpoint TempCheck = *Home;
     HealthHP TempHealth = *Health;
     PointsXP TempPoints = *Points;
-    EggyPoints EggTemp = *Egg;
-
     if (level == 1)
     {
         TempCheck->chckpointgrid[166][23] = CHECKPOINT_LINE;
@@ -135,107 +146,8 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *
 
         TempPoints->pointgrid[151][29] = POINTS;
         TempPoints->Next->pointgrid[21][76] = POINTS;
-
-        EggTemp->Eggygrid[24][34] = EGG;
-        EggTemp->Eggygrid[132][35] = EGG;    
     }
-    while (TempCheck != NULL)
-    {
-        for (int i = 0; i < GRID_WIDTH; i++)
-        {
-            for (int j = 0; j < GRID_HEIGHT; j++)
-            {
-                if (TempCheck->chckpointgrid[j][i] == CHECKPOINT_LINE)
-                {
-                    for (int p = i - 5; p < i + 5; p++) 
-                    {
-                        for (int o = j - 5; o < j + 5; o++) 
-                        {
-                            if (p >= 0 && p < GRID_WIDTH && o >= 0 && o < GRID_HEIGHT) 
-                            {
-                                grid[o][p] = CHECKPOINT_LINE;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        TempCheck = TempCheck->Next;
-    }
-    while (TempHealth != NULL)
-    {
-        PlayCheckpointSound();
-        //checkposition(player, Home, Health, Points);
-        player.score += 100 * comboMultiplier;
-        for (int i = 0; i < GRID_WIDTH; i++)
-        {
-            for (int j = 0; j < GRID_HEIGHT; j++)
-            {
-                if (TempHealth->healthgrid[j][i] == HEALTH_UP)
-                {
-                    for (int p = i - 5; p < i + 5; p++) 
-                    {
-                        for (int o = j - 5; o < j + 5; o++) 
-                        {
-                            if (p >= 0 && p < GRID_WIDTH && o >= 0 && o < GRID_HEIGHT) 
-                            {
-                                grid[o][p] = HEALTH_UP;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        TempHealth->enabled = true;
-        TempHealth = TempHealth->Next;
-    }
-    while (TempPoints != NULL)
-    {
-        //checkposition(*player,Home, Health, Points);
-        for (int i = 0; i < GRID_WIDTH; i++)
-        {
-            for (int j = 0; j < GRID_HEIGHT; j++)
-            {
-                if (TempPoints->pointgrid[j][i] == POINTS)
-                {
-                    for (int p = i - 5; p < i + 5; p++) 
-                    {
-                        for (int o = j - 5; o < j + 5; o++) 
-                        {
-                            if (p >= 0 && p < GRID_WIDTH && o >= 0 && o < GRID_HEIGHT) 
-                            {
-                                grid[o][p] = POINTS;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        TempPoints = TempPoints->Next;
-    }
-    while (EggTemp != NULL)
-    {
-        for (int i = 0; i < GRID_WIDTH; i++)
-        {
-            for (int j = 0; j < GRID_HEIGHT; j++)
-            {
-                if (EggTemp->Eggygrid[j][i] == EGG)
-                {
-                    for (int p = i - 5; p < i + 5; p++) 
-                    {
-                        for (int o = j - 5; o < j + 5; o++) 
-                        {
-                            if (p >= 0 && p < GRID_WIDTH && o >= 0 && o < GRID_HEIGHT) 
-                            {
-                                grid[o][p] = EGG;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        EggTemp = EggTemp->Next;
-    }
+    InitGrids(Home, Health, Points);
 }
 
 void ResetCameraCheckpoint(Player *player, Camera2D *camera){
@@ -244,9 +156,11 @@ void ResetCameraCheckpoint(Player *player, Camera2D *camera){
     camera->target.y = player->y * CELL_SIZE;
 }
 
-void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
+void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 {
     Checkpoint TempCheck = *Home;
+    HealthHP current = *Health;
+    PointsXP currents = *Points;
     Checkpoint prev = NULL;
 
     if (player->y % 50 == 0 && lastScorePosition != player->y && player->y < 200) 
@@ -267,261 +181,28 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
         passed = true;
         checkpoint.x = player->x;
         checkpoint.y = player->y;
-        player->score += 10 * comboMultiplier;
-
-        while (TempCheck != NULL)
-        {
-            for (int j = 0; j < GRID_HEIGHT; j++)
-            {
-                for (int i = 0; i < GRID_WIDTH; i++)
-                {
-                    if (TempCheck->chckpointgrid[j][i] == CHECKPOINT_LINE)
-                    {
-                        if (player->x >= i - 5 && player->x <= i + 5 &&
-                            player->y >= j - 5 && player->y <= j + 5)
-                        {
-                            for (int dx = -5; dx <= 5; dx++)
-                            {
-                                for (int dy = -5; dy <= 5; dy++)
-                                {
-                                    int nx = i + dx;
-                                    int ny = j + dy;
-                                    if (nx >= 0 && nx < GRID_WIDTH && ny >= 0 && ny < GRID_HEIGHT)
-                                    {
-                                        grid[ny][nx] = ROAD;
-                                    }
-                                }
-                            }                            
-                            if (TempCheck->Next != NULL)
-                            {
-                                if (TempCheck->Before != NULL)
-                                {
-                                    TempCheck->Before->Next = TempCheck->Next;
-                                    TempCheck->Next->Before = TempCheck->Before;
-                                }
-                                else
-                                {
-                                    TempCheck->Next->Before = NULL;
-                                }
-                            }
-                            else
-                            {
-                                if (TempCheck->Before != NULL)
-                                {
-                                    TempCheck->Before->Next = NULL;
-                                }
-                            }
-                            // if (prev == NULL)
-                            //     *Home = TempCheck->Next;
-                            // else
-                            //     prev->Next = TempCheck->Next;
-
-                            // free(TempCheck);
-                            return;
-                        }
-                    }
-                }
-            }
-            prev = TempCheck;
-            TempCheck = TempCheck->Next;
-        }
+        PlayCheckpointSound();
+        checkpositions(player, Home, Health, Points);
+        player->score += 100 * comboMultiplier;
+        
     }
 
     else if (grid[player->y][player->x] == HEALTH_UP)
     {
-        HealthHP current = *Health;
-
-        while (current != NULL)
-        {
-            if (current->enabled == true)
-            {
-                int centerX = current->x / CELL_SIZE;
-                int centerY = current->y / CELL_SIZE;
-
-                if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
-                    player->y >= centerY - 5 && player->y <= centerY + 5)
-                {
-                    current->enabled = false;
-                    player->lives++;
-
-                    for (int dx = -5; dx <= 5; dx++)
-                    {
-                        for (int dy = -5; dy <= 5; dy++)
-                        {
-                            int gx = centerX + dx;
-                            int gy = centerY + dy;
-
-                            if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
-                            {
-                                grid[gy][gx] = ROAD;
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-
-            current = current->Next;
-        }
-
+        checkpositions(player,Home, Health, Points);
+        // Clean up the player’s current grid tile
         grid[player->y][player->x] = ROAD;
+
     }
 
 
     else if (grid[player->y][player->x] == POINTS)
-    {
-        PointsXP current = *Points;
-
-        while (current != NULL)
-        {
-            if (current->enabled == true)
-            {
-                int centerX = current->x / CELL_SIZE;
-                int centerY = current->y / CELL_SIZE;
-
-                if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
-                    player->y >= centerY - 5 && player->y <= centerY + 5)
-                {
-                    current->enabled = false;
-                    player->score += 10 * comboMultiplier;
-
-                    for (int dx = -5; dx <= 5; dx++)
-                    {
-                        for (int dy = -5; dy <= 5; dy++)
-                        {
-                            int gx = centerX + dx;
-                            int gy = centerY + dy;
-
-                            if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
-                            {
-                                grid[gy][gx] = ROAD;
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-
-            current = current->Next;
-        }
-        grid[player->y][player->x] = ROAD;
-    }
-    else if (grid[player->y][player->x] == EGG)
-    {
-        EggyPoints current = *Egg;
-
-        while (current != NULL)
-        {
-            if (current->enabled == true)
-            {
-                int centerX = current->x / CELL_SIZE;
-                int centerY = current->y / CELL_SIZE;
-
-                if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
-                    player->y >= centerY - 5 && player->y <= centerY + 5)
-                {
-                    current->enabled = false;
-                    player->score += 150;
-                    PlaySound(pointsSound);
-
-                    for (int dx = -5; dx <= 5; dx++)
-                    {
-                        for (int dy = -5; dy <= 5; dy++)
-                        {
-                            int gx = centerX + dx;
-                            int gy = centerY + dy;
-
-                            if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
-                            {
-                                grid[gy][gx] = ROAD;
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-
-            current = current->Next;
-        }
+    {  
+        checkpositions(player, Home, Health, Points);
+        // Clean up the player’s current grid tile
         grid[player->y][player->x] = ROAD;
     }
 }
-// >>>>>>> Stashed changes
-
-//         while (current != NULL)
-//         {
-//             if (current->enabled == true)
-//             {
-//                 int centerX = current->x / CELL_SIZE;
-//                 int centerY = current->y / CELL_SIZE;
-
-//                 if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
-//                     player->y >= centerY - 5 && player->y <= centerY + 5)
-//                 {
-//                     current->enabled = false;
-//                     player->score += 150;
-//                     PlaySound(pointsSound);
-
-//                     for (int dx = -5; dx <= 5; dx++)
-//                     {
-//                         for (int dy = -5; dy <= 5; dy++)
-//                         {
-//                             int gx = centerX + dx;
-//                             int gy = centerY + dy;
-
-//                             if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
-//                             {
-//                                 grid[gy][gx] = ROAD;
-//                             }
-//                         }
-//                     }
-//                     break;
-//                 }
-//             }
-
-//             current = current->Next;
-//         }
-//         grid[player->y][player->x] = ROAD;
-//     }
-// }
-// >>>>>>> Stashed changes
-
-//         while (current != NULL)
-//         {
-//             if (current->enabled == true)
-//             {
-//                 int centerX = current->x / CELL_SIZE;
-//                 int centerY = current->y / CELL_SIZE;
-
-//                 if (player->x >= centerX - 5 && player->x <= centerX + 5 &&
-//                     player->y >= centerY - 5 && player->y <= centerY + 5)
-//                 {
-//                     current->enabled = false;
-//                     player->score += 150;
-//                     PlaySound(pointsSound);
-
-//                     for (int dx = -5; dx <= 5; dx++)
-//                     {
-//                         for (int dy = -5; dy <= 5; dy++)
-//                         {
-//                             int gx = centerX + dx;
-//                             int gy = centerY + dy;
-
-//                             if (gx >= 0 && gx < GRID_WIDTH && gy >= 0 && gy < GRID_HEIGHT)
-//                             {
-//                                 grid[gy][gx] = ROAD;
-//                             }
-//                         }
-//                     }
-//                     break;
-//                 }
-//             }
-
-//             current = current->Next;
-//         }
-//         grid[player->y][player->x] = ROAD;
-//     }
-// }
 
 
 void InitiateCheckpointlist(Checkpoint *First)
@@ -586,70 +267,13 @@ void InitiatePointsList(PointsXP *Points)
 }
 
 
-void InitiateEggsList(EggyPoints *Egg)
-{
-    *Egg = NULL;
 
-    if (level == 1)
-    {
-        *Egg = (EggyPoints)malloc(sizeof(struct Eggy));
-        (*Egg)->enabled = true;
-        (*Egg)->x = 340;
-        (*Egg)->y = 235;
-        (*Egg)->Before = NULL;
-
-        (*Egg)->Next = (EggyPoints)malloc(sizeof(struct Eggy));
-        (*Egg)->Next->enabled = true;
-        (*Egg)->Next->x = 345;
-        (*Egg)->Next->y = 1323;
-        (*Egg)->Next->Next = NULL;
-        (*Egg)->Next->Before = *Egg;
-    }
-}
-
-//     if (level == 1)
-//     {
-//         *Egg = (EggyPoints)malloc(sizeof(struct Eggy));
-//         (*Egg)->enabled = true;
-//         (*Egg)->x = 340;
-//         (*Egg)->y = 235;
-//         (*Egg)->Before = NULL;
-
-//         (*Egg)->Next = (EggyPoints)malloc(sizeof(struct Eggy));
-//         (*Egg)->Next->enabled = true;
-//         (*Egg)->Next->x = 345;
-//         (*Egg)->Next->y = 1323;
-//         (*Egg)->Next->Next = NULL;
-//         (*Egg)->Next->Before = *Egg;
-//     }
-// }
-//     if (level == 1)
-//     {
-//         *Egg = (EggyPoints)malloc(sizeof(struct Eggy));
-//         (*Egg)->enabled = true;
-//         (*Egg)->x = 340;
-//         (*Egg)->y = 235;
-//         (*Egg)->Before = NULL;
-
-//         (*Egg)->Next = (EggyPoints)malloc(sizeof(struct Eggy));
-//         (*Egg)->Next->enabled = true;
-//         (*Egg)->Next->x = 345;
-//         (*Egg)->Next->y = 1323;
-//         (*Egg)->Next->Next = NULL;
-//         (*Egg)->Next->Before = *Egg;
-//     }
-// }
-
-
-// void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
-
-void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
+void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points)
 {
     srand(time(NULL));
 
     kalah = false;
     PermainanBerakhir = false;
-    player.score = 0;
     player.lives = MAX_LIVES;  
     numCars = NUM_CARS_START; 
     carSpeed = CAR_SPEED_START;          
@@ -659,22 +283,20 @@ void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *
     checkpoint.x = player.x;
     checkpoint.y = player.y;
 
-    printf("Game di-reset: lives = %d, score = %d, posisi = (%d, %d)\n",
-           player.lives, player.score, player.x, player.y);
+
 
     InitiateCheckpointlist(Home);
     InitiateHealthList(Health);
     InitiatePointsList(Points);
-    InitiateEggsList(Egg);
-    InitGrid(Home, Health, Points, Egg);
-    printf("Grid berhasil di-reset\n");
+    InitGrid(Home, Health, Points);
+
     
-    int array[25] = {9, 14, 27, 32, 49, 55, 61, 67, 77, 95, 101, 115, 121, 127, 133, 141, 145, 151, 157, 175, 181, 187, 193, 208, 212};
-    int directray[25] = {-1, -1, 1, 1, -1, -1, 1, 1, -1,/**/ 1, /**/ -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1};
+    int array[24] = {9, 14, 27, 32, 49, 55, 61, 67, 95, 101, 115, 121, 127, 133, 139, 145, 151, 157, 175, 181, 187, 193, 205, 211};
+    int directray[24] = {-1, -1, 1, 1, -1, -1, 1, 1, /**/ 1, /**/ -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1};
 
-    InitGrid(Home, Health, Points, Egg); 
+    InitGrid(Home, Health, Points); 
 
-    CreateEmpty(&carList); // Inisialisasi list mobil
+    CreateEmpty(&carList);
 
     for (int i = 0; i < NUM_CARS_START; i++) {
         int col = rand() % (GRID_WIDTH - GRID_START);
@@ -715,12 +337,17 @@ void CheckCollision(Camera2D *camera) {
         }
 
         if (collision) {
+            InitParticles((Vector2){player.x * CELL_SIZE, player.y *CELL_SIZE});
             player.x = checkpoint.x;
             player.y = checkpoint.y;
             player.lives--;
+            ResetCameraCheckpoint(&player, camera);
             PlaySound(nabrak);
             ResetCombo();
-            if (player.lives <= 0) kalah = true;
+            if (player.lives <= 0) {
+                kalah = true;
+                SoundGameover();
+            }
             break;
         }
 
@@ -729,7 +356,8 @@ void CheckCollision(Camera2D *camera) {
 }
 
 
-void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg) {
+void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points) {
+    
 
     if (!gameStarted) 
     {
@@ -739,7 +367,9 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
         }
         return; // Jangan update posisi player sebelum permainan dimulai
     }
-    
+
+    UpdateParticles();
+    UpdateCheckpointParticles();
     if (!PermainanBerakhir) {
         UpdateCarMovement();
 
@@ -755,36 +385,37 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
         if (movement[0])
         {
             player.y -= PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();           
             movement[0] = false;
         }
         if (movement[1])
         {
             player.y += PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();
             movement[1] = false;
         }
         if (movement[2])
         {
             player.x -= PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();
             movement[2] = false;
         }
         if (movement[3])
         {
             player.x += PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();
             movement[3] = false;
         }
 
         if (player.y>=GRID_HEIGHT)player.y = GRID_HEIGHT-1;
-        checkposition(&player, Home, Health, Points, Egg);
+
+        checkposition(&player, Home, Health, Points);
         CheckCollision(camera);
     }
 
     if (player.y == 0)
     {
-        NextLevel(camera, &player, Home, Health, Points, Egg);
+        NextLevel(camera, &player, Home, Health, Points);
     }
 }
 
-float CalculateDistance(Vector2 pos1, Vector2 pos2)
-{
-    return sqrtf((pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.y - pos2.y) * (pos1.y - pos2.y));
-}

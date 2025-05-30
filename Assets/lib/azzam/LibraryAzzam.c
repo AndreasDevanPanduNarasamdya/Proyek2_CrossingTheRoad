@@ -1,8 +1,6 @@
 #include "../header.h"
 
-// Variabel global untuk modul partikel (tidak didefinisikan di LibraryFaiz.h)
-Particle particles[MAX_PARTICLES];  // Array partikel
-bool playerHit = false;             // Status collision
+// Variabel global untuk modul partikel
 
 
 void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg) {
@@ -24,6 +22,7 @@ void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Hea
 
 // --- Modul Efek Partikel ---
 // Inisialisasi partikel saat terjadi collision
+
 void InitParticles(Vector2 playerPos) {
     for (int i = 0; i < MAX_PARTICLES; i++) {
         particles[i].pos = playerPos;
@@ -55,4 +54,78 @@ void DrawParticles() {
             DrawTextureEx(Blood, (Vector2){particles[i].pos.x, particles[i].pos.y}, 0, 0.25f, WHITE);
         }
     }
+}
+
+// Array terpisah untuk partikel checkpoint (opsional)
+// Atau bisa menggunakan array particles yang sama dengan flag berbeda
+
+void InitCheckpointParticles(Vector2 checkpointPos) {
+    for (int i = 0; i < MAX_CHECKPOINT_PARTICLES; i++) {
+        checkpointParticles[i].pos = checkpointPos;
+
+        // Kecepatan acak di X dan Y, cukup untuk efek sebar
+        checkpointParticles[i].speed.x = GetRandomValue(-30, 30) / 10.0f;
+        checkpointParticles[i].speed.y = GetRandomValue(-30, 30) / 10.0f;
+
+        checkpointParticles[i].life = GetRandomValue(40, 60);
+        checkpointParticles[i].size = GetRandomValue(2, 4);
+
+        // Warna tetap terang dan menyala
+        checkpointParticles[i].color = (Color){255, 230, 100, 255};
+    }
+}
+
+void UpdateCheckpointParticles() {
+    for (int i = 0; i < MAX_CHECKPOINT_PARTICLES; i++) {
+        if (checkpointParticles[i].life > 0) {
+            checkpointParticles[i].pos.x += checkpointParticles[i].speed.x;
+            checkpointParticles[i].pos.y += checkpointParticles[i].speed.y;
+
+            // Peredam kecepatan ringan
+            checkpointParticles[i].speed.x *= 0.95f;
+            checkpointParticles[i].speed.y *= 0.95f;
+
+            checkpointParticles[i].life--;
+        }
+    }
+}
+
+void DrawCheckpointParticles() {
+    for (int i = 0; i < MAX_CHECKPOINT_PARTICLES; i++) {
+        if (checkpointParticles[i].life > 0) {
+            float alphaRatio = (float)checkpointParticles[i].life / 60.0f;
+            Color fade = checkpointParticles[i].color;
+            fade.a = (int)(255 * alphaRatio);
+
+            DrawCircleV(checkpointParticles[i].pos, checkpointParticles[i].size, fade);
+        }
+    }
+}
+
+// Menghitung progress pemain dalam persentase (0.0 - 1.0)
+float CalculateProgress(Player *player, int finishY) {
+    float totalDistance = (float)(finishY - START_Y); // Misal START_Y = posisi awal player
+    float playerDistance = (float)(player->y - START_Y);
+
+    float progress = playerDistance / totalDistance;
+    if (progress > 1.0f) progress = 1.0f;
+    if (progress < 0.0f) progress = 0.0f;
+    return progress;
+}
+
+// Menggambar progress bar di layar
+void DrawProgressBar(float progress) {
+    int barX = SCREEN_WIDTH/2;
+    int barY = 20;
+    int barWidth = 200;
+    int barHeight = 20;
+
+    // Background
+    DrawRectangle(barX, barY, barWidth, barHeight, GRAY);
+
+    // Isi (progress)
+    DrawRectangle(barX, barY, (int)(barWidth * progress), barHeight, GREEN);
+
+    // Border
+    DrawRectangleLines(barX, barY, barWidth, barHeight, DARKGRAY);
 }
