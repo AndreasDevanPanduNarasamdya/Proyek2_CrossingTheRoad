@@ -1,8 +1,6 @@
 #include "../header.h"
 
-// Variabel global untuk modul partikel
-
-
+// Modul NextLevel
 void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points) {
     // Tingkatkan level
     level++;
