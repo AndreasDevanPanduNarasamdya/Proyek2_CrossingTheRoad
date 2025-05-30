@@ -2,7 +2,7 @@
 #define LIBRARYAZZAM_H
 
 
-void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points); // Deklarasi fungsi NextLevel()
+void NextLevel(Camera2D *camera, Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg); // Deklarasi fungsi NextLevel()
 
 #define MAX_PARTICLES 50  // Jumlah maksimal partikel efek
 
