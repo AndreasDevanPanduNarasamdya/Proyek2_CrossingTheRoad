@@ -11,6 +11,7 @@ void start() {
     PlayMenuBacksound();
 
     SetTargetFPS(60);
+    LoadLeaderboardFromFile("skor.txt");
 
     float volume = 1.0f;
     bool isFullscreen = false;

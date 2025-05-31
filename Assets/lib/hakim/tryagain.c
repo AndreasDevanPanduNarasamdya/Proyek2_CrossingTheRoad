@@ -2,9 +2,8 @@
 #define TRYAGAIN_C
 
 void ShowTryAgain(bool *restartGame) {
-    UnloadAllSounds();
     int selectedOption = 0;
-    const char *options[] = {"Try Again", "Main Menu"};
+    const char *options[] = {"Try Again", "End Game"};
     int totalOptions = 2;
 
     while (!WindowShouldClose()) {
@@ -34,6 +33,7 @@ void ShowTryAgain(bool *restartGame) {
         if (IsKeyPressed(KEY_ENTER)) {
             if (selectedOption == 0) {  // Try Again
                 *restartGame = true;
+                level = 1;
                 return;
             } else if (selectedOption == 1) {  // Main Menu
                 *restartGame = false;
@@ -43,27 +43,26 @@ void ShowTryAgain(bool *restartGame) {
     }
 }
 
-// **Tambahkan fungsi ini agar main.c bisa lebih bersih**
-void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera) {
+// modul yang menangani gameover untuk try again
+void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg) {
     printf("HandleGameOver() DIPANGGIL! Game Over terjadi!\n");
 
     bool restartGame = false;
     ShowTryAgain(&restartGame);
     
     if (restartGame) {
-        printf("Pemain memilih 'Try Again'. Reset game...\n");
 
-        
+        // reset semua variabel sebelum initgame
         *kalah = false;
         *PermainanBerakhir = false;
-        player.lives = MAX_LIVES; 
+        player.lives = MAX_LIVES;
 
         printf("Sebelum InitGame(): kalah = %d, PermainanBerakhir = %d, lives = %d\n", 
                *kalah, *PermainanBerakhir, player.lives);
 
-        InitGame(); 
+        InitGame(Home, Health, Points, Egg); // ke initgame
 
-        // **Pastikan kamera kembali ke awal**
+        // mengembalikan kamera ke posisi semula
         camera->target = (Vector2){player.x * CELL_SIZE, player.y * CELL_SIZE};
         camera->offset = (Vector2){SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2};
         camera->rotation = 0.0f;
@@ -74,7 +73,33 @@ void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera) {
 
         return;
     } else {
-        printf("Pemain memilih 'Main Menu'. Kembali ke menu utama.\n");
-        isInMainMenu = true; 
+        printf("DEBUG: HandleGameOver - Pemain memilih 'End Game'. Mempersiapkan input nama...\n");
+
+        // 1. PANGGIL MODUL INPUT NAMA DI SINI
+        char playerName[MAX_PLAYER_NAME_LENGTH]; 
+        playerName[0] = '\0'; 
+        InputPlayerName(playerName, MAX_PLAYER_NAME_LENGTH);
+
+        // Jika nama kosong setelah input (misalnya pemain keluar dari layar input nama), beri nama default.
+        if (strlen(playerName) == 0) {
+            strcpy(playerName, "Player"); // Nama default
+            printf("DEBUG: HandleGameOver - Nama pemain di-default menjadi: '%s'\n", playerName);
+        }
+        printf("DEBUG: HandleGameOver - Nama pemain yang diinput: '%s'\n", playerName);
+
+        // 2. PANGGIL MODUL LEADERBOARD
+        int finalScore = player.score;
+        printf("DEBUG: HandleGameOver - Skor final pemain %s: %d\n", playerName, finalScore);
+
+        SaveScoreToLeaderboard(playerName, finalScore);
+
+        printf("DEBUG: HandleGameOver - Sebelum panggil ShowLeaderboardScreen. WindowShouldClose() adalah: %s\n", WindowShouldClose() ? "TRUE" : "FALSE");
+        ShowLeaderboardScreen();
+        printf("DEBUG: HandleGameOver - Kembali dari ShowLeaderboardScreen.\n");
+
+
+        isInMainMenu = true; // kembali ke menu utama
+        *kalah = false;
+        *PermainanBerakhir = false;
     }
 }
