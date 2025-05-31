@@ -39,6 +39,8 @@ float volume = 1.0f;   // Volume awal
 bool isFullscreen = false; // Fullscreen mode awal
 
 bool passed;
+bool menang = false;
+bool usernameEntered = true;
 int health_upgrade = 0;
 
 typedef struct LinkedListCheckPoint

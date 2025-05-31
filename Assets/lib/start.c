@@ -7,6 +7,7 @@ void start(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg
     LoadAllSounds();
     PlayMenuBacksound();
     SetTargetFPS(60);
+    LoadLeaderboardFromFile("leaderboard.txt");
 
     float volume = 1.0f;
     bool isFullscreen = false;
@@ -52,6 +53,11 @@ void start(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg
                 if (player.y * CELL_SIZE > camera.target.y + CAMERA_DEATH_DISTANCE) {
                     kalah = true;
                 }
+                
+                if (level == 11) {
+                menang = true;
+                PermainanBerakhir = true;
+                }
             }
     
             if (kalah || PermainanBerakhir) {
@@ -66,6 +72,8 @@ void start(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg
                     continue;
                 }
             }
+
+           
     
             if (IsKeyPressed(KEY_SPACE)) {
                 isPaused = !isPaused;
@@ -81,6 +89,54 @@ void start(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg
                 }
                 continue;
             }
+
+            if (menang) {
+    // Panggil input username & simpan skor
+                if (!usernameEntered) {
+        // Gunakan fungsi InputPlayerName yang sudah ada
+                char playerName[MAX_PLAYER_NAME_LENGTH];
+             InputPlayerName(playerName, MAX_PLAYER_NAME_LENGTH);
+        
+         if (strlen(playerName) > 0) {
+            SaveScoreToLeaderboard(playerName, player.score); 
+        }
+        usernameEntered = true;
+    }
+
+    // Gambar layar menang
+         BeginDrawing();
+    ClearBackground(RAYWHITE);
+    DrawSharedUILayout(SCREEN_WIDTH, SCREEN_HEIGHT, "CONGRATULATIONS!", NULL, false);
+    
+    // Pesan selamat
+    DrawText("SELAMAT! KAMU MENANG!", 
+             SCREEN_WIDTH/2 - MeasureText("SELAMAT! KAMU MENANG!", 30)/2, 
+             SCREEN_HEIGHT/2 - 60, 30, GREEN);
+    
+    // Tampilkan skor
+    char scoreText[100];
+    sprintf(scoreText, "Skor Akhir: %d", player.score);
+    DrawText(scoreText, 
+             SCREEN_WIDTH/2 - MeasureText(scoreText, 25)/2, 
+             SCREEN_HEIGHT/2 - 20, 25, DARKGREEN);
+    
+    // Instruksi
+    DrawText("Tekan ENTER untuk kembali ke menu", 
+             SCREEN_WIDTH/2 - MeasureText("Tekan ENTER untuk kembali ke menu", 20)/2, 
+             SCREEN_HEIGHT/2 + 20, 20, DARKGRAY);
+    
+    EndDrawing();
+
+    // Check input untuk kembali ke menu
+    if (IsKeyPressed(KEY_ENTER)) {
+        isInMainMenu = true;
+        menang = false;
+        usernameEntered = false;
+        PermainanBerakhir = false;
+        // Reset level jika perlu
+        level = 1;
+    }
+}
     
             UpdateGame(&camera, Home, Health, Points, Egg);
             DrawGame(camera, Home, Health, Points, Egg);
@@ -89,7 +145,7 @@ void start(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg
         UnloadAllTextures();
     }
     
-
+    SaveLeaderboardToFile("leaderboard.txt");
     StopMenuBacksound();
     UnloadAllSounds();
     CloseAudioDevice();
