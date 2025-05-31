@@ -337,7 +337,6 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
     else if (grid[player->y][player->x] == POINTS)
     {
         PointsXP current = *Points;
-        PlayPointsSound();
         while (current != NULL)
         {
             if (current->enabled == true)
@@ -350,7 +349,7 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
                 {
                     current->enabled = false;
                     player->score += 10 * comboMultiplier;
-
+                    pointSound();
                     for (int dx = -5; dx <= 5; dx++)
                     {
                         for (int dy = -5; dy <= 5; dy++)
@@ -364,6 +363,7 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
                             }
                         }
                     }
+
                     break;
                 }
             }
@@ -388,8 +388,6 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
                 {
                     current->enabled = false;
                     player->score += 150;
-                    PlayPointsSound(); // Assuming egg pickup uses the same sound as points
-
                     for (int dx = -5; dx <= 5; dx++)
                     {
                         for (int dy = -5; dy <= 5; dy++)
@@ -497,7 +495,6 @@ void InitiateEggsList(EggyPoints *Egg)
 void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
 {
     srand(time(NULL));
-
     kalah = false;
     PermainanBerakhir = false;
     player.score = 0;
@@ -509,7 +506,7 @@ void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *
     player.y = GRID_HEIGHT - 2;
     checkpoint.x = player.x;
     checkpoint.y = player.y;
-
+    PlayBackgroundMusic();
     InitiateCheckpointlist(Home);
     InitiateHealthList(Health);
     InitiatePointsList(Points);
@@ -588,19 +585,14 @@ void CheckCollision(Camera2D *camera)
 
 void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
 {
+
     if (!gameStarted)
     {
         if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT))
         {
             gameStarted = true;
-            // Langsung mainkan musik jika belum pernah dimulai sebelumnya
-            if (!IsMusicStreamPlaying(backgroundMusic)) // Cukup cek ini
-            {
-                PlayBackgroundMusic(); 
-            }
         }
     }
-    UpdateBackgroundMusic();
     UpdateParticles();
     UpdateCheckpointParticles();
 
@@ -646,10 +638,8 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
             player.y = GRID_HEIGHT - 1;
 
         checkposition(&player, Home, Health, Points, Egg);
-        // Pass both player and camera pointers to CheckCollision
         CheckCollision(camera);
     }
-
     if (player.y == 0)
     {
         NextLevel(camera, &player, Home, Health, Points, Egg);

@@ -1,99 +1,132 @@
 #include "../header.h"
-Sound menuMoveSound, moveCharSound, nabrak, egg, horn, lose, checkpointSound, healthUpSound, pointsSound;
-Music backgroundMusic, menuBacksound;
+Sound menuMoveSound, moveCharSound, nabrak, egg, horn, lose, checkpointSound, healthUpSound, point;
+Music backgroundMusic, menuBacksound, loading;
 // Fungsi untuk memuat semua suara dan musik
-void LoadAllSounds() {
-    //Char
+void LoadAllSounds()
+{
+    // Char
     moveCharSound = LoadSound("Assets/sound/charMove.wav");
 
-    //Menu
+    // Menu
     menuMoveSound = LoadSound("Assets/sound/menu_selection.wav");
-    menuBacksound = LoadMusicStream("Assets/sound/menusound.wav"); 
+    menuBacksound = LoadMusicStream("Assets/sound/menusound.wav");
 
-    //Background
-    backgroundMusic = LoadMusicStream("Assets/sound/background.wav"); 
-    
-    //Car
+    // Background
+    backgroundMusic = LoadMusicStream("Assets/sound/backsound.wav");
+
+    // Loading
+    loading = LoadMusicStream("Assets/sound/loading.wav");
+
+    // Car
     horn = LoadSound("Assets/sound/carhorn.wav");
     nabrak = LoadSound("Assets/sound/nabrak.wav");
 
-    //Game
+    // Game
     lose = LoadSound("Assets/sound/gameover.wav");
-    egg =  LoadSound("Assets/sound/egg.wav");
+    egg = LoadSound("Assets/sound/egg.wav");
     checkpointSound = LoadSound("Assets/sound/checkpoint.wav");
     healthUpSound = LoadSound("Assets/sound/health.wav");
-    pointsSound = LoadSound("Assets/sound/point.wav");
+    point = LoadSound("Assets/sound/poin.wav");
 }
 
-void UnloadAllSounds() {
-    UnloadSound(menuMoveSound); 
-    UnloadMusicStream(menuBacksound); 
-    UnloadMusicStream(backgroundMusic); 
-    UnloadSound(horn); 
-    UnloadSound(moveCharSound); 
+void UnloadAllSounds()
+{
+    UnloadSound(menuMoveSound);
+    UnloadMusicStream(menuBacksound);
+    UnloadMusicStream(backgroundMusic);
+    UnloadSound(horn);
+    UnloadSound(moveCharSound);
     UnloadSound(nabrak);
     UnloadSound(lose);
     UnloadSound(egg);
     UnloadSound(checkpointSound);
     UnloadSound(healthUpSound);
-    UnloadSound(pointsSound);
+    UnloadSound(point);
 }
 
 // MENU
-void menusound() {
+void menusound()
+{
     PlaySound(menuMoveSound);
 }
-void PlayMenuBacksound() {
-    PlayMusicStream(menuBacksound); 
+void PlayMenuBacksound()
+{
+    PlayMusicStream(menuBacksound);
     SetMusicVolume(menuBacksound, 1.0f);
 }
-void StopMenuBacksound() {
-    StopMusicStream(menuBacksound); 
+void StopMenuBacksound()
+{
+    StopMusicStream(menuBacksound);
+}
+
+// Fungsi Loading
+void LoadingMusic()
+{
+    PlayMusicStream(loading);
+    SetMusicVolume(loading, 1.0f);
+}
+void UpdateLoadingMusic()
+{
+    UpdateMusicStream(loading);
+}
+void StopLoadingMusic()
+{
+    StopMusicStream(loading);
 }
 
 // BACKSOUND GAME
-void PlayBackgroundMusic() {
-    PlayMusicStream(backgroundMusic); 
+void PlayBackgroundMusic()
+{
+    PlayMusicStream(backgroundMusic);
     SetMusicVolume(backgroundMusic, 1.0f);
 }
-void UpdateBackgroundMusic() {
-    UpdateMusicStream(backgroundMusic); 
+void UpdateBackgroundMusic()
+{
+    UpdateMusicStream(backgroundMusic);
 }
-void StopBacksound1() {
+void StopBacksound1()
+{
     StopMusicStream(backgroundMusic);
 }
 
 // GAME SOUND
-void SoundGameover() {
+void SoundGameover()
+{
     PlaySound(lose);
 }
 
-void eggSound(){
+void eggSound()
+{
     PlaySound(egg);
 }
 
 // Fungsi untuk memanggil suara ketika pemain bergerak
-void PlayPlayerMoveSound() {
+void PlayPlayerMoveSound()
+{
     PlaySound(moveCharSound);
 }
 
 // Fungsi untuk memanggil suara ketika mendapatkan checkpoint
-void PlayCheckpointSound() {
+void PlayCheckpointSound()
+{
     PlaySound(checkpointSound);
 }
 
 // Fungsi untuk memanggil suara ketika mendapatkan health
-void PlayHealthUpSound() {
+void PlayHealthUpSound()
+{
     PlaySound(healthUpSound);
 }
 
 // Fungsi untuk memanggil suara ketika mendapatkan point
-void PlayPointsSound() {
-    PlaySound(pointsSound);
+void pointSound()
+{
+    PlaySound(point);
 }
 
 // Fungsi untuk memanggil suara ketika terjadi tabrakan
-void PlayNabrak(){
+void PlayNabrak()
+{
     PlaySound(horn);
     PlaySound(nabrak);
 }

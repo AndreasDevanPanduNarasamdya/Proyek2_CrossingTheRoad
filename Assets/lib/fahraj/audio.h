@@ -12,6 +12,12 @@ void StopMenuBacksound();
 // Fungsi Backsound
 void PlayBackgroundMusic();
 void UpdateBackgroundMusic();
+void StopBacksound1();
+
+// Fungsi Loading
+void LoadingMusic();
+void UpdateLoadingMusic();
+void StopLoadingMusic();
 
 // Fungsi untuk suara di dalam game
 void eggSound();
@@ -20,7 +26,7 @@ void SoundGameover();
 void PlayPlayerMoveSound();
 void PlayCheckpointSound();
 void PlayHealthUpSound();
-void PlayPointsSound();
+void pointSound();
 void PlayNabrak();
 
 #endif 

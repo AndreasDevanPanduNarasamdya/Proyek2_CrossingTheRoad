@@ -123,6 +123,6 @@ void DrawProgressBar(float progress) {
     DrawRectangle(barX, barY, barWidth, barHeight, GRAY);
     int fillHeight = (int)(barHeight * progress);
     int fillY = (barY + barHeight) - fillHeight;
-    DrawRectangle(barX, fillY, barWidth, fillHeight, GREEN);
+    DrawRectangle(barX, fillY, barWidth, fillHeight, RED);
     DrawRectangleLines(barX, barY, barWidth, barHeight, DARKGRAY);
 }

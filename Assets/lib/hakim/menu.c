@@ -221,7 +221,7 @@ MenuOption ShowMenu() {
             
             // Draw title with bounce effect
             const char* title = "Why Did the Chicken Cross The Road?";
-            int titleFontSize = 50;
+            int titleFontSize = 35;
             int titleWidth = MeasureText(title, titleFontSize);
             
             // Title shadow
