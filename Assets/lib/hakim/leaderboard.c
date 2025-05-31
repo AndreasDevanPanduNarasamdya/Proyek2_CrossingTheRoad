@@ -1,8 +1,255 @@
 #include "../header.h"
 
-LeaderboardEntry leaderboardEntries[MAX_LEADERBOARD_ENTRIES];
+// Head pointer untuk linked list
+LeaderboardNode* leaderboardHead = NULL;
 int numLeaderboardEntries = 0;
 
+// Fungsi untuk membuat node baru
+LeaderboardNode* createLeaderboardNode(const char* name, int score) {
+    LeaderboardNode* newNode = (LeaderboardNode*)malloc(sizeof(LeaderboardNode));
+    if (newNode == NULL) {
+        printf("Error: Gagal mengalokasikan memori untuk node leaderboard\n");
+        return NULL;
+    }
+    
+    strncpy(newNode->name, name, MAX_PLAYER_NAME_LENGTH - 1);
+    newNode->name[MAX_PLAYER_NAME_LENGTH - 1] = '\0';
+    newNode->score = score;
+    newNode->next = NULL;
+    
+    return newNode;
+}
+
+// Fungsi untuk menambah skor ke leaderboard (sorted insertion)
+void SaveScoreToLeaderboard(const char* playerName, int score) {
+    printf("DEBUG: Menambahkan skor %d untuk pemain %s ke leaderboard\n", score, playerName);
+    
+    LeaderboardNode* newNode = createLeaderboardNode(playerName, score);
+    if (newNode == NULL) {
+        return;
+    }
+    
+    if (leaderboardHead == NULL || score > leaderboardHead->score) {
+        newNode->next = leaderboardHead;
+        leaderboardHead = newNode;
+        numLeaderboardEntries++;
+
+        if (numLeaderboardEntries > MAX_LEADERBOARD_ENTRIES) {
+            LeaderboardNode* current = leaderboardHead;
+            LeaderboardNode* prev = NULL;
+            while (current->next != NULL) {
+                prev = current;
+                current = current->next;
+            }
+            if (prev != NULL) {
+                prev->next = NULL;
+                free(current);
+                numLeaderboardEntries--;
+            }
+        }
+
+        printf("Skor %d untuk %s berhasil ditambahkan ke leaderboard\n", score, playerName);
+        SaveLeaderboardToFile("leaderboard.txt");  // <--- Tambahan
+        return;
+    }
+
+    LeaderboardNode* current = leaderboardHead;
+    LeaderboardNode* prev = NULL;
+    int position = 1;
+
+    while (current != NULL && current->score >= score) {
+        prev = current;
+        current = current->next;
+        position++;
+    }
+
+    if (position > MAX_LEADERBOARD_ENTRIES) {
+        printf("Skor %d oleh %s tidak cukup tinggi untuk masuk leaderboard\n", score, playerName);
+        free(newNode);
+        return;
+    }
+
+    newNode->next = current;
+    if (prev != NULL) {
+        prev->next = newNode;
+    }
+
+    numLeaderboardEntries++;
+
+    if (numLeaderboardEntries > MAX_LEADERBOARD_ENTRIES) {
+        current = leaderboardHead;
+        prev = NULL;
+        while (current->next != NULL) {
+            prev = current;
+            current = current->next;
+        }
+        if (prev != NULL) {
+            prev->next = NULL;
+            free(current);
+            numLeaderboardEntries--;
+        }
+    }
+
+    printf("Skor %d untuk %s berhasil ditambahkan ke leaderboard pada posisi %d\n", score, playerName, position);
+
+    SaveLeaderboardToFile("leaderboard.txt"); 
+}
+
+
+// Fungsi untuk menyimpan leaderboard ke file
+void SaveLeaderboardToFile(const char* filename) {
+    FILE* file = fopen(filename, "w");
+    if (file == NULL) {
+        printf("Error: Gagal membuka file %s untuk menulis\n", filename);
+        return;
+    }
+    
+    LeaderboardNode* current = leaderboardHead;
+    int count = 0;
+    
+    while (current != NULL && count < MAX_LEADERBOARD_ENTRIES) {
+        fprintf(file, "%s,%d\n", current->name, current->score);
+        current = current->next;
+        count++;
+    }
+    
+    fclose(file);
+    printf("Leaderboard berhasil disimpan ke file %s (%d entri)\n", filename, count);
+}
+
+// Fungsi untuk memuat leaderboard dari file
+void LoadLeaderboardFromFile(const char* filename) {
+    // Bersihkan leaderboard yang ada
+    ClearLeaderboard();
+    
+    FILE* file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("File %s tidak ditemukan. Memulai dengan leaderboard kosong.\n", filename);
+        return;
+    }
+    
+    char lineBuffer[256];
+    char name[MAX_PLAYER_NAME_LENGTH];
+    int score;
+    
+    printf("Memuat leaderboard dari file %s...\n", filename);
+    
+    while (fgets(lineBuffer, sizeof(lineBuffer), file) != NULL) {
+        // Parse baris dengan format "nama,skor"
+        if (sscanf(lineBuffer, "%15[^,],%d", name, &score) == 2) {
+            LeaderboardNode* newNode = createLeaderboardNode(name, score);
+            if (newNode != NULL) {
+                // Insert di akhir list (file sudah terurut)
+                if (leaderboardHead == NULL) {
+                    leaderboardHead = newNode;
+                } else {
+                    LeaderboardNode* current = leaderboardHead;
+                    while (current->next != NULL) {
+                        current = current->next;
+                    }
+                    current->next = newNode;
+                }
+                numLeaderboardEntries++;
+            }
+        } else {
+            // Hapus newline untuk logging yang bersih
+            lineBuffer[strcspn(lineBuffer, "\r\n")] = 0;
+            if (strlen(lineBuffer) > 0) {
+                printf("Warning: Format baris tidak valid: '%s'\n", lineBuffer);
+            }
+        }
+    }
+    
+    fclose(file);
+    printf("Leaderboard berhasil dimuat: %d entri\n", numLeaderboardEntries);
+}
+
+// Fungsi untuk membersihkan semua node dalam linked list
+void ClearLeaderboard(void) {
+    LeaderboardNode* current = leaderboardHead;
+    LeaderboardNode* next;
+    
+    while (current != NULL) {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+    
+    leaderboardHead = NULL;
+    numLeaderboardEntries = 0;
+    printf("Leaderboard telah dibersihkan\n");
+}
+
+// Fungsi untuk menampilkan layar leaderboard
+void ShowLeaderboardScreen(void) {
+    printf("DEBUG: ShowLeaderboardScreen - FUNGSI DIMASUKI.\n");
+    
+    InitUIElements(SCREEN_WIDTH, SCREEN_HEIGHT);
+    int screenFrameCounter = 0;
+    
+    while (!WindowShouldClose()) {
+        UpdateUIElements(SCREEN_WIDTH, SCREEN_HEIGHT);
+        float currentGlobalAlpha = GetUIGlobalAlpha();
+        
+        // Input untuk keluar
+        if (IsKeyPressed(KEY_Q)) {
+            printf("DEBUG: ShowLeaderboardScreen - Tombol keluar (Q) ditekan pada frame ke-%d.\n", screenFrameCounter);
+            break;
+        }
+        
+        BeginDrawing();
+        
+        // Gambar latar belakang dan UI
+        DrawSharedUILayout(SCREEN_WIDTH, SCREEN_HEIGHT, "LEADERBOARD", NULL, false);
+        
+        // Tampilkan entri leaderboard
+        if (numLeaderboardEntries == 0) {
+            DrawText("Leaderboard masih kosong!",
+                     SCREEN_WIDTH / 2 - MeasureText("Leaderboard masih kosong!", 20) / 2,
+                     SCREEN_HEIGHT / 2 + 20,
+                     20,
+                     ColorAlpha(RAYWHITE, currentGlobalAlpha));
+        } else {
+            int leaderboardStartY = SCREEN_HEIGHT / 4 + 60;
+            LeaderboardNode* current = leaderboardHead;
+            int rank = 1;
+            
+            while (current != NULL && rank <= MAX_LEADERBOARD_ENTRIES) {
+                char entryText[256];
+                sprintf(entryText, "%2d. %-*s %5d",
+                        rank,
+                        MAX_PLAYER_NAME_LENGTH + 2,
+                        current->name,
+                        current->score);
+                
+                int textWidth = MeasureText(entryText, 20);
+                int posX = SCREEN_WIDTH / 2 - textWidth / 2;
+                
+                DrawText(entryText,
+                         posX,
+                         leaderboardStartY + (rank - 1) * 35,
+                         20,
+                         ColorAlpha(RAYWHITE, currentGlobalAlpha));
+                
+                current = current->next;
+                rank++;
+            }
+        }
+        
+        // Instruksi kembali
+        const char* backInstruction = "Tekan Q untuk Kembali";
+        DrawText(backInstruction,
+                 SCREEN_WIDTH / 2 - MeasureText(backInstruction, 20) / 2,
+                 SCREEN_HEIGHT - 70,
+                 20,
+                 ColorAlpha(LIGHTGRAY, currentGlobalAlpha));
+        
+        EndDrawing();
+        screenFrameCounter++;
+    }
+    
+    printf("DEBUG: ShowLeaderboardScreen - FUNGSI SELESAI setelah %d frame.\n", screenFrameCounter);
+}
 
 // Fungsi yang akan menampilkan layar untuk input nama pemain dan mengisi nameBuffer.
 void InputPlayerName(char *nameBuffer, int maxLength) {
@@ -90,180 +337,48 @@ void InputPlayerName(char *nameBuffer, int maxLength) {
         }
         
         DrawText("Tekan ENTER untuk Simpan, Q untuk Batal",
-                 SCREEN_WIDTH / 2 - MeasureText("Tekan ENTER untuk Simpan, ESC untuk Batal", 20) / 2,
+                 SCREEN_WIDTH / 2 - MeasureText("Tekan ENTER untuk Simpan, Q untuk Batal", 20) / 2,
                  SCREEN_HEIGHT - 60, 20, GRAY);
         EndDrawing();
     }
 }
 
+const char *GetUsernameInput() {
+    static char username[100] = "";
+    int letterCount = 0;
+    bool enterPressed = false;
 
-// Fungsi pembanding untuk qsort (urutkan skor dari tertinggi ke terendah)
-int compareLeaderboardEntries(const void *a, const void *b) {
-    LeaderboardEntry *entryA = (LeaderboardEntry *)a;
-    LeaderboardEntry *entryB = (LeaderboardEntry *)b;
+    SetExitKey(KEY_NULL);
 
-    // Urutkan descending berdasarkan skor
-    if (entryB->score > entryA->score) return 1;
-    if (entryB->score < entryA->score) return -1;
-    
-    return 0;
-}
+    while (!enterPressed && !WindowShouldClose()) {
+        int key = GetCharPressed();
+        while (key > 0) {
+            if ((key >= 32) && (key <= 125) && (letterCount < 20)) {
+                username[letterCount++] = (char)key;
+                username[letterCount] = '\0';
+            }
+            key = GetCharPressed();
+        }
 
-void SaveScoreToLeaderboard(const char *playerName, int score) {
+        if (IsKeyPressed(KEY_BACKSPACE) && letterCount > 0) {
+            letterCount--;
+            username[letterCount] = '\0';
+        }
 
-    if (numLeaderboardEntries == MAX_LEADERBOARD_ENTRIES && score <= leaderboardEntries[MAX_LEADERBOARD_ENTRIES - 1].score) {
-
-        printf("Skor %d oleh %s tidak cukup tinggi untuk masuk leaderboard penuh.\n", score, playerName);
-        return;
-    }
-
-    int targetIndex;
-
-    if (numLeaderboardEntries < MAX_LEADERBOARD_ENTRIES) {
-        // Leaderboard belum penuh, skor baru langsung ditambahkan di akhir (untuk sementara)
-        targetIndex = numLeaderboardEntries;
-        numLeaderboardEntries++; // Jumlah entri bertambah
-    } else {
-
-        targetIndex = MAX_LEADERBOARD_ENTRIES - 1;
-    }
-
-    // Salin nama dan skor ke posisi target
-    strncpy(leaderboardEntries[targetIndex].name, playerName, MAX_PLAYER_NAME_LENGTH - 1);
-    leaderboardEntries[targetIndex].name[MAX_PLAYER_NAME_LENGTH - 1] = '\0'; // Pastikan null-terminated
-    leaderboardEntries[targetIndex].score = score;
-
-    // Urutkan kembali seluruh array leaderboard setelah penambahan/penggantian
-    qsort(leaderboardEntries, numLeaderboardEntries, sizeof(LeaderboardEntry), compareLeaderboardEntries);
-
-    printf("Skor %d untuk %s berhasil diproses untuk leaderboard (in-memory).\n", score, playerName);
-
-    // Nantinya, setelah baris ini, Anda akan memanggil SaveLeaderboardToFile().
-}
-
-
-void ShowLeaderboardScreen(void) {
-    printf("DEBUG: ShowLeaderboardScreen - FUNGSI DIMASUKI.\n"); // <--- DEBUG POINT
-
-    InitUIElements(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-    int screenFrameCounter = 0; 
-
-    while (!WindowShouldClose()) {
-        // 1. Update Logika UI Animasi Latar Belakang
-        UpdateUIElements(SCREEN_WIDTH, SCREEN_HEIGHT);
-        float currentGlobalAlpha = GetUIGlobalAlpha(); // Dapatkan alpha saat ini untuk elemen UI
-
-        // Cek input untuk keluar dari layar leaderboard
-        if ( IsKeyPressed(KEY_Q)) {
-            printf("DEBUG: ShowLeaderboardScreen - Tombol keluar (Enter/Q) ditekan pada frame ke-%d.\n", screenFrameCounter); // <--- DEBUG POINT
-
-            break; 
+        if (IsKeyPressed(KEY_ENTER) && letterCount > 0) {
+            enterPressed = true;
         }
 
         BeginDrawing();
-
-        // 2. Gambar Latar Belakang dan Elemen UI Bersama
-
+        ClearBackground(RAYWHITE);
         DrawSharedUILayout(SCREEN_WIDTH, SCREEN_HEIGHT, "LEADERBOARD", NULL, false);
-        
-        // 3. Tampilkan Entri Leaderboard 
-        if (numLeaderboardEntries == 0) {
-            DrawText("Leaderboard masih kosong!",
-                     SCREEN_WIDTH / 2 - MeasureText("Leaderboard masih kosong!", 20) / 2,
-                     SCREEN_HEIGHT / 2 + 20, // Sesuaikan Y agar tidak tertimpa judul dari DrawSharedUILayout
-                     20, 
-                     ColorAlpha(RAYWHITE, currentGlobalAlpha)); // Gunakan global alpha
-        } else {
-            // Untuk menyesuaikan entri pertama
-            int leaderboardStartY = SCREEN_HEIGHT / 4 + 60; // Perkiraan posisi Y awal
-
-            for (int i = 0; i < numLeaderboardEntries; i++) {
-                char entryText[256];
-                sprintf(entryText, "%2d. %-*s %5d",
-                        i + 1,
-                        MAX_PLAYER_NAME_LENGTH + 2,
-                        leaderboardEntries[i].name,
-                        leaderboardEntries[i].score);
-                
-                int textWidth = MeasureText(entryText, 20);
-                int posX = SCREEN_WIDTH / 2 - textWidth / 2;
-
-                DrawText(entryText,
-                         posX,
-                         leaderboardStartY + i * 35, // Jarak vertikal antar entri
-                         20,
-                         ColorAlpha(RAYWHITE, currentGlobalAlpha)); 
-            }
-        }
-
-        // 4. Gambar Instruksi untuk Kembali 
-        const char* backInstruction = "Tekan Q untuk Kembali";
-        DrawText(backInstruction,
-                 SCREEN_WIDTH / 2 - MeasureText(backInstruction, 20) / 2,
-                 SCREEN_HEIGHT - 70,
-                 20, 
-                 ColorAlpha(LIGHTGRAY, currentGlobalAlpha)); 
-
-
+        DrawText("Masukkan Username:", SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 - 100, 30, BLACK);
+        DrawRectangle(SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 - 50, 300, 50, LIGHTGRAY);
+        DrawText(username, SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 - 45, 30, DARKBLUE);
+        DrawText("Tekan ENTER untuk lanjut", SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 + 20, 20, GRAY);
         EndDrawing();
     }
-    printf("DEBUG: ShowLeaderboardScreen - FUNGSI SELESAI setelah %d frame.\n", screenFrameCounter); // <--- DEBUG POINT
 
-}
-
-
-
-void LoadLeaderboardFromFile(const char *filename) {
-    FILE *file = fopen(filename, "r"); // Buka file dalam mode baca ("r")
-
-    numLeaderboardEntries = 0; // Selalu reset jumlah entri saat memuat dari file
-
-    if (file == NULL) {
-        TraceLog(LOG_WARNING, "File skor '%s' tidak ditemukan. Leaderboard dimulai kosong.", filename);
-        return; // Keluar jika file tidak ada
-    }
-
-    TraceLog(LOG_INFO, "Membaca leaderboard dari file '%s'...", filename);
-
-    char lineBuffer[256]; // Buffer untuk membaca satu baris dari file
-    char sscanf_format_string[50]; // Buffer untuk string format sscanf dinamis
-
-    // Membuat format string seperti "%15[^,],%d" secara dinamis
-    // Jika MAX_PLAYER_NAME_LENGTH adalah 16, maka MAX_PLAYER_NAME_LENGTH - 1 adalah 15.
-    // Format untuk sprintf: "%%<lebar_nama>[^,],%%d"
-    sprintf(sscanf_format_string, "%%%d[^,],%%d", MAX_PLAYER_NAME_LENGTH - 1);
-    // Contoh: Jika MAX_PLAYER_NAME_LENGTH = 16, sscanf_format_string akan berisi "%15[^,],%d"
-
-    // Baca baris per baris sampai akhir file atau sampai leaderboard penuh
-    while (fgets(lineBuffer, sizeof(lineBuffer), file) != NULL && numLeaderboardEntries < MAX_LEADERBOARD_ENTRIES) {
-        // Coba parsing baris menggunakan format string yang sudah dibuat
-        if (sscanf(lineBuffer, sscanf_format_string,
-                   leaderboardEntries[numLeaderboardEntries].name,
-                   &leaderboardEntries[numLeaderboardEntries].score) == 2) {
-            
-            // Pastikan nama diakhiri dengan null-terminator, ini penting!
-            leaderboardEntries[numLeaderboardEntries].name[MAX_PLAYER_NAME_LENGTH - 1] = '\0';
-            
-            numLeaderboardEntries++; // Tambah jumlah entri yang berhasil dimuat
-        } else {
-            // Jika sscanf gagal mem-parsing 2 item, mungkin barisnya tidak sesuai format atau kosong.
-            // Hapus newline di akhir lineBuffer untuk logging yang lebih bersih jika ada.
-            lineBuffer[strcspn(lineBuffer, "\r\n")] = 0;
-            if (strlen(lineBuffer) > 0) { // Hanya log jika baris tidak benar-benar kosong
-                TraceLog(LOG_WARNING, "Baris tidak valid atau format salah di file skor: '%s'", lineBuffer);
-            }
-        }
-    }
-
-    fclose(file); // Tutup file setelah selesai membaca
-
-    // Setelah memuat, PENTING untuk mengurutkan data leaderboard
-    if (numLeaderboardEntries > 0) {
-        // Pastikan fungsi compareLeaderboardEntries sudah benar untuk urutan descending
-        qsort(leaderboardEntries, numLeaderboardEntries, sizeof(LeaderboardEntry), compareLeaderboardEntries);
-        TraceLog(LOG_INFO, "Leaderboard berhasil dimuat dan diurutkan. Jumlah entri: %d", numLeaderboardEntries);
-    } else {
-        TraceLog(LOG_INFO, "Leaderboard kosong setelah mencoba memuat dari file (atau file kosong).");
-    }
+    SetExitKey(KEY_ESCAPE);
+    return username;
 }

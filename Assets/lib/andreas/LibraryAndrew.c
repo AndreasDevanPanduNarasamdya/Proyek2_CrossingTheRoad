@@ -10,7 +10,39 @@ void RenderRoads()
     }
     else if (level == 2)
     {
-        DrawTextureEx(newmap2, (Vector2){100, -306}, 0.0f, 0.315f, WHITE);
+        DrawTextureEx(newmap, (Vector2){150, -370}, 0.0f, 0.25f, WHITE);
+    }
+    else if (level == 3)
+    {
+        DrawTextureEx(newmap, (Vector2){150, -370}, 0.0f, 0.25f, WHITE);
+    }
+    else if (level == 4)
+    {
+        DrawTextureEx(newmap, (Vector2){150, -370}, 0.0f, 0.25f, WHITE);
+    }
+    else if (level == 5)
+    {
+        DrawTextureEx(newmap, (Vector2){150, -370}, 0.0f, 0.25f, WHITE);
+    }
+    else if (level == 6)
+    {
+        DrawTextureEx(newmap, (Vector2){150, -370}, 0.0f, 0.25f, WHITE);
+    }
+    else if (level == 7)
+    {
+        DrawTextureEx(newmap, (Vector2){150, -370}, 0.0f, 0.25f, WHITE);
+    }
+    else if (level == 8)
+    {
+        DrawTextureEx(newmap, (Vector2){150, -370}, 0.0f, 0.25f, WHITE);
+    }
+    else if (level == 9)
+    {
+        DrawTextureEx(newmap, (Vector2){150, -370}, 0.0f, 0.25f, WHITE);
+    }
+    else if (level == 10)
+    {
+       DrawTextureEx(newmap, (Vector2){150, -370}, 0.0f, 0.25f, WHITE);
     }
 }
 

@@ -65,23 +65,26 @@ void UpdateUIAnimator(Animator *animator);
 float GetUIGlobalAlpha(void);
 
 
-/// ====== leaderboard.h ======
 #define MAX_LEADERBOARD_ENTRIES 10
 #define MAX_PLAYER_NAME_LENGTH 16 
-
-typedef struct {
+/// ====== leaderboard.h ======
+typedef struct LeaderboardNode {
     char name[MAX_PLAYER_NAME_LENGTH];
     int score;
-} LeaderboardEntry;
+    struct LeaderboardNode* next;
+} LeaderboardNode;
 
+// Deklarasi variabel global
+extern LeaderboardNode* leaderboardHead;
+extern int numLeaderboardEntries;
 
-void InputPlayerName(char *nameBuffer, int maxLength);
-
-void SaveScoreToLeaderboard(const char *playerName, int score);
-
+// Function prototypes untuk leaderboard
+LeaderboardNode* createLeaderboardNode(const char* name, int score);
+void SaveScoreToLeaderboard(const char* playerName, int score);
+void SaveLeaderboardToFile(const char* filename);
+void LoadLeaderboardFromFile(const char* filename);
+void ClearLeaderboard(void);
 void ShowLeaderboardScreen(void);
-
-void LoadLeaderboardFromFile(const char *filename);
-
-
+void InputPlayerName(char *nameBuffer, int maxLength);
+const char* GetUsernameInput();
 #endif 
