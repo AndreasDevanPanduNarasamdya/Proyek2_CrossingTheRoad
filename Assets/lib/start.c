@@ -45,7 +45,7 @@ void start(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg
         camera.zoom = 1.7f;
     
         while (!WindowShouldClose() && !isInMainMenu) {
-            UpdateMusicStream(backgroundMusic1);
+            UpdateMusicStream(backgroundMusic);
     
             if (!kalah && !PermainanBerakhir && !isPaused && gameStarted) {
                 camera.target.y -= CAMERA_SPEED;
@@ -59,7 +59,7 @@ void start(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg
     
                 if (isInMainMenu) {
                     UnloadAllTextures();
-                    StopMusicStream(backgroundMusic1);
+                    StopMusicStream(backgroundMusic);
                     break;  
                 } else {
                     InitGame(Home, Health, Points, Egg); 
@@ -76,7 +76,7 @@ void start(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg
     
                 if (isInMainMenu) {
                     UnloadAllTextures();
-                    StopMusicStream(backgroundMusic1);
+                    StopMusicStream(backgroundMusic);
                     break; 
                 }
                 continue;

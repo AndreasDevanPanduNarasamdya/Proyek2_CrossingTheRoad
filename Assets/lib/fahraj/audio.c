@@ -1,29 +1,39 @@
 #include "../header.h"
-Sound menuMoveSound, carSound, moveCharSound, nabrak, lose, checkpointSound, healthUpSound, pointsSound;
-Music backgroundMusic1, menuBacksound;
-
+Sound menuMoveSound, moveCharSound, nabrak, egg, horn, lose, checkpointSound, healthUpSound, pointsSound;
+Music backgroundMusic, menuBacksound;
 // Fungsi untuk memuat semua suara dan musik
 void LoadAllSounds() {
+    //Char
+    moveCharSound = LoadSound("Assets/sound/charMove.wav");
+
+    //Menu
     menuMoveSound = LoadSound("Assets/sound/menu_selection.wav");
     menuBacksound = LoadMusicStream("Assets/sound/menusound.wav"); 
-    backgroundMusic1 = LoadMusicStream("Assets/sound/backsound5.wav"); 
+
+    //Background
+    backgroundMusic = LoadMusicStream("Assets/sound/background.wav"); 
+    
+    //Car
+    horn = LoadSound("Assets/sound/carhorn.wav");
     nabrak = LoadSound("Assets/sound/nabrak.wav");
-    carSound = LoadSound("Assets/sound/car1.wav");
+
+    //Game
     lose = LoadSound("Assets/sound/gameover.wav");
-    checkpointSound = LoadSound("Assets/sound/result.wav");
+    egg =  LoadSound("Assets/sound/egg.wav");
+    checkpointSound = LoadSound("Assets/sound/checkpoint.wav");
     healthUpSound = LoadSound("Assets/sound/health.wav");
     pointsSound = LoadSound("Assets/sound/point.wav");
-    volume = (volume < 0.0f) ? 0.0f : (volume > 1.0f) ? 1.0f : volume;
 }
 
 void UnloadAllSounds() {
     UnloadSound(menuMoveSound); 
     UnloadMusicStream(menuBacksound); 
-    UnloadMusicStream(backgroundMusic1); 
-    UnloadSound(carSound); 
+    UnloadMusicStream(backgroundMusic); 
+    UnloadSound(horn); 
     UnloadSound(moveCharSound); 
     UnloadSound(nabrak);
     UnloadSound(lose);
+    UnloadSound(egg);
     UnloadSound(checkpointSound);
     UnloadSound(healthUpSound);
     UnloadSound(pointsSound);
@@ -34,9 +44,10 @@ void menusound() {
     PlaySound(menuMoveSound);
 }
 
+
 void PlayMenuBacksound() {
     PlayMusicStream(menuBacksound); // Memainkan musik backsound menu
-    SetMusicVolume(menuBacksound, 1.0f); // Atur volume (opsional)
+    SetMusicVolume(menuBacksound, 1.0f);
 }
 
 void StopMenuBacksound() {
@@ -45,16 +56,16 @@ void StopMenuBacksound() {
 
 // BACKSOUND GAME
 void PlayBackgroundMusic1() {
-    PlayMusicStream(backgroundMusic1); // Memainkan musik backsound level 1
-    SetMusicVolume(backgroundMusic1, 1.0f); // Atur volume (opsional)
+    PlayMusicStream(backgroundMusic); // Memainkan musik backsound
+    SetMusicVolume(backgroundMusic, 1.0f);
 }
 
 void UpdateBackgroundMusic() {
-    UpdateMusicStream(backgroundMusic1); // Memperbarui stream musik
+    UpdateMusicStream(backgroundMusic); // Memperbarui stream musik
 }
 
 void StopBacksound1() {
-    StopMusicStream(backgroundMusic1); // Menghentikan musik backsound level 1
+    StopMusicStream(backgroundMusic);
 }
 
 // GAME SOUND
@@ -62,14 +73,13 @@ void SoundGameover() {
     PlaySound(lose);
 }
 
-// Car Sound
-void CarSound() {
-    PlaySound(carSound);
+void eggSound(){
+    PlaySound(egg);
 }
 
 // Fungsi untuk memanggil suara ketika pemain bergerak
 void PlayPlayerMoveSound() {
-    PlaySound(menuMoveSound);
+    PlaySound(moveCharSound);
 }
 
 // Fungsi untuk memanggil suara ketika mendapatkan checkpoint
@@ -87,13 +97,8 @@ void PlayPointsSound() {
     PlaySound(pointsSound);
 }
 
-// Fungsi helper untuk mengatur volume suara berdasarkan jarak
-float CalculateVolumeByDistance(Vector2 source, Vector2 listener, float maxDistance) {
-    float distance = CalculateDistance(source, listener);
-    float volume = 1.0f - (distance / maxDistance);
-    return (volume < 0.0f) ? 0.0f : volume;
-}
-float CalculateDistance(Vector2 a, Vector2 b)
-{
-    return sqrtf(powf(b.x - a.x, 2) + powf(b.y - a.y, 2));
+// Fungsi untuk memanggil suara ketika terjadi tabrakan
+void PlayNabrak(){
+    PlaySound(horn);
+    PlaySound(nabrak);
 }

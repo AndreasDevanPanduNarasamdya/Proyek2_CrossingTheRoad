@@ -115,17 +115,14 @@ float CalculateProgress(Player *player, int finishY) {
 
 // Menggambar progress bar di layar
 void DrawProgressBar(float progress) {
-    int barX = SCREEN_WIDTH/2;
-    int barY = 20;
-    int barWidth = 200;
-    int barHeight = 20;
-
-    // Background
+    int barWidth = 20;  
+    int barHeight = 200; 
+    int padding = 10;  
+    int barX = SCREEN_WIDTH - barWidth - padding;
+    int barY = (SCREEN_HEIGHT - barHeight) / 2;
     DrawRectangle(barX, barY, barWidth, barHeight, GRAY);
-
-    // Isi (progress)
-    DrawRectangle(barX, barY, (int)(barWidth * progress), barHeight, GREEN);
-
-    // Border
+    int fillHeight = (int)(barHeight * progress);
+    int fillY = (barY + barHeight) - fillHeight;
+    DrawRectangle(barX, fillY, barWidth, fillHeight, GREEN);
     DrawRectangleLines(barX, barY, barWidth, barHeight, DARKGRAY);
 }

@@ -3,7 +3,7 @@
 void HandlePause(bool *isPaused, bool *isInMainMenu, float *volume, bool *isFullscreen) {
 
     if (*isPaused) {
-        StopMusicStream(backgroundMusic1);
+        StopMusicStream(backgroundMusic);
         BeginDrawing();
         ClearBackground(GRAY);
 
@@ -19,7 +19,7 @@ void HandlePause(bool *isPaused, bool *isInMainMenu, float *volume, bool *isFull
         }
         if (IsKeyPressed(KEY_Q)) { 
             *isInMainMenu = true;
-            StopMusicStream(backgroundMusic1);
+            StopMusicStream(backgroundMusic);
         }
     }
 }
