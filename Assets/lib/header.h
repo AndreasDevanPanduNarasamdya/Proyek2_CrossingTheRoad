@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <math.h>
 #include "raylib.h"
+#include <float.h>
 
 #include "GLOBALHEADER.h"
 
