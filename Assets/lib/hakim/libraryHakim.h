@@ -64,4 +64,24 @@ void UpdateUIAnimator(Animator *animator);
 // Fungsi untuk mendapatkan nilai alpha global saat ini (jika diperlukan oleh modul lain)
 float GetUIGlobalAlpha(void);
 
+
+/// ====== leaderboard.h ======
+#define MAX_LEADERBOARD_ENTRIES 10
+#define MAX_PLAYER_NAME_LENGTH 16 
+
+typedef struct {
+    char name[MAX_PLAYER_NAME_LENGTH];
+    int score;
+} LeaderboardEntry;
+
+
+void InputPlayerName(char *nameBuffer, int maxLength);
+
+void SaveScoreToLeaderboard(const char *playerName, int score);
+
+void ShowLeaderboardScreen(void);
+
+void LoadLeaderboardFromFile(const char *filename);
+
+
 #endif 

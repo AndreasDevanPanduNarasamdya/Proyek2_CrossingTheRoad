@@ -7,6 +7,7 @@ void start(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg
     LoadAllSounds();
     PlayMenuBacksound();
     SetTargetFPS(60);
+    LoadLeaderboardFromFile("skor.txt");
 
     float volume = 1.0f;
     bool isFullscreen = false;

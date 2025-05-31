@@ -27,6 +27,7 @@
 #include "hakim/tryagain.c"
 #include "hakim/pause.c"
 #include "hakim/ui.c" 
+#include "hakim/leaderboard.c" 
 #include "andreas/LibraryAndrew.c"
 #include "azzam/LibraryAzzam.c"
 #include "faiz/LibraryFaiz.c"
