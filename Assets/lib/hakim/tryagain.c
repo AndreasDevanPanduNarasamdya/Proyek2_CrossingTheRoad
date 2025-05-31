@@ -73,6 +73,7 @@ void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera, Chec
 
         return;
     } else {
+       // Kode yang diperbarui untuk HandleGameOver
         printf("DEBUG: HandleGameOver - Pemain memilih 'End Game'. Mempersiapkan input nama...\n");
 
         // 1. PANGGIL MODUL INPUT NAMA DI SINI
@@ -82,8 +83,8 @@ void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera, Chec
 
         // Jika nama kosong setelah input (misalnya pemain keluar dari layar input nama), beri nama default.
         if (strlen(playerName) == 0) {
-            strcpy(playerName, "Player"); // Nama default
-            printf("DEBUG: HandleGameOver - Nama pemain di-default menjadi: '%s'\n", playerName);
+        strcpy(playerName, "Player"); // Nama default
+        printf("DEBUG: HandleGameOver - Nama pemain di-default menjadi: '%s'\n", playerName);
         }
         printf("DEBUG: HandleGameOver - Nama pemain yang diinput: '%s'\n", playerName);
 
@@ -91,15 +92,19 @@ void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera, Chec
         int finalScore = player.score;
         printf("DEBUG: HandleGameOver - Skor final pemain %s: %d\n", playerName, finalScore);
 
+        // Simpan skor ke linked list leaderboard
         SaveScoreToLeaderboard(playerName, finalScore);
+
+        // Simpan leaderboard ke file
+        SaveLeaderboardToFile("leaderboard.txt");
 
         printf("DEBUG: HandleGameOver - Sebelum panggil ShowLeaderboardScreen. WindowShouldClose() adalah: %s\n", WindowShouldClose() ? "TRUE" : "FALSE");
         ShowLeaderboardScreen();
         printf("DEBUG: HandleGameOver - Kembali dari ShowLeaderboardScreen.\n");
 
-
         isInMainMenu = true; // kembali ke menu utama
         *kalah = false;
         *PermainanBerakhir = false;
+
     }
 }

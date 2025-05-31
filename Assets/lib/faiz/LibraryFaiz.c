@@ -120,8 +120,7 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *
     PointsXP TempPoints = *Points;
     EggyPoints EggTemp = *Egg;
 
-    if (level == 1)
-    {
+   
         TempCheck->chckpointgrid[166][23] = CHECKPOINT_LINE;
         TempCheck->Next->chckpointgrid[39][53] = CHECKPOINT_LINE;
 
@@ -133,7 +132,7 @@ void InitGrid(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *
 
         EggTemp->Eggygrid[24][34] = EGG;
         EggTemp->Eggygrid[132][35] = EGG;
-    }
+    
 
     while (TempCheck != NULL)
     {
@@ -431,8 +430,7 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
 void InitiateCheckpointlist(Checkpoint *First)
 {
     *First = NULL;
-    if (level == 1)
-    {
+   
         *First = (Checkpoint)malloc(sizeof(struct LinkedListCheckPoint));
         (*First)->enabled = true;
         (*First)->x = 500;
@@ -445,14 +443,13 @@ void InitiateCheckpointlist(Checkpoint *First)
         (*First)->Next->y = 1650;
         (*First)->Next->Next = NULL;
         (*First)->Next->Before = (*First);
-    }
+    
 }
 
 void InitiateHealthList(HealthHP *Health)
 {
     *Health = NULL;
-    if (level == 1)
-    {
+   
         *Health = (HealthHP)malloc(sizeof(struct HealthyLife));
         (*Health)->enabled = true;
         (*Health)->x = 345;
@@ -465,15 +462,14 @@ void InitiateHealthList(HealthHP *Health)
         (*Health)->Next->y = 1323;
         (*Health)->Next->Next = NULL;
         (*Health)->Next->Before = *Health;
-    }
+    
 }
 
 void InitiatePointsList(PointsXP *Points)
 {
     *Points = NULL;
 
-    if (level == 1)
-    {
+   
         *Points = (PointsXP)malloc(sizeof(struct CoinPoin));
         (*Points)->enabled = true;
         (*Points)->x = 178;
@@ -486,15 +482,14 @@ void InitiatePointsList(PointsXP *Points)
         (*Points)->Next->y = 1523;
         (*Points)->Next->Next = NULL;
         (*Points)->Next->Before = *Points;
-    }
+    
 }
 
 void InitiateEggsList(EggyPoints *Egg)
 {
     *Egg = NULL;
 
-    if (level == 1)
-    {
+   
         *Egg = (EggyPoints)malloc(sizeof(struct Eggy));
         (*Egg)->enabled = true;
         (*Egg)->x = 340;
@@ -507,7 +502,7 @@ void InitiateEggsList(EggyPoints *Egg)
         (*Egg)->Next->y = 1323;
         (*Egg)->Next->Next = NULL;
         (*Egg)->Next->Before = *Egg;
-    }
+    
 }
 
 void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
@@ -516,7 +511,6 @@ void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *
 
     kalah = false;
     PermainanBerakhir = false;
-    player.score = 0;
     player.lives = MAX_LIVES;
     numCars = NUM_CARS_START;
     carSpeed = CAR_SPEED_START;
@@ -663,6 +657,7 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
             // Pass both player and camera pointers to CheckCollision
             CheckCollision(camera);
         }
+
 
         if (player.y == 0)
         {
