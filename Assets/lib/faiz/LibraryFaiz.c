@@ -591,6 +591,9 @@ void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *
         if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT))
         {
             gameStarted = true;
+            if (!IsMusicStreamPlaying(backgroundMusic)){
+                PlayBackgroundMusic();
+            }
         }
     }
     UpdateParticles();
