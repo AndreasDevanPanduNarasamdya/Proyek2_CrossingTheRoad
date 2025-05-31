@@ -43,27 +43,22 @@ void UnloadAllSounds() {
 void menusound() {
     PlaySound(menuMoveSound);
 }
-
-
 void PlayMenuBacksound() {
-    PlayMusicStream(menuBacksound); // Memainkan musik backsound menu
+    PlayMusicStream(menuBacksound); 
     SetMusicVolume(menuBacksound, 1.0f);
 }
-
 void StopMenuBacksound() {
-    StopMusicStream(menuBacksound); // Menghentikan musik backsound menu
+    StopMusicStream(menuBacksound); 
 }
 
 // BACKSOUND GAME
-void PlayBackgroundMusic1() {
-    PlayMusicStream(backgroundMusic); // Memainkan musik backsound
+void PlayBackgroundMusic() {
+    PlayMusicStream(backgroundMusic); 
     SetMusicVolume(backgroundMusic, 1.0f);
 }
-
 void UpdateBackgroundMusic() {
-    UpdateMusicStream(backgroundMusic); // Memperbarui stream musik
+    UpdateMusicStream(backgroundMusic); 
 }
-
 void StopBacksound1() {
     StopMusicStream(backgroundMusic);
 }

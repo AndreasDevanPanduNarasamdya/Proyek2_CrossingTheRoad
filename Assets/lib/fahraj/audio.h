@@ -9,10 +9,12 @@ void menusound();
 void PlayMenuBacksound();
 void StopMenuBacksound();
 
+// Fungsi Backsound
+void PlayBackgroundMusic();
+void UpdateBackgroundMusic();
+
 // Fungsi untuk suara di dalam game
 void eggSound();
-void PlayBackgroundMusic1();
-void UpdateBackgroundMusic();
 void StopBacksound1();
 void SoundGameover();
 void PlayPlayerMoveSound();
@@ -21,4 +23,4 @@ void PlayHealthUpSound();
 void PlayPointsSound();
 void PlayNabrak();
 
-#endif // SOUND_MANAGER_H
+#endif 
