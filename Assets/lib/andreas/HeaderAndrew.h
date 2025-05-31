@@ -3,7 +3,7 @@
 
 #include "../raylib.h"
 
-Texture2D TaxiTexture, TruckTexture, VanTexture, PlayerSprite, background, newmap2,  logs, checkpointflag, checkpointtxt, Mustang, healthup, points, newmap, train;
+Texture2D TaxiTexture, TruckTexture, VanTexture, PlayerSprite, background, newmap2,  logs, checkpointflag, checkpointtxt, lvl3, Mustang, healthup, points, newmap, train;
 bool showCheckpointText = false;
 int checkpointTimer = 0;
 int timer = 2000;
@@ -37,6 +37,12 @@ void RenderCars(Carlist *carList);
 void UnloadAllTextures();
 void LoadAllTextures();
 void RenderInstructions(Player player, char *coordText, int level);
+void InitiateCheckpointlist(Checkpoint *First);
+void InitiateHealthList(HealthHP *Health);
+void InitiatePointsList(PointsXP *Points);
+void InitiateEggsList(EggyPoints *Egg);
+void InitGrids(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg);
+void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg);
 // void InitGrids(Checkpoint *Home, HealthHP *Health, PointsXP *Points);
 // void checkpositions(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP *Points);
 
