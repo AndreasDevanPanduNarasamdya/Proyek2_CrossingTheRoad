@@ -7,7 +7,10 @@ void start(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg
     LoadAllSounds();
     PlayMenuBacksound();
     SetTargetFPS(60);
+<<<<<<< HEAD
     LoadLeaderboardFromFile("leaderboard.txt");
+=======
+>>>>>>> parent of fee26ed (menambahkan leaderboard)
 
     float volume = 1.0f;
     bool isFullscreen = false;
