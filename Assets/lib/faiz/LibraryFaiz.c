@@ -41,37 +41,22 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     BeginDrawing();
     ClearBackground(WHITE);
     BeginMode2D(camera);
-
-    sprintf(coordText, "Coordinate: %2d,%2d", player.x, player.y);
     RenderRoads();
-
     RenderCars(&carList);
-
     RenderFlags(Home);
-
     RenderHealths(Health);
-
     RenderPoints(Points);
-
     RenderEggs(Egg);
-
     RenderCharacter(&PlayerSprite, player);
 
-    // Hitung progress bar
-    float progress = CalculateProgress(&player, FINISH_Y); // Hitung progress
-
-    // Gambar partikel darah
+    float progress = CalculateProgress(&player, FINISH_Y);
     DrawParticles();
     DrawCheckpointParticles();
 
-    // Selesai menggambar elemen dalam dunia
     EndMode2D();
 
-    // Gambar progress bar
     DrawProgressBar(progress);
-
     RenderInstructions(player, coordText, level);
-
     ResetTimer();
 
     if (PermainanBerakhir)
@@ -86,7 +71,6 @@ void DrawGame(Camera2D camera, Checkpoint *Home, HealthHP *Health, PointsXP *Poi
     {
         DrawCenteredText("Use arrow keys to move", 30, BLACK);
     }
-
     EndDrawing();
 }
 
@@ -352,7 +336,6 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
     else if (grid[player->y][player->x] == POINTS)
     {
         PointsXP current = *Points;
-        PlayPointsSound();
         while (current != NULL)
         {
             if (current->enabled == true)
@@ -365,7 +348,7 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
                 {
                     current->enabled = false;
                     player->score += 10 * comboMultiplier;
-
+                    pointSound();
                     for (int dx = -5; dx <= 5; dx++)
                     {
                         for (int dy = -5; dy <= 5; dy++)
@@ -379,6 +362,7 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
                             }
                         }
                     }
+
                     break;
                 }
             }
@@ -403,8 +387,6 @@ void checkposition(Player *player, Checkpoint *Home, HealthHP *Health, PointsXP 
                 {
                     current->enabled = false;
                     player->score += 150;
-                    PlayPointsSound(); // Assuming egg pickup uses the same sound as points
-
                     for (int dx = -5; dx <= 5; dx++)
                     {
                         for (int dy = -5; dy <= 5; dy++)
@@ -508,7 +490,6 @@ void InitiateEggsList(EggyPoints *Egg)
 void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
 {
     srand(time(NULL));
-
     kalah = false;
     PermainanBerakhir = false;
     player.lives = MAX_LIVES;
@@ -519,7 +500,7 @@ void InitGame(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *
     player.y = GRID_HEIGHT - 2;
     checkpoint.x = player.x;
     checkpoint.y = player.y;
-
+    PlayBackgroundMusic();
     InitiateCheckpointlist(Home);
     InitiateHealthList(Health);
     InitiatePointsList(Points);
@@ -598,70 +579,66 @@ void CheckCollision(Camera2D *camera)
 
 void UpdateGame(Camera2D *camera, Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg)
 {
+
     if (!gameStarted)
     {
         if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT))
         {
             gameStarted = true;
-            PlayBackgroundMusic1();
+            if (!IsMusicStreamPlaying(backgroundMusic)){
+                PlayBackgroundMusic();
+            }
         }
     }
-    else
+    UpdateParticles();
+    UpdateCheckpointParticles();
+
+    if (!PermainanBerakhir)
     {
-        UpdateBackgroundMusic();
-        UpdateParticles();
-        UpdateCheckpointParticles();
+        UpdateCarMovement();
 
-        if (!PermainanBerakhir)
+        if (IsKeyPressed(KEY_UP))
+            movement[0] = true;
+        if (IsKeyPressed(KEY_DOWN))
+            movement[1] = true;
+        if (IsKeyPressed(KEY_LEFT))
+            movement[2] = true;
+        if (IsKeyPressed(KEY_RIGHT))
+            movement[3] = true;
+
+        if (movement[0])
         {
-            UpdateCarMovement();
-
-            if (IsKeyPressed(KEY_UP))
-                movement[0] = true;
-            if (IsKeyPressed(KEY_DOWN))
-                movement[1] = true;
-            if (IsKeyPressed(KEY_LEFT))
-                movement[2] = true;
-            if (IsKeyPressed(KEY_RIGHT))
-                movement[3] = true;
-
-            if (movement[0])
-            {
-                player.y -= PLAYER_SPEED + 1;
-                PlayPlayerMoveSound();
-                movement[0] = false;
-            }
-            if (movement[1])
-            {
-                player.y += PLAYER_SPEED + 1;
-                PlayPlayerMoveSound();
-                movement[1] = false;
-            }
-            if (movement[2])
-            {
-                player.x -= PLAYER_SPEED + 1;
-                PlayPlayerMoveSound();
-                movement[2] = false;
-            }
-            if (movement[3])
-            {
-                player.x += PLAYER_SPEED + 1;
-                PlayPlayerMoveSound();
-                movement[3] = false;
-            }
-
-            if (player.y >= GRID_HEIGHT)
-                player.y = GRID_HEIGHT - 1;
-
-            checkposition(&player, Home, Health, Points, Egg);
-            // Pass both player and camera pointers to CheckCollision
-            CheckCollision(camera);
+            player.y -= PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();
+            movement[0] = false;
+        }
+        if (movement[1])
+        {
+            player.y += PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();
+            movement[1] = false;
+        }
+        if (movement[2])
+        {
+            player.x -= PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();
+            movement[2] = false;
+        }
+        if (movement[3])
+        {
+            player.x += PLAYER_SPEED + 1;
+            PlayPlayerMoveSound();
+            movement[3] = false;
         }
 
+        if (player.y >= GRID_HEIGHT)
+            player.y = GRID_HEIGHT - 1;
 
-        if (player.y == 0)
-        {
-            NextLevel(camera, &player, Home, Health, Points, Egg);
-        }
+        checkposition(&player, Home, Health, Points, Egg);
+        CheckCollision(camera);
+    }
+    if (player.y == 0)
+    {
+        NextLevel(camera, &player, Home, Health, Points, Egg);
     }
 }

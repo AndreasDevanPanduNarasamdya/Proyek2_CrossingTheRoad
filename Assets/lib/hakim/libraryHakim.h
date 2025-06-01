@@ -64,8 +64,6 @@ void UpdateUIAnimator(Animator *animator);
 // Fungsi untuk mendapatkan nilai alpha global saat ini (jika diperlukan oleh modul lain)
 float GetUIGlobalAlpha(void);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 #define MAX_LEADERBOARD_ENTRIES 10
 #define MAX_PLAYER_NAME_LENGTH 16 
@@ -89,8 +87,4 @@ void ClearLeaderboard(void);
 void ShowLeaderboardScreen(void);
 void InputPlayerName(char *nameBuffer, int maxLength);
 const char* GetUsernameInput();
-=======
->>>>>>> parent of fee26ed (menambahkan leaderboard)
-=======
->>>>>>> parent of fee26ed (menambahkan leaderboard)
 #endif 
