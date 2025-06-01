@@ -8,7 +8,10 @@ void start(Checkpoint *Home, HealthHP *Health, PointsXP *Points, EggyPoints *Egg
     PlayMenuBacksound();
     SetTargetFPS(60);
 <<<<<<< HEAD
+<<<<<<< HEAD
     LoadLeaderboardFromFile("leaderboard.txt");
+=======
+>>>>>>> parent of fee26ed (menambahkan leaderboard)
 =======
 >>>>>>> parent of fee26ed (menambahkan leaderboard)
 

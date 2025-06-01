@@ -74,6 +74,7 @@ void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera, Chec
         return;
     } else {
 <<<<<<< HEAD
+<<<<<<< HEAD
        // Kode yang diperbarui untuk HandleGameOver
         printf("DEBUG: HandleGameOver - Pemain memilih 'End Game'. Mempersiapkan input nama...\n");
 
@@ -103,6 +104,9 @@ void HandleGameOver(bool *kalah, bool *PermainanBerakhir, Camera2D *camera, Chec
         ShowLeaderboardScreen();
         printf("DEBUG: HandleGameOver - Kembali dari ShowLeaderboardScreen.\n");
 
+=======
+        printf("Pemain memilih 'Main Menu'. Kembali ke menu utama.\n");
+>>>>>>> parent of fee26ed (menambahkan leaderboard)
 =======
         printf("Pemain memilih 'Main Menu'. Kembali ke menu utama.\n");
 >>>>>>> parent of fee26ed (menambahkan leaderboard)

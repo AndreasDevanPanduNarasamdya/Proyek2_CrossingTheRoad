@@ -65,6 +65,7 @@ void UpdateUIAnimator(Animator *animator);
 float GetUIGlobalAlpha(void);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #define MAX_LEADERBOARD_ENTRIES 10
 #define MAX_PLAYER_NAME_LENGTH 16 
@@ -88,6 +89,8 @@ void ClearLeaderboard(void);
 void ShowLeaderboardScreen(void);
 void InputPlayerName(char *nameBuffer, int maxLength);
 const char* GetUsernameInput();
+=======
+>>>>>>> parent of fee26ed (menambahkan leaderboard)
 =======
 >>>>>>> parent of fee26ed (menambahkan leaderboard)
 #endif 
